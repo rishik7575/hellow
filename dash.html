@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLift Dashboard - Enhanced</title>
+    <style>
+        /* Your existing CSS here... */
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="AgriLift/image__1_-removebg-preview.png">
+            </div>
+            <nav>
+                <button onclick="window.location.href='welcome.html';">Home</button>
+                <button onclick="window.location.href='loan.html';">Loans</button>
+                <button onclick="alert('Contact functionality coming soon!')">Contact</button>
+                <button onclick="window.location.href='seed.html';">Market</button>
+                <button onclick="window.location.href='worker.html';">Labour Management</button>
+                <button onclick="window.location.href='machinary.html';">Machinery</button>
+                <button onclick="window.location.href='export.html';">Export</button>
+            </nav>
+        </div>
+        <div class="weather-soil-cards">
+            <div id="weatherCard" class="card">
+                <h4>Current Weather</h4>
+                <div id="weatherInfo">Loading...</div>
+                <div id="weatherAlerts" class="alerts"></div>
+            </div>
+            <div id="soilCard" class="card">
+                <h4>Soil Conditions</h4>
+                <div id="soilInfo">Loading...</div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section class="dashboard-section upload-section">
+            <h2>Smart Soil Analysis</h2>
+            <p>Upload your soil report for personalized crop recommendations</p>
+            <div id="fileUploadArea" class="upload-area">
+                <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
+                <p>Supported formats: PDF, JPG, JPEG, PNG</p>
+                <div id="errorMessage" class="error-message"></div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+            <div class="section-card analysis-section">
+                <h3>Soil Analysis Results</h3>
+                <div class="chart-container">
+                    <canvas id="soilChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="interactiveLineChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="interactiveBarChart"></canvas>
+                </div>
+                <div class="soil-layers">
+                    <!-- Soil Layers will be dynamically added here -->
+                </div>
+                <div id="soilParameters"></div>
+            </div>
+
+            <div class="section-card recommendations-section">
+                <h3>Crop Recommendations</h3>
+                <select class="season-selector" id="seasonSelect" onchange="updateRecommendations()">
+                    <option value="none">None</option>
+                    <option value="kharif">Kharif (Monsoon)</option>
+                    <option value="rabi">Rabi (Winter)</option>
+                    <option value="zaid">Zaid (Summer)</option>
+                </select>
+                <div id="cropRecommendations"></div>
+            </div>
+        </section>
+
+        <div id="soilMap" class="interactive-map">
+            <canvas id="soilHeatMap"></canvas>
+        </div>
+
+        <div id="sensorData" class="sensor-visuals">
+            <div id="moistureGauge"></div>
+            <div id="temperatureSlider"></div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gauge.js@2.3.2/dist/gauge.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.5.0/distribute/nouislider.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+
+    <script>
+        let realTimeData = {
+            pH: 7,
+            nitrogen: 50,
+            phosphorus: 50,
+            potassium: 50,
+            organicMatter: 2,
+            moisture: 50,
+            temperature: 25
+        };
+
+        document.getElementById("fileInput").addEventListener("change", handleFileUpload);
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                document.getElementById('errorMessage').textContent = 'Please select a file.';
+                return;
+            }
+
+            document.getElementById('errorMessage').textContent = '';
+            document.getElementById('fileUploadArea').innerHTML = '<p>Analyzing...</p>';
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const text = e.target.result;
+
+                if (file.type.startsWith('image/')) {
+                    simulateImageAnalysis(text);
+                } else if (file.type === "application/pdf") {
+                    simulatePDFAnalysis(text);
+                } else {
+                    document.getElementById('errorMessage').textContent = 'Unsupported file type.';
+                }
+            };
+
+            if (file.type.startsWith('image/')) {
+                reader.readAsDataURL(file);
+            } else if (file.type === "application/pdf") {
+                reader.readAsText(file);
+            }
+        }
+
+        function simulateImageAnalysis(text) {
+            realTimeData = {
+                pH: Math.random() * 14,
+                nitrogen: Math.random() * 100,
+                phosphorus: Math.random() * 100,
+                potassium: Math.random() * 100,
+                organicMatter: Math.random() * 5,
+                moisture: Math.random() * 100,
+                temperature: Math.random() * 40 + 10
+            };
+            displayResults(realTimeData);
+        }
+
+        function simulatePDFAnalysis(text) {
+            realTimeData = {
+                pH: parseFloat(text.match(/pH:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 14),
+                nitrogen: parseFloat(text.match(/Nitrogen:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                phosphorus: parseFloat(text.match(/Phosphorus:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                potassium: parseFloat(text.match(/Potassium:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                organicMatter: parseFloat(text.match(/Organic Matter:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 5),
+                moisture: parseFloat(text.match(/Moisture:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                temperature: parseFloat(text.match(/Temperature:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 40 + 10)
+            };
+            displayResults(realTimeData);
+        }
+
+        function displayResults(data) {
+            document.getElementById('fileUploadArea').innerHTML = '<p>File Uploaded Successfully!</p><button class="upload-btn" onclick="document.getElementById(\'fileInput\').click()">Choose Another File</button>';
+
+            updateLineChart(data);
+            updatePieChart(data);
+            updateSoilLayers(data);
+
+            let paramsHTML = '';
+            for (let [key, value] of Object.entries(data)) {
+                paramsHTML += `
+                    <div class="parameter-card">
+                        <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                        <span>${value.toFixed(2)} ${key === 'pH' ? '' : 'mg/kg'}</span>
+                    </div>
+                `;
+            }
+            document.getElementById('soilParameters').innerHTML = paramsHTML;
+
+            updateRecommendations();
+            updateInteractiveElements();
+        }
+
+        function updateLineChart(data) {
+            const ctx = document.getElementById('soilChart').getContext('2d');
+            if (!window.realTimeChart) {
+                window.realTimeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            label: 'Soil Parameters',
+                            data: Object.values(data),
+                            borderColor: 'rgba(51, 105, 30, 1)',
+                            fill: false,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            } else {
+                window.realTimeChart.data.datasets[0].data = Object.values(data);
+                window.realTimeChart.update();
+            }
+        }
+
+        function updatePieChart(data) {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            if (!window.pieChart) {
+                window.pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Nitrogen', 'Phosphorus', 'Potassium', 'Organic Matter', 'Moisture'],
+                        datasets: [{
+                            data: [data.nitrogen, data.phosphorus, data.potassium, data.organicMatter, data.moisture],
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Soil Composition'
+                            }
+                        }
+                    }
+                });
+            } else {
+                window.pieChart.data.datasets[0].data = [data.nitrogen, data.phosphorus, data.potassium, data.organicMatter, data.moisture];
+                window.pieChart.update();
+            }
+        }
+
+        function updateSoilLayers(data) {
+            const soilLayers = document.querySelector('.soil-layers');
+            soilLayers.innerHTML = ''; // Clear existing layers
+            const totalHeight = 100; // Total height in percentage
+
+            const layers = [
+                { name: 'Moisture', height: data.moisture },
+                { name: 'Organic Matter', height: data.organicMatter * 10 },
+                { name: 'Soil', height: totalHeight - data.moisture - (data.organicMatter * 10) }
+            ];
+
+            layers.forEach(layer => {
+                const layerDiv = document.createElement('div');
+                layerDiv.className = 'soil-layer';
+                layerDiv.style.height = `${layer.height}%`;
+                layerDiv.innerHTML = `<div></div><div></div>`;
+                soilLayers.appendChild(layerDiv);
+            });
+        }
+
+        function updateWeatherCard() {
+            fetch('https://api.openweathermap.org/data/2.5/weather?q=YourCityName&appid=YourAPIKey&units=metric')
+                .then(response => response.json())
+                .then(data => {
+                    const weather = {
+                        temperature: data.main.temp,
+                        humidity: data.main.humidity,
+                        condition: data.weather[0].main
+                    };
+                    document.getElementById('weatherInfo').innerHTML = `
+                        <p>${weather.temperature}°C</p>
+                        <p>Humidity: ${weather.humidity}%</p>
+                        <p>${weather.condition}</p>
+                    `;
+                    checkWeatherAlerts(weather);
+                })
+                .catch(error => console.error('Error fetching weather data:', error));
+        }
+
+        function updateSoilCard() {
+            document.getElementById('soilInfo').innerHTML = `
+                <p>Moisture: ${realTimeData.moisture.toFixed(2)}%</p>
+                <p>Temperature: ${realTimeData.temperature.toFixed(2)}°C</p>
+                <p>pH: ${realTimeData.pH.toFixed(2)}</p>
+            `;
+        }
+
+        function checkWeatherAlerts(weather) {
+            if (weather.condition === "Rainy" && weather.humidity > 80) {
+                document.getElementById('weatherAlerts').textContent = "Heavy Rain Alert - Consider moving sensitive crops indoors!";
+            } else if (weather.temperature > 30) {
+                document.getElementById('weatherAlerts').textContent = "Heat Wave Alert - Ensure adequate irrigation.";
+            } else {
+                document.getElementById('weatherAlerts').textContent = "";
+            }
+        }
+
+        function createSoilHeatMap() {
+            const ctx = document.getElementById('soilHeatMap').getContext('2d');
+            const soilMap = Chart.getChart("soilHeatMap");
+            if (soilMap) soilMap.destroy();
+
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Soil Moisture',
+                        data: Array.from({ length: 20 }, () => ({
+                            x: Math.random() * 100,
+                            y: Math.random() * 100,
+                            r: Math.random() * 10 + 5
+                        })),
+                        backgroundColor: 'rgba(0, 128, 0, 0.5)',
+                        pointHoverBackgroundColor: 'rgba(0, 128, 0, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function createMoistureGauge() {
+            const opts = {
+                angle: 0.15,
+                lineWidth: 0.44,
+                radiusScale: 1,
+                pointer: {
+                    length: 0.6,
+                    strokeWidth: 0.035,
+                    color: '#000000'
+                },
+                limitMax: false,
+                limitMin: false,
+                colorStart: '#6FAD02',
+                colorStop: '#FF4444',
+                strokeColor: '#E0E0E0',
+                generateGradient: true,
+                highDpiSupport: true
+            };
+            const target = document.getElementById('moistureGauge');
+            const gauge = new Gauge(target).setOptions(opts);
+            gauge.maxValue = 100;
+            gauge.setMinValue(0);
+            gauge.animationSpeed = 32;
+            gauge.set(realTimeData.moisture);
+        }
+
+        function createTemperatureSlider() {
+            const slider = document.getElementById('temperatureSlider');
+            noUiSlider.create(slider, {
+                start: [realTimeData.temperature],
+                range: {
+                    'min': [0],
+                    'max': [50]
+                },
+                connect: 'lower',
+                step: 1,
+                tooltips: [true],
+                format: {
+                    to: (value) => `${value}°C`,
+                    from: (value) => Number(value.replace('°C', ''))
+                }
+            });
+            slider.noUiSlider.on('update', function (values, handle) {
+                realTimeData.temperature = values[handle];
+                // Here you would typically update your backend or other UI elements
+            });
+        }
+
+        function createInteractiveCharts() {
+            const lineCtx = document.getElementById('interactiveLineChart').getContext('2d');
+            const barCtx = document.getElementById('interactiveBarChart').getContext('2d');
+
+            // Line Chart
+            new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(realTimeData),
+                    datasets: [{
+                        label: 'Soil Parameters',
+                        data: Object.values(realTimeData),
+                        borderColor: 'rgba(51, 105, 30, 1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { type: 'category' },
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        zoom: {
+                            zoom: {
+                                wheel: {
+                                    enabled: true
+                                },
+                                pinch: {
+                                    enabled: true
+                                },
+                                mode: 'xy'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Bar Chart
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(realTimeData),
+                    datasets: [{
+                        label: 'Soil Parameters',
+                        data: Object.values(realTimeData),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        }
+
+        function updateInteractiveElements() {
+            createSoilHeatMap();
+            createMoistureGauge();
+            createTemperatureSlider();
+            createInteractiveCharts();
+            updateWeatherCard();
+            updateSoilCard();
+        }
+
+        function updateRecommendations() {
+            const season = document.getElementById('seasonSelect').value;
+            const recommendations = getCropRecommendations(season);
+
+            let recsHTML = '';
+            recommendations.forEach(crop => {
+                recsHTML += `
+                    <div class="crop-card">
+                        <h4>${crop.name}</h4>
+                        <p>${crop.description}</p>
+                        <p><strong>Growing Period:</strong> ${crop.period}</p>
+                        <p><strong>Water Requirement:</strong> ${crop.water}</p>
+                        <button class="buy-seeds-btn" onclick="buySeeds('${crop.name}')">Buy Seeds</button>
+                    </div>
+                `;
+            });
+            document.getElementById('cropRecommendations').innerHTML = recsHTML;
+        }
+
+        function buySeeds(cropName) {
+            alert('Buy ' + cropName + ' Seeds - Coming soon!');
+            window.location.href = 'seed.html';
+        }
+
+        function getCropRecommendations(season) {
+            const recommendations = {
+                kharif: [
+                    { name: 'Rice', description: 'Ideal for high moisture soils.', period: 'June - November', water: 'High' },
+                    { name: 'Cotton', description: 'Suitable for well-drained soils.', period: 'May - November', water: 'Medium' }
+                ],
+                rabi: [
+                    { name: 'Wheat', description: 'Perfect for moderate pH levels.', period: 'November - April', water: 'Medium' },
+                    { name: 'Mustard', description: 'Ideal for nitrogen-rich soils.', period: 'October - March', water: 'Low' }
+                ],
+                zaid: [
+                    { name: 'Watermelon', description: 'Best for sandy loam soils.', period: 'March - June', water: 'Medium' },
+                    { name: 'Cucumber', description: 'Suitable for well-fertilized soils.', period: 'February - May', water: 'Medium' }
+                ]
+            };
+            return recommendations[season] || [];
+        }
+
+        // Update elements periodically
+        document.addEventListener('DOMContentLoaded', updateInteractiveElements);
+        setInterval(updateInteractiveElements, 5000); // Update every 5 seconds
+    </script>
+</body>
+
+</html>

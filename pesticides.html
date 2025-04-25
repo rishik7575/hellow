@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLift | Pesticides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f8faf8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .product-card {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            transform: translateY(0);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .product-card img {
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .add-to-cart {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .add-to-cart:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+
+        .add-to-cart:hover:before {
+            left: 0;
+        }
+
+        .cart-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            opacity: 0;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .cart-active .cart-sidebar {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .category-filter {
+            scroll-behavior: smooth;
+        }
+
+        .filter-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #047857;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .filter-btn:hover:after {
+            width: 70%;
+        }
+
+        .filter-btn.active {
+            background-color: #047857;
+            color: white;
+        }
+
+        .filter-btn.active:after {
+            width: 70%;
+        }
+
+        .toast {
+            bottom: -100px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+        }
+
+        .toast-active {
+            bottom: 30px;
+            opacity: 1;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ecfdf5;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .search-input {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-input:focus {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        #suggestions {
+            animation: scaleIn 0.2s ease-out forwards;
+            transform-origin: top center;
+            z-index: 100;
+        }
+
+        .cart-item {
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .cart-item:hover {
+            background-color: #f7f7f7;
+        }
+
+        .change-quantity,
+        .remove-item {
+            transition: all 0.2s ease;
+        }
+
+        .change-quantity:hover {
+            background-color: #e5e7eb;
+            transform: scale(1.1);
+        }
+
+        .remove-item:hover {
+            background-color: #fee2e2;
+            transform: scale(1.1);
+        }
+
+        .checkout-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkout-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+
+        .checkout-btn:hover:before {
+            left: 0;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #065f46;
+            z-index: 49;
+            padding: 1rem;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #047857;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #047857;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #065f46;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #e5e7eb;
+            border-top: 5px solid #047857;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Product badge */
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transform: rotate(5deg);
+        }
+
+        /* Modern badge animation */
+        .badge-anim {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Scroll to top button -->
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="flex flex-col space-y-4">
+            <a href="welcome.html" class="text-white hover:text-emerald-200 transition">Home</a>
+            <a href="seed.html" class="text-white hover:text-emerald-200 transition">Seeds & Plants</a>
+            <a href="mounitoring.html" class="text-white hover:text-emerald-200 transition">Farm Monitoring</a>
+            <a href="worker.html" class="text-white hover:text-emerald-200 transition">Labour Management</a>
+            <a href="loan.html" class="text-white hover:text-emerald-200 transition">Loans</a>
+            <a href="services.html" class="text-white hover:text-emerald-200 transition">Services</a>
+            <a href="contact.html" class="text-white hover:text-emerald-200 transition">Contact Us</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-emerald-800 text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold flex items-center">
+                <i class="fas fa-leaf mr-2"></i>AgriLift
+            </a>
+
+            <button id="menuToggle" class="menu-toggle md:hidden text-white hover:text-emerald-200">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="welcome.html" class="nav-link hover:text-emerald-200 transition">Home</a>
+                <a href="seed.html" class="nav-link hover:text-emerald-200 transition">Seeds&Plants</a>
+                <a href="mounitoring.html" class="nav-link hover:text-emerald-200 transition">Farm Monitoring</a>
+                <a href="worker.html" class="nav-link hover:text-emerald-200 transition">Labour Management</a>
+                <a href="loan.html" class="nav-link hover:text-emerald-200 transition">Loans</a>
+                <a href="services.html" class="nav-link hover:text-emerald-200 transition">Services</a>
+                <a href="contact.html" class="nav-link hover:text-emerald-200 transition">Contact Us</a>
+                <button id="cartBtn" class="relative hover:text-emerald-200 transition">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cartCount"
+                        class="absolute -top-2 -right-3 bg-red-500 text-xs px-2 py-0.5 rounded-full">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="bg-emerald-700 text-white py-3 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex-1 relative">
+                <input id="searchInput" type="text" placeholder="Search products..."
+                    class="w-full px-4 py-2.5 pl-10 rounded-full bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-300 search-input">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                <div id="suggestions" class="absolute w-full bg-white mt-1 rounded-lg shadow-lg hidden">
+                    <ul class="py-1">
+                        <!-- Suggestions will be dynamically added here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="bg-gradient-to-r from-emerald-800 to-emerald-600 text-white py-12 mb-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl">
+                <h1 class="text-4xl font-bold mb-4">Pesticides for a Sustainable Future</h1>
+                <p class="text-lg mb-6">explores innovative, eco-friendly pest control solutions that balance
+                    agricultural productivity with environmental safety.</p>
+                <button
+                    class="bg-white text-emerald-800 font-bold px-6 py-3 rounded-full hover:bg-emerald-50 transition shadow-lg">
+                    Explore Collection
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Category Filters -->
+        <div class="mb-10">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Browse by Category</h2>
+            <div class="category-filter flex overflow-x-auto pb-4 space-x-4">
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-emerald-600 text-white whitespace-nowrap active"
+                    data-category="all">All Pesticides</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-gray-200 hover:bg-emerald-100 whitespace-nowrap"
+                    data-category="vegetables">Herbicides</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-gray-200 hover:bg-emerald-100 whitespace-nowrap"
+                    data-category="decorative">Fungicides</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-gray-200 hover:bg-emerald-100 whitespace-nowrap"
+                    data-category="fruits">Rodenticides</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-gray-200 hover:bg-emerald-100 whitespace-nowrap"
+                    data-category="medicinal">Insecticides </button>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Product Cards -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="vegetables">
+                <div class="product-badge badge-anim">Best Seller</div>
+                <div class="overflow-hidden">
+                    <img src="data:image/jpeg;base64,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"
+                        alt="Lab-Grown Lettuce" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Selective Herbicides</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.5)</span>
+                    </div>sparing desirable crops, ensuring effective weed control without harming agricultural
+                    productivity.
+                    <p class="text-gray-600 text-sm mb-4">
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹400</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Fungicides -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="decorative">
+                <div class="overflow-hidden">
+                    <img src="https://www.upl-ltd.com/images/fungicide/UPL-Fungicide-Landing-Image.jpg"
+                        alt="Lab-Grown Orchid" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Eradicant Fungicides</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(5.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">eliminate existing fungal infections by destroying the
+                        pathogen after it has infected the plant.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹599</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Rodenticides -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="fruits">
+                <div class="product-badge badge-anim">New</div>
+                <div class="overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1515150144380-bca9f1650ed9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8QW50aWNvYWd1bGFudCUyMGFncmljdWx0dXJlfGVufDB8fDB8fHww"
+                        alt="Lab-Grown Strawberry" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Anticoagulant</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="far fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Anticoagulants prevent blood clotting, commonly used in
+                        rodenticides to control pest populations in agriculture.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹499</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Insecticides  -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="medicinal">
+                <div class="overflow-hidden">
+                    <img src="https://cdn.britannica.com/68/171768-050-4260E8FE/farmer-sprays-insectides-Japan-rice-paddy.jpg"
+                        alt="Lab-Grown Aloe Vera" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Ingested Insecticides</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.5)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Ingested insecticides are consumed by pests through feeding,
+                        affecting their internal systems to eliminate infestations.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹1200</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Herbicides -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="vegetables">
+                <div class="overflow-hidden">
+                    <img src="https://agriplexindia.com/cdn/shop/products/Glycel_3.png?crop=center&height=645&v=1676013814&width=645"
+                        alt="Lab-Grown Tomato" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Non-Selective Herbicides </h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="far fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.0)</span>
+                    </div> kill all types of vegetation, including weeds and crops, making them ideal for total
+                    vegetation control.
+                    <p class="text-gray-600 text-sm mb-4"></p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹399</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Fungicides -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="decorative">
+                <div class="overflow-hidden">
+                    <img src="https://5.imimg.com/data5/SELLER/Default/2022/2/FT/PM/DM/31481645/100-gm-cure-curative-fungicide.jpg"
+                        alt="Lab-Grown Succulent" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Curative Fungicides</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="far fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Curative fungicides stop fungal infections after they have
+                        started by inhibiting further growth and spread.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹650</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Rodenticides -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="fruits">
+                <div class="overflow-hidden">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgj5vD7IOGS6ksQGWUXzz9LVJ14AHGRCOXRgUnuJwZS6ANm2QOv2o3_TP8qQw2yqNkXnQ&usqp=CAU"
+                        alt="Lab-Grown Blueberry" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Non-Anticoagulant </h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.5)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">kill rodents through mechanisms other than blood clotting,
+                        such as neurotoxicity or calcium overload.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹849</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Insecticides  -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="medicinal">
+                <div class="product-badge badge-anim">Popular</div>
+                <div class="overflow-hidden">
+                    <img src="https://www.agriplexindia.com/cdn/shop/collections/Insecticides.png?v=1714216643&width=640"
+                        alt="Lab-Grown Echinacea" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Fumigant Insecticides</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="far fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Fumigant insecticides are gaseous chemicals that control pests
+                        in storage..</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹1099</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Herbs -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="vegetables">
+                <div class="overflow-hidden">
+                    <img src="https://media.istockphoto.com/id/958953510/photo/agricultural-worker-takes-care-of-his-estate.jpg?s=612x612&w=0&k=20&c=asNVXLUWqkGa5DKVFo9Z3WWoTu9Hj5DCUuIPbvcpPOQ="
+                        alt="Lab-Grown Basil" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Residual Herbicides</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.5)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Residual herbicides remain active in the soil for an extended
+                        period, preventing weed germination and growth.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹299</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Exotic Plants -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="decorative">
+                <div class="product-badge badge-anim">Limited</div>
+                <div class="overflow-hidden">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlc7hkfq8BKoDoAZEJn9yNAtRCstX9vyXprA&s"
+                        Lab-Grown Bonsai" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Broad-Spectrum</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(5.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Broad-spectrum pesticides target a wide range of pests or
+                        pathogens, providing comprehensive protection in agriculture.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹2999</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- More product cards with different categories -->
+        </div>
+    </div>
+
+    <!-- Featured Section -->
+    <section class="py-12 bg-gradient-to-r from-emerald-50 to-emerald-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-8 text-center text-gray-800">Why Choose AgriLift Plants?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-seedling text-emerald-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Sustainable Cultivation</h3>
+                    <p class="text-gray-600">Our lab-grown plants reduce water usage by 90% compared to traditional
+                        farming methods.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-flask text-emerald-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Enhanced Nutrition</h3>
+                    <p class="text-gray-600">Scientifically enhanced to provide more vitamins, minerals, and
+                        antioxidants than conventional plants.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-truck text-emerald-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Farm to Table Fresh</h3>
+                    <p class="text-gray-600">Our plants are grown locally, reducing carbon footprint and ensuring
+                        maximum freshness.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar fixed top-0 right-0 h-full w-96 bg-white shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Your Cart</h2>
+            <button id="closeCart" class="text-gray-500 hover:text-gray-700 transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <div id="cartItems" class="space-y-4 max-h-[65vh] overflow-y-auto pr-2">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+
+        <div class="mt-6 border-t pt-4">
+            <div class="flex justify-between font-bold text-lg mb-4">
+                <span>Total:</span>
+                <span id="cartTotal">₹0.00</span>
+            </div>
+            <a href="C1.HTML"
+                class="w-full bg-emerald-600 text-white py-3 rounded-lg mt-4 hover:bg-emerald-700 transition flex items-center justify-center checkout-btn">
+                <i class="fas fa-credit-card mr-2"></i> Checkout
+            </a>
+        </div>
+    </div>
+
+    <!-- Overlay for cart -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="toast fixed left-1/2 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-lg flex items-center justify-center space-x-2">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span>Item added to cart!</span>
+    </div>
+
+    <script>
+        // Wait for the page to load
+        window.addEventListener('load', function () {
+            // Hide loading overlay
+            setTimeout(function () {
+                document.getElementById('loadingOverlay').style.opacity = '0';
+                setTimeout(function () {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }, 500);
+            }, 800);
+        });
+
+        // Cart Functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartOverlay = document.getElementById('cartOverlay');
+
+        function updateCart() {
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = cartCount;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+        }
+
+        function addItemToCart(productName, price) {
+            const product = cart.find(item => item.name === productName);
+
+            if (product) {
+                product.quantity += 1;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            updateCart();
+            showToast();
+        }
+
+        // Add to Cart with animation
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const productCard = button.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const price = parseFloat(productCard.querySelector('span').textContent.slice(1));
+
+                // Add a small click animation
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 200);
+
+                addItemToCart(productName, price);
+            });
+        });
+
+        // Cart Display
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <i class="fas fa-shopping-cart text-gray-300 text-5xl mb-4"></i>
+                        <p class="text-gray-500">Your cart is empty</p>
+                    </div>
+                `;
+                document.getElementById('cartTotal').textContent = '₹0.00';
+                return;
+            }
+
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                cartItems.innerHTML += `
+                    <div class="cart-item flex justify-between items-start space-x-3 bg-gray-50 p-3 rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="font-semibold">${item.name}</h4>
+                            <p class="text-sm text-gray-600">{item.price.toFixed(2)} × ${item.quantity}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="change-quantity w-7 h-7 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300" data-index="${index}" data-change="-1">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <span class="w-5 text-center">${item.quantity}</span>
+                            <button class="change-quantity w-7 h-7 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300" data-index="${index}" data-change="1">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                            <button class="remove-item w-7 h-7 flex items-center justify-center rounded bg-red-100 text-red-600 hover:bg-red-200" data-index="${index}">
+                                <i class="fas fa-trash-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Change Quantity with animation
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('change-quantity') || event.target.parentElement.classList.contains('change-quantity')) {
+                const button = event.target.classList.contains('change-quantity') ? event.target : event.target.parentElement;
+                const index = parseInt(button.getAttribute('data-index'));
+                const change = parseInt(button.getAttribute('data-change'));
+
+                if (cart[index]) {
+                    // Add animation
+                    button.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        button.style.transform = 'scale(1)';
+                    }, 100);
+
+                    if (change === -1 && cart[index].quantity > 1) {
+                        cart[index].quantity -= 1;
+                    } else if (change === 1) {
+                        cart[index].quantity += 1;
+                    }
+                    updateCart();
+                }
+            }
+        });
+
+        // Remove Item from Cart
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('remove-item') || event.target.parentElement.classList.contains('remove-item')) {
+                const button = event.target.classList.contains('remove-item') ? event.target : event.target.parentElement;
+                const index = parseInt(button.getAttribute('data-index'));
+
+                if (cart[index]) {
+                    const cartItem = button.closest('.cart-item');
+                    cartItem.style.transform = 'translateX(100%)';
+                    cartItem.style.opacity = '0';
+
+                    setTimeout(() => {
+                        cart.splice(index, 1); // Remove the item from the array
+                        updateCart();
+                    }, 300);
+                }
+            }
+        });
+
+        // Cart Interactions with overlay
+        document.getElementById('cartBtn').addEventListener('click', () => {
+            document.body.classList.add('cart-active');
+            cartOverlay.classList.remove('hidden');
+
+            // Prevent scrolling when cart is open
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeCart() {
+            document.body.classList.remove('cart-active');
+            cartOverlay.classList.add('hidden');
+
+            // Re-enable scrolling
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('closeCart').addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Toast Notification with better animation
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('toast-active');
+            setTimeout(() => toast.classList.remove('toast-active'), 2500);
+        }
+
+        // Filter Functionality with smoother animation
+        function filterProducts(category) {
+            const allProducts = document.querySelectorAll('.product-card');
+            let delay = 0;
+
+            allProducts.forEach(product => {
+                if (category === 'all' || product.getAttribute('data-category') === category) {
+                    // First hide it
+                    product.style.opacity = '0';
+                    product.style.transform = 'scale(0.95) translateY(10px)';
+
+                    // Then show it with a delay for staggered animation
+                    setTimeout(() => {
+                        product.style.display = 'block';
+                        setTimeout(() => {
+                            product.style.opacity = '1';
+                            product.style.transform = 'scale(1) translateY(0)';
+                        }, 50);
+                    }, delay);
+
+                    delay += 50; // Stagger the animations
+                } else {
+                    product.style.opacity = '0';
+                    product.style.transform = 'scale(0.95) translateY(10px)';
+                    setTimeout(() => {
+                        product.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        // Event listener for filter buttons with active state
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const category = this.getAttribute('data-category');
+                filterProducts(category);
+
+                // Reset the active class from all buttons and set it on the clicked one
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('bg-emerald-600', 'text-white', 'active');
+                    btn.classList.add('bg-gray-200');
+                });
+
+                this.classList.remove('bg-gray-200');
+                this.classList.add('bg-emerald-600', 'text-white', 'active');
+            });
+        });
+
+        // Scroll to top functionality
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Improved search functionality
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsContainer = document.getElementById('suggestions');
+        const suggestionList = suggestionsContainer.querySelector('ul');
+
+        function updateSearchHistoryDisplay() {
+            // This function is referenced but not implemented in the original code
+            // Adding a basic implementation
+            const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            // We could display search history somewhere if needed
+        }
+
+        function addToSearchHistory(term) {
+            if (!term.trim()) return;
+
+            const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+            // Check if term already exists
+            if (!searchHistory.includes(term)) {
+                // Add to start of array and keep only last 10 searches
+                searchHistory.unshift(term);
+
+                if (searchHistory.length > 10) {
+                    searchHistory.pop();
+                }
+
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            }
+        }
+
+        // Function to generate suggestions
+        function generateSuggestions(searchTerm) {
+            if (!searchTerm.trim()) return [];
+
+            let suggestions = [];
+
+            // Suggest from history
+            const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            suggestions = suggestions.concat(history.filter(term =>
+                term.toLowerCase().includes(searchTerm.toLowerCase())
+            ));
+
+            // Suggest based on product names
+            const products = [];
+            document.querySelectorAll('.product-card h3').forEach(el => {
+                products.push(el.textContent);
+            });
+
+            suggestions = suggestions.concat(products.filter(product =>
+                product.toLowerCase().includes(searchTerm.toLowerCase())
+            ));
+
+            // Remove duplicates and limit to 5
+            return [...new Set(suggestions)].slice(0, 5);
+        }
+
+        // Function to show/hide and populate suggestions
+        function updateSuggestions(searchTerm) {
+            const suggestions = generateSuggestions(searchTerm);
+
+            if (suggestions.length > 0 && searchTerm.trim()) {
+                suggestionsContainer.classList.remove('hidden');
+                suggestionList.innerHTML = suggestions.map(term =>
+                    `<li class="px-4 py-2 cursor-pointer hover:bg-emerald-100 transition">${term}</li>`
+                ).join('');
+            } else {
+                suggestionsContainer.classList.add('hidden');
+            }
+        }
+
+        // Perform search
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            if (searchTerm) {
+                addToSearchHistory(searchTerm);
+            }
+
+            updateSuggestions(searchTerm);
+
+            // Search all products
+            document.querySelectorAll('.product-card').forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                const productDesc = product.querySelector('p').textContent.toLowerCase();
+
+                if (productName.includes(searchTerm) || productDesc.includes(searchTerm)) {
+                    product.style.display = 'block';
+                    setTimeout(() => {
+                        product.style.opacity = '1';
+                        product.style.transform = 'scale(1) translateY(0)';
+                    }, 50);
+                } else if (searchTerm) {
+                    product.style.opacity = '0';
+                    product.style.transform = 'scale(0.95) translateY(10px)';
+                    setTimeout(() => {
+                        product.style.display = 'none';
+                    }, 300);
+                } else {
+                    // If search term is empty, show all
+                    product.style.display = 'block';
+                    setTimeout(() => {
+                        product.style.opacity = '1';
+                        product.style.transform = 'scale(1) translateY(0)';
+                    }, 50);
+                }
+            });
+
+            // If no search term, reset category filters
+            if (!searchTerm) {
+                const activeFilter = document.querySelector('.filter-btn.active');
+                if (activeFilter) {
+                    filterProducts(activeFilter.getAttribute('data-category'));
+                } else {
+                    filterProducts('all');
+                }
+            }
+        }
+
+        // Event listener for selecting a suggestion
+        suggestionList.addEventListener('click', function (e) {
+            if (e.target.tagName === 'LI') {
+                searchInput.value = e.target.textContent;
+                performSearch();
+                suggestionsContainer.classList.add('hidden');
+            }
+        });
+
+        // Show suggestions on input
+        searchInput.addEventListener('input', performSearch);
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                suggestionsContainer.classList.add('hidden');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCart();
+            filterProducts('all');
+            updateSearchHistoryDisplay();
+
+            // Add animation delay to each product card
+            document.querySelectorAll('.product-card').forEach((card, index) => {
+                card.style.animationDelay = (index * 0.1) + 's';
+            });
+        });
+    </script>
+</body>
+
+</html>

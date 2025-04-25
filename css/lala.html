@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLift Dashboard - Enhanced</title>
+    <style>
+        :root {
+            --primary-color: #33691E;
+            /* A deep green for a natural look */
+            --secondary-color: #8BC34A;
+            /* A lighter green for accents */
+            --background-color: #FAFAFA;
+            /* Near-white for main content background */
+            --text-color: #333333;
+            --card-bg: #F5F5F5;
+            /* Light grey for cards */
+            --accent-color: #FFEB3B;
+            /* Yellow for highlights */
+            --error-color: #FF5722;
+            /* Deep orange for errors */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            padding: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1.logo {
+            color: var(--background-color);
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        h1.logo::before {
+            content: '🌱';
+            margin-right: 10px;
+        }
+
+        nav button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--background-color);
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+
+        nav button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        main {
+            flex-grow: 1;
+            padding-top: 80px;
+        }
+
+        .dashboard-section {
+            margin: 20px 0;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .upload-section {
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--secondary-color);
+            padding: 30px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(139, 195, 74, 0.1);
+        }
+
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        #soilHealthCardDisplay {
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            nav button {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <h1 class="logo">AgriLift Dashboard</h1>
+            <nav>
+                <button onclick="alert('Home functionality coming soon!')">Home</button>
+                <button onclick="alert('Contact functionality coming soon!')">Contact</button>
+                <button onclick="alert('Seeds functionality coming soon!')">Seeds</button>
+                <button onclick="alert('Machinery functionality coming soon!')">Machinery</button>
+                <button onclick="alert('Export functionality coming soon!')">Export</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="dashboard-section upload-section">
+            <h2>Upload Soil Health Card</h2>
+            <p>Upload your Soil Health Card for analysis</p>
+            <div id="fileUploadArea" class="upload-area">
+                <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
+                <p>Supported formats: PDF, JPG, JPEG, PNG</p>
+                <div id="errorMessage" class="error-message"></div>
+            </div>
+        </section>
+
+        <section id="soilHealthCardDisplay">
+            <h2>Soil Health Card Analysis</h2>
+            <div id="personalInfo">
+                <p><strong>Farmer's Name:</strong> <span id="farmerName"></span></p>
+                <p><strong>Village:</strong> <span id="village"></span></p>
+                <p><strong>District:</strong> <span id="district"></span></p>
+                <p><strong>State:</strong> <span id="state"></span></p>
+                <p><strong>Survey Number:</strong> <span id="surveyNumber"></span></p>
+                <p><strong>Sample ID:</strong> <span id="sampleID"></span></p>
+            </div>
+
+            <div id="soilAnalysis">
+                <h3>Soil Analysis Results</h3>
+                <table id="soilParametersTable">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>Rating</th>
+                            <th>Recommendation</th>
+                        </tr>
+                    </thead>
+                    <tbody id="soilParameters"></tbody>
+                </table>
+            </div>
+
+            <div id="fertilizerRecommendations">
+                <h3>Fertilizer Recommendations for Crops</h3>
+                <table id="cropRecommendationsTable">
+                    <thead>
+                        <tr>
+                            <th>Crop</th>
+                            <th>N (kg/ha)</th>
+                            <th>P (kg/ha)</th>
+                            <th>K (kg/ha)</th>
+                            <th>Additional Advice</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cropRecommendations"></tbody>
+                </table>
+            </div>
+
+            <div id="remarks">
+                <h3>Remarks</h3>
+                <p id="remarksText"></p>
+            </div>
+
+            <div id="issuedBy">
+                <p><strong>Issued By:</strong> <span id="issuer"></span></p>
+                <p><strong>Date of Issue:</strong> <span id="issueDate"></span></p>
+            </div>
+
+            <div id="contact">
+                <p><strong>Contact:</strong> <span id="contactInfo"></span></p>
+                <p><strong>Website:</strong> <span id="website"></span></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.5/dist/tesseract.min.js"></script>
+    <script>
+        document.getElementById("fileInput").addEventListener("change", handleFileUpload);
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                document.getElementById('errorMessage').textContent = 'Please select a file.';
+                return;
+            }
+
+            document.getElementById('errorMessage').textContent = '';
+            document.getElementById('fileUploadArea').innerHTML = '<p>Analyzing...</p>';
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (file.type.startsWith('image/')) {
+                    parseImage(e.target.result);
+                } else if (file.type === "application/pdf") {
+                    parsePDF(e.target.result);
+                } else {
+                    document.getElementById('errorMessage').textContent = 'Unsupported file type.';
+                }
+            };
+
+            if (file.type.startsWith('image/')) {
+                reader.readAsDataURL(file);
+            } else if (file.type === "application/pdf") {
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function parsePDF(arrayBuffer) {
+            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+            loadingTask.promise.then(function (pdf) {
+                pdf.getPage(1).then(function (page) {
+                    page.getTextContent().then(function (textContent) {
+                        const fullText = textContent.items.map(item => item.str).join('\n');
+                        processSoilHealthCard(fullText);
+                    });
+                });
+            });
+        }
+
+        function parseImage(dataURL) {
+            Tesseract.recognize(
+                dataURL,
+                'eng',
+                {
+                    tessedit_char_whitelist: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.() kg/ha%',
+                    tessedit_pageseg_mode: Tesseract.PSM.AUTO_ONLY,
+                    preserve_interword_spaces: 1
+                }
+            ).then(({ data: { text } }) => {
+                processSoilHealthCard(text);
+            });
+        }
+
+        function processSoilHealthCard(text) {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            let soilData = {};
+            let cropRecommendations = [];
+
+            // Parsing personal info
+            soilData.farmerName = getValueFromLine(lines, 'Farmer\'s Name:');
+            soilData.village = getValueFromLine(lines, 'Village:');
+            soilData.district = getValueFromLine(lines, 'District:');
+            soilData.state = getValueFromLine(lines, 'State:');
+            soilData.surveyNumber = getValueFromLine(lines, 'Survey Number:');
+            soilData.sampleID = getValueFromLine(lines, 'Sample ID:');
+
+            // Parsing soil analysis
+            const soilParamsStart = lines.findIndex(line => line.includes('Analysis Results:'));
+            const soilParamsEnd = lines.findIndex(line => line.includes('Fertilizer Recommendations for Crops:'));
+            for (let i = soilParamsStart + 2; i < soilParamsEnd - 1; i++) {
+                const [param, value, rating, recommendation] = lines[i].split('\t').map(item => item.trim());
+                soilData[param.toLowerCase()] = { value, rating, recommendation };
+            }
+
+            // Parsing crop recommendations
+            const cropRecsStart = soilParamsEnd + 1;
+            const cropRecsEnd = lines.findIndex(line => line.includes('Remarks:'));
+            for (let i = cropRecsStart + 2; i < cropRecsEnd - 1; i++) {
+                const [crop, n, p, k, advice] = lines[i].split('\t').map(item => item.trim());
+                cropRecommendations.push({
+                    crop: crop,
+                    n: parseInt(n),
+                    p: parseInt(p),
+                    k: parseInt(k),
+                    advice: advice
+                });
+            }
+
+            // Parsing remarks and issuer info
+            soilData.remarks = lines[cropRecsEnd + 1].trim();
+            soilData.issuer = getValueFromLine(lines, 'Issued By:');
+            soilData.issueDate = getValueFromLine(lines, 'Date of Issue:');
+            soilData.contactInfo = getValueFromLine(lines, 'Contact:');
+            soilData.website = getValueFromLine(lines, 'Website:');
+
+            displaySoilHealthCard(soilData, cropRecommendations);
+        }
+
+        function getValueFromLine(lines, label) {
+            const line = lines.find(l => l.startsWith(label));
+            return line ? line.split(':')[1].trim() : '';
+        }
+
+        function displaySoilHealthCard(soilData, cropRecommendations) {
+            document.getElementById('farmerName').textContent = soilData.farmerName;
+            // ... Set other personal info fields similarly ...
+
+            const soilParamsTable = document.getElementById('soilParameters');
+            soilParamsTable.innerHTML = '';
+            for (let param in soilData) {
+                if (soilData[param].value) {
+                    soilParamsTable.innerHTML += `<tr>
+                        <td>${param}</td>
+                        <td>${soilData[param].value}</td>
+                        <td>${soilData[param].rating}</td>
+                        <td>${soilData[param].recommendation}</td>
+                    </tr>`;
+                }
+            }
+
+            const cropRecsTable = document.getElementById('cropRecommendations');
+            cropRecsTable.innerHTML = '';
+            cropRecommendations.forEach(crop => {
+                cropRecsTable.innerHTML += `<tr>
+                    <td>${crop.crop}</td>
+                    <td>${crop.n}</td>
+                    <td>${crop.p}</td>
+                    <td>${crop.k}</td>
+                    <td>${crop.advice}</td>
+                </tr>`;
+            });
+
+            // Set remarks, issuer info, and contact details
+            document.getElementById('remarksText').textContent = soilData.remarks;
+            document.getElementById('issuer').textContent = soilData.issuer;
+            document.getElementById('issueDate').textContent = soilData.issueDate;
+            document.getElementById('contactInfo').textContent = soilData.contactInfo;
+            document.getElementById('website').textContent = soilData.website;
+        }
+    </script>
+</body>
+
+</html>

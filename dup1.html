@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLand - Comprehensive Agricultural Solutions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #77daa0;
+            --secondary-green: #27ae60;
+            --accent-blue: #3498db;
+            --background-light: #f4f7f6;
+            --text-dark: #2c3e50;
+            --card-background: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 5px 0px 5px;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeInDown 1s;
+        }
+
+        .navbar .logo img {
+            width: 165px;
+            /* Adjust width as needed */
+            height: auto;
+            /* Maintain aspect ratio */
+            margin-right: 20px;
+            /* Space between the image and text */
+            border-radius: 1px;
+            /* Optional: Rounded corners */
+            line-height: 0px;
+        }
+
+        .navbar .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            font-size: larger;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #f1c40f;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 5%;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            max-height: 500px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            animation: zoomIn 1s;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: float 3s infinite;
+        }
+
+        .btn-farmer {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-executive {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 5%;
+            background-color: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background-color: var(--card-background);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            opacity: 0;
+            animation: fadeInUp 1s forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover i {
+            transform: rotate(360deg);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+            animation: fadeInUp 1s;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #f1c40f;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/AgriLift/image__1_-removebg-preview.png">
+        </div>
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <!-- <li><a href="#features">Features</a></li> -->
+            <li><a href="loan.html">Loans</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <select id="languageSwitcher">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="telugu">Telugu</option>
+            <!-- Add more language options here -->
+        </select>
+    </nav>
+    <br><br><br>
+
+    <!-- Hero Section with Sliding Images -->
+    <section id="home" class="hero">
+        <div class="hero-slide active" style="background-image: url('AgriLift/welcome1.jpg');">
+            <div class="hero-content">
+                <h1>Empowering Farmers, Transforming Agriculture</h1>
+                <p>Comprehensive platform offering end-to-end agricultural solutions, from land testing to market
+                    selling</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-farmer">Farmer Login</button>
+                    <button class="btn btn-executive">Executive Portal</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide" style="background-image: url('AgriLift/welcome2.jpg');">
+            <div class="hero-content">
+                <h1>Empowering Farmers, Transforming Agriculture</h1>
+                <p>Comprehensive platform offering end-to-end agricultural solutions, from land testing to market
+                    selling</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-farmer">Farmer Login</button>
+                    <button class="btn btn-executive">Executive Portal</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide" style="background-image: url('AgriLift/welcome\ 4.jpg');">
+            <div class="hero-content">
+                <h1>Empowering Farmers, Transforming Agriculture</h1>
+                <p>Comprehensive platform offering end-to-end agricultural solutions, from land testing to market
+                    selling</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-farmer">Farmer Login</button>
+                    <button class="btn btn-executive">Executive Portal</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide" style="background-image: url('AgriLift/welcome3.jpg');">
+            <div class="hero-content">
+                <h1>Empowering Farmers, Transforming Agriculture</h1>
+                <p>Comprehensive platform offering end-to-end agricultural solutions, from land testing to market
+                    selling</p>
+                <div class="cta-buttons">
+                    <a href="login.html">
+                        <button class="btn btn-farmer">Farmer Login</button>
+                    </a>
+                    <a href="executive.html">
+                        <button class="btn btn-executive">Executive Portal</button>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Our Comprehensive Solutions</h2>
+        <div class="features-grid">
+            <div class="feature-card" style="--delay: 1;">
+                <i class="fas fa-flask"></i>
+                <h3>Land Testing</h3>
+                <p>Advanced AI-driven soil analysis and crop recommendations</p>
+            </div>
+            <div class="feature-card" style="--delay: 2;">
+                <i class="fas fa-money-bill-wave"></i>
+                <h3>Loan Services</h3>
+                <p>Simplified access to government and private agricultural loans</p>
+            </div>
+            <div class="feature-card" style="--delay: 3;">
+                <i class="fas fa-seedling"></i>
+                <h3>Seeds & Plants</h3>
+                <p>Quality seeds and lab-grown plants sourced from trusted suppliers</p>
+            </div>
+            <div class="feature-card" style="--delay: 4;">
+                <i class="fas fa-tractor"></i>
+                <h3>Machinery Options</h3>
+                <p>Flexible ploughing and harvesting machinery rental</p>
+            </div>
+            <div class="feature-card" style="--delay: 5;">
+                <i class="fas fa-users"></i>
+                <h3>Labor Management</h3>
+                <p>Connect with skilled planting workers and farm managers</p>
+            </div>
+            <div class="feature-card" style="--delay: 6;">
+                <i class="fas fa-cloud-sun"></i>
+                <h3>Weather Forecasts</h3>
+                <p>Localized, real-time weather updates for precise planning</p>
+            </div>
+            <div class="feature-card" style="--delay: 7;">
+                <i class="fas fa-egg"></i>
+                <h3>Diverse Farming</h3>
+                <p>Support for poultry, dairy, and fishing farm operations</p>
+            </div>
+            <div class="feature-card" style="--delay: 8;">
+                <i class="fas fa-store"></i>
+                <h3>Market Connections</h3>
+                <p>Direct crop selling platform to maximize farmer profits</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h3>AgriLand - Your Agricultural Partner</h3>
+        <p>Innovating agriculture through technology and sustainable solutions</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+    <!-- Include i18next and plugins -->
+    <script src="https://unpkg.com/i18next@21.6.14/i18next.min.js"></script>
+    <script
+        src="https://unpkg.com/i18next-browser-languagedetector@6.1.4/i18nextBrowserLanguageDetector.min.js"></script>
+    <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/jquery-i18next@1.2.1/jquery-i18next.min.js"></script>
+
+    <script>
+        i18next
+            .use(i18nextBrowserLanguageDetector)
+            .init({
+                debug: true,
+                fallbackLng: 'en',
+                // Optionally, you can load translations from your own server using backend plugins.
+                // For this demo, we define them inline.
+                resources: {
+                    en: {
+                        translation: {
+                            "title": "AgriLand - Comprehensive Agricultural Solutions",
+                            "nav": {
+                                "home": "Home",
+                                "features": "Features",
+                                "loans": "Loans",
+                                "services": "Services",
+                                "contact": "Contact"
+                            },
+                            "hero": {
+                                "heading": "Empowering Farmers, Transforming Agriculture",
+                                "subheading": "Comprehensive platform offering end-to-end agricultural solutions, from land testing to market selling",
+                                "farmerLogin": "Farmer Login",
+                                "executivePortal": "Executive Portal"
+                            },
+                            "features": {
+                                "title": "Our Comprehensive Solutions",
+                                "landTesting": {
+                                    "title": "Land Testing",
+                                    "description": "Advanced AI-driven soil analysis and crop recommendations"
+                                },
+                                "loanServices": {
+                                    "title": "Loan Services",
+                                    "description": "Simplified access to government and private agricultural loans"
+                                }
+                                // Add other features here...
+                            },
+                            "footer": {
+                                "heading": "AgriLand - Your Agricultural Partner",
+                                "subheading": "Innovating agriculture through technology and sustainable solutions",
+                                "privacyPolicy": "Privacy Policy",
+                                "termsOfService": "Terms of Service",
+                                "support": "Support"
+                            }
+                        }
+                    },
+                    es: {
+                        translation: {
+                            "title": "AgriLand - Soluciones Agrícolas Integrales",
+                            "nav": {
+                                "home": "Inicio",
+                                "features": "Características",
+                                "loans": "Préstamos",
+                                "services": "Servicios",
+                                "contact": "Contacto"
+                            },
+                            "hero": {
+                                "heading": "Empoderando a los Agricultores, Transformando la Agricultura",
+                                "subheading": "Plataforma integral que ofrece soluciones agrícolas completas, desde el análisis de la tierra hasta la venta en el mercado",
+                                "farmerLogin": "Acceso Agricultor",
+                                "executivePortal": "Portal Ejecutivo"
+                            },
+                            "features": {
+                                "title": "Nuestras Soluciones Integrales",
+                                "landTesting": {
+                                    "title": "Análisis de Suelo",
+                                    "description": "Análisis de suelo avanzado con IA y recomendaciones de cultivos"
+                                },
+                                "loanServices": {
+                                    "title": "Servicios de Préstamos",
+                                    "description": "Acceso simplificado a préstamos agrícolas gubernamentales y privados"
+                                }
+                                // Add other feature translations here...
+                            },
+                            "footer": {
+                                "heading": "AgriLand - Su Socio Agrícola",
+                                "subheading": "Innovando la agricultura a través de tecnología y soluciones sostenibles",
+                                "privacyPolicy": "Política de Privacidad",
+                                "termsOfService": "Términos del Servicio",
+                                "support": "Soporte"
+                            }
+                        }
+                    }
+                    // You can add more languages here.
+                },
+                te: {
+                    translation: {
+                        "title": "AgriLand - సంపూర్ణ వ్యవసాయ పరిష్కారాలు",
+                        "nav": {
+                            "home": "హోమ్",
+                            "features": "లక్షణాలు",
+                            "loans": "ఋణాలు",
+                            "services": "సేవలు",
+                            "contact": "సంప్రదించండి"
+                        },
+                        "hero": {
+                            "heading": "రైతులను శక్తివంతం చేస్తూ, వ్యవసాయాన్ని మార్చడం",
+                            "subheading": "భూమి పరీక్ష నుండి మార్కెట్ అమ్మకాల వరకు, అన్ని వ్యవసాయ పరిష్కారాలను అందించే సమగ్ర వేదిక",
+                            "farmerLogin": "రైతు లాగిన్",
+                            "executivePortal": "ఎగ్జిక్యూటివ్ పోర్టల్"
+                        },
+                        "features": {
+                            "title": "మా సమగ్ర పరిష్కారాలు",
+                            "landTesting": {
+                                "title": "భూమి పరీక్ష",
+                                "description": "ఉన్నత AI ఆధారిత నేల విశ్లేషణ మరియు పంట సిఫార్సులు"
+                            },
+                            "loanServices": {
+                                "title": "ఋణ సేవలు",
+                                "description": "రాష్ట్ర మరియు ప్రైవేట్ వ్యవసాయ రుణాలకు సులభమైన ప్రాప్యత"
+                            }
+                            // Add other feature translations here...
+                        },
+                        "footer": {
+                            "heading": "AgriLand - మీ వ్యవసాయ భాగస్వామి",
+                            "subheading": "సాంకేతికత మరియు సుస్థిర పరిష్కారాల ద్వారా వ్యవసాయంలో నూతనత",
+                            "privacyPolicy": "గోప్యతా విధానం",
+                            "termsOfService": "సేవా నిబంధనలు",
+                            "support": "మద్దతు"
+                        }
+                    }
+                }
+            }, function (err, t) {
+                // Initialize jquery-i18next after i18next is initialized
+                jqueryI18next.init(i18next, $, { useOptionsAttr: true });
+                // Translate the entire body
+                $('body').localize();
+            });
+
+        // Language switcher event
+        $('#languageSwitcher').on('change', function () {
+            const newLang = $(this).val();
+            i18next.changeLanguage(newLang, function (err, t) {
+                $('body').localize();
+            });
+        });
+
+        // Sliding Hero Images
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        let currentSlide = 0;
+
+        function changeSlide() {
+            // Remove active class from current slide
+            heroSlides[currentSlide].classList.remove('active');
+
+            // Move to next slide
+            currentSlide = (currentSlide + 1) % heroSlides.length;
+
+            // Add active class to next slide
+            heroSlides[currentSlide].classList.add('active');
+        }
+
+        // Change slide every 5 seconds
+        setInterval(changeSlide, 5000);
+
+        // Stagger Feature Card Animations
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach((card, index) => {
+            card.style.setProperty('--delay', index + 1);
+        });
+    </script>
+</body>
+
+</html>

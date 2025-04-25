@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLift | Advanced Hybrid Seeds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f8faf8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .product-card {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            transform: translateY(0);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .product-card img {
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .add-to-cart {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .add-to-cart:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+
+        .add-to-cart:hover:before {
+            left: 0;
+        }
+
+        .cart-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            opacity: 0;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .cart-active .cart-sidebar {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .category-filter {
+            scroll-behavior: smooth;
+        }
+
+        .filter-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #047857;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .filter-btn:hover:after {
+            width: 70%;
+        }
+
+        .filter-btn.active {
+            background-color: #047857;
+            color: white;
+        }
+
+        .filter-btn.active:after {
+            width: 70%;
+        }
+
+        .toast {
+            bottom: -100px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+        }
+
+        .toast-active {
+            bottom: 30px;
+            opacity: 1;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ecfdf5;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .search-input {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-input:focus {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        #suggestions {
+            animation: scaleIn 0.2s ease-out forwards;
+            transform-origin: top center;
+            z-index: 100;
+        }
+
+        .cart-item {
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .cart-item:hover {
+            background-color: #f7f7f7;
+        }
+
+        .change-quantity,
+        .remove-item {
+            transition: all 0.2s ease;
+        }
+
+        .change-quantity:hover {
+            background-color: #e5e7eb;
+            transform: scale(1.1);
+        }
+
+        .remove-item:hover {
+            background-color: #fee2e2;
+            transform: scale(1.1);
+        }
+
+        .checkout-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkout-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+
+        .checkout-btn:hover:before {
+            left: 0;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #065f46;
+            z-index: 49;
+            padding: 1rem;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #047857;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #047857;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #065f46;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #e5e7eb;
+            border-top: 5px solid #047857;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Product badge */
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transform: rotate(5deg);
+        }
+
+        /* Modern badge animation */
+        .badge-anim {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Scroll to top button -->
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="flex flex-col space-y-4">
+            <a href="welcome.html" class="text-white hover:text-emerald-200 transition">Home</a>
+            <a href="seed.html" class="text-white hover:text-emerald-200 transition">Market</a>
+            <a href="mounitoring.html" class="text-white hover:text-emerald-200 transition">Farm Monitoring</a>
+            <a href="worker.html" class="text-white hover:text-emerald-200 transition">Labour Management</a>
+            <a href="loan.html" class="text-white hover:text-emerald-200 transition">Loans</a>
+            <a href="contact.html" class="text-white hover:text-emerald-200 transition">Contact Us</a>
+            <a href="services.html" class="text-white hover:text-emerald-200 transition">Services</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-emerald-800 text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold flex items-center">
+                <i class="fas fa-leaf mr-2"></i>AgriLift
+            </a>
+
+            <button id="menuToggle" class="menu-toggle md:hidden text-white hover:text-emerald-200">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="welcome.html" class="nav-link hover:text-emerald-200 transition">Home</a>
+                <a href="seed.html" class="nav-link hover:text-emerald-200 transition">Market</a>
+                <a href="mounitoring.html" class="nav-link hover:text-emerald-200 transition">Farm Monitoring</a>
+                <a href="worker.html" class="nav-link hover:text-emerald-200 transition">Labour Management</a>
+                <a href="loan.html" class="nav-link hover:text-emerald-200 transition">Loans</a>
+                <a href="contact.html" class="nav-link hover:text-emerald-200 transition">Contact Us</a>
+                <a href="services.html" class="nav-link hover:text-emerald-200 transition">Services</a>
+                <button id="cartBtn" class="relative hover:text-emerald-200 transition">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cartCount"
+                        class="absolute -top-2 -right-3 bg-red-500 text-xs px-2 py-0.5 rounded-full">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="bg-emerald-700 text-white py-3 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex-1 relative">
+                <input id="searchInput" type="text" placeholder="Search products..."
+                    class="w-full px-4 py-2.5 pl-10 rounded-full bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-300 search-input">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                <div id="suggestions" class="absolute w-full bg-white mt-1 rounded-lg shadow-lg hidden">
+                    <ul class="py-1">
+                        <!-- Suggestions will be dynamically added here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="bg-gradient-to-r from-emerald-800 to-emerald-600 text-white py-12 mb-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl">
+                <h1 class="text-4xl font-bold mb-4">Advanced Hybrid Seeds for a Sustainable Future</h1>
+                <p class="text-lg mb-6">Experience the future of agriculture with our scientifically enhanced Seeds that
+                    are nutritious, sustainable, and perfect for any setting.</p>
+                <button
+                    class="bg-white text-emerald-800 font-bold px-6 py-3 rounded-full hover:bg-emerald-50 transition shadow-lg">
+                    Explore Collection
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Category Filters -->
+        <div class="mb-10">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Browse by Category</h2>
+            <div class="category-filter flex overflow-x-auto pb-4 space-x-4">
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-emerald-600 text-white whitespace-nowrap active"
+                    data-category="all">All Seeds</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-gray-200 hover:bg-emerald-100 whitespace-nowrap"
+                    data-category="Spices">Spices</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-gray-200 hover:bg-emerald-100 whitespace-nowrap"
+                    data-category="fruits">fruits</button>
+                <button class="filter-btn px-5 py-2.5 rounded-full bg-gray-200 hover:bg-emerald-100 whitespace-nowrap"
+                    data-category="Herbal">Herbal</button>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Product Cards -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="fruits">
+                <div class="product-badge badge-anim">Best Seller</div>
+                <div class="overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1519096845289-95806ee03a1a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Lab-Grown Lettuce" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Mango</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.5)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Mango is a sweet, juicy tropical fruit with a vibrant flavor
+                        and rich aroma.
+
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹400</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Spices -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="Spices">
+                <div class="overflow-hidden">
+                    <img src="https://media.istockphoto.com/id/1346906247/photo/cumin-seeds-called-jeera-in-clay-bowl-and-its-powder-in-white-bowl-on-dark-background.webp?a=1&b=1&s=612x612&w=0&k=20&c=4LfQOPtE0FLEjTM1BNfxOIEGp2Yzw4_YM_TMKQN-CN8="
+                        alt="Lab-Grown Orchid" class="w-full h-56 object-cover">
+                </div>
+                ''
+
+                +
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Cumin Seeds</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(5.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Cumin seeds are used for adding a warm, earthy flavor to
+                        dishes and aiding digestion.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹599</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: fruits -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="fruits">
+                <div class="product-badge badge-anim">New</div>
+                <div class="overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1610725664338-2be2cb450798?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8U3RyYXdiZXJyaWVzfGVufDB8fDB8fHww"
+                        alt="Lab-Grown Strawberry" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Strawberries</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="far fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Strawberries are sweet, juicy berries rich in antioxidants,
+                        vitamin C, and fiber
+                        properties.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹499</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Herbal -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="Herbal">
+                <div class="overflow-hidden">
+                    <img src="https://media.istockphoto.com/id/2006732975/photo/tulsi-or-the-holy-basil-flower-leaves-holy-basil-sacred-basil.jpg?s=612x612&w=0&k=20&c=8JOiiiwxxbk2BX8tMKP-VPubn9ByiQgxAhoveAGFlbI="
+                        alt="Lab-Grown Aloe Vera" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Tulasi</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.5)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Tulasi (Holy Basil) is a medicinal herb known for its aromatic
+                        leaves and health benefits, including immunity boosting and stress relief.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹1200</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: fruits -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="fruits">
+                <div class="overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1563114773-84221bd62daa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Lab-Grown Tomato" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Watermelon</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="far fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Watermelon is a refreshing, hydrating fruit with a sweet,
+                        juicy flesh, rich in vitamins and antioxidants.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹399</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Spices -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="Spices">
+                <div class="overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1591801058986-9e28e68670f7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8QmxhY2slMjBQZXBwZXJ8ZW58MHx8MHx8fDA%3D"
+                        alt="Lab-Grown Succulent" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Black Pepper</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="far fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Black pepper is a pungent spice used for seasoning and has
+                        medicinal benefits like aiding digestion and improving metabolism..</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹650</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: fruits -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="fruits">
+                <div class="overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1616684000067-36952fde56ec?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8a2l3aXxlbnwwfHwwfHx8MA%3D%3D
+                    " alt="Lab-Grown Blueberry" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Kiwi</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.5)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Kiwi is a tangy, nutrient-rich fruit packed with vitamin C,
+                        fiber, and antioxidants.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹849</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Herbal -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="Herbal">
+                <div class="product-badge badge-anim">Popular</div>
+                <div class="overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1642497393790-c5751b818e1b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8RmxheHNlZWRzfGVufDB8fDB8fHww"
+                        alt="Lab-Grown Echinacea" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Flaxseeds</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="far fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Flaxseeds are nutrient-dense seeds rich in omega-3 fatty
+                        acids, fiber, and antioxidants, promoting heart and digestive health.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹1099</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Herbs -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="fruits">
+                <div class="overflow-hidden">
+                    <img src="https://plus.unsplash.com/premium_photo-1668076515507-c5bc223c99a4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8UG9tZWdyYW5hdGV8ZW58MHx8MHx8fDA%3D"
+                        alt="Lab-Grown Basil" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Pomegranate</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(4.5)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Pomegranate is a nutrient-rich fruit with juicy, sweet-tart
+                        seeds packed with antioxidants, vitamins, and health benefits.
+                        enthusiasts.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹299</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card: Exotic Plants -->
+            <div class="product-card bg-white overflow-hidden relative" data-category="Spices">
+                <div class="product-badge badge-anim">Limited</div>
+                <div class="overflow-hidden">
+                    <img src="https://media.istockphoto.com/id/1200003027/photo/cloves-and-wooden-spoon-close-up-food-background-isolated-on-white-background.webp?a=1&b=1&s=612x612&w=0&k=20&c=r88AXt-8psFu25oDanyqciQThf3NjGW2macjCmZxCTk="
+                        alt="Lab-Grown Bonsai" class="w-full h-56 object-cover">
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-2">Cloves(Laung)</h3>
+                    <div class="flex mb-2">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <span class="ml-1 text-xs text-gray-500">(5.0)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Cloves (Laung) are aromatic spice buds with a warm, intense
+                        flavor, known for their medicinal properties and digestive benefits.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-emerald-600 font-bold text-xl">₹2999</span>
+                        <button
+                            class="add-to-cart bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- More product cards with different categories -->
+        </div>
+    </div>
+
+    <!-- Featured Section -->
+    <section class="py-12 bg-gradient-to-r from-emerald-50 to-emerald-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-8 text-center text-gray-800">Why Choose AgriLift Plants?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-seedling text-emerald-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Sustainable Cultivation</h3>
+                    <p class="text-gray-600">Our Advanced Hybrid Seeds reduce water usage by 90% compared to traditional
+                        farming methods.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-flask text-emerald-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Enhanced Nutrition</h3>
+                    <p class="text-gray-600">Scientifically enhanced to provide more vitamins, minerals, and
+                        antioxidants than conventional plants.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-truck text-emerald-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Farm to Table Fresh</h3>
+                    <p class="text-gray-600">Our plants are grown locally, reducing carbon footprint and ensuring
+                        maximum freshness.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar fixed top-0 right-0 h-full w-96 bg-white shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Your Cart</h2>
+            <button id="closeCart" class="text-gray-500 hover:text-gray-700 transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <div id="cartItems" class="space-y-4 max-h-[65vh] overflow-y-auto pr-2">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+
+        <div class="mt-6 border-t pt-4">
+            <div class="flex justify-between font-bold text-lg mb-4">
+                <span>Total:</span>
+                <span id="cartTotal">₹0.00</span>
+            </div>
+            <a href="C1.HTML"
+                class="w-full bg-emerald-600 text-white py-3 rounded-lg mt-4 hover:bg-emerald-700 transition flex items-center justify-center checkout-btn">
+                <i class="fas fa-credit-card mr-2"></i> Checkout
+            </a>
+        </div>
+    </div>
+
+    <!-- Overlay for cart -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="toast fixed left-1/2 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-lg flex items-center justify-center space-x-2">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span>Item added to cart!</span>
+    </div>
+
+    <script>
+        // Wait for the page to load
+        window.addEventListener('load', function () {
+            // Hide loading overlay
+            setTimeout(function () {
+                document.getElementById('loadingOverlay').style.opacity = '0';
+                setTimeout(function () {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }, 500);
+            }, 800);
+        });
+
+        // Cart Functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartOverlay = document.getElementById('cartOverlay');
+
+        function updateCart() {
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = cartCount;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+        }
+
+        function addItemToCart(productName, price) {
+            const product = cart.find(item => item.name === productName);
+
+            if (product) {
+                product.quantity += 1;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            updateCart();
+            showToast();
+        }
+
+        // Add to Cart with animation
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const productCard = button.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const price = parseFloat(productCard.querySelector('span').textContent.slice(1));
+
+                // Add a small click animation
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 200);
+
+                addItemToCart(productName, price);
+            });
+        });
+
+        // Cart Display
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <i class="fas fa-shopping-cart text-gray-300 text-5xl mb-4"></i>
+                        <p class="text-gray-500">Your cart is empty</p>
+                    </div>
+                `;
+                document.getElementById('cartTotal').textContent = '$0.00';
+                return;
+            }
+
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                cartItems.innerHTML += `
+                    <div class="cart-item flex justify-between items-start space-x-3 bg-gray-50 p-3 rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="font-semibold">${item.name}</h4>
+                            <p class="text-sm text-gray-600">$${item.price.toFixed(2)} × ${item.quantity}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="change-quantity w-7 h-7 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300" data-index="${index}" data-change="-1">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <span class="w-5 text-center">${item.quantity}</span>
+                            <button class="change-quantity w-7 h-7 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300" data-index="${index}" data-change="1">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                            <button class="remove-item w-7 h-7 flex items-center justify-center rounded bg-red-100 text-red-600 hover:bg-red-200" data-index="${index}">
+                                <i class="fas fa-trash-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Change Quantity with animation
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('change-quantity') || event.target.parentElement.classList.contains('change-quantity')) {
+                const button = event.target.classList.contains('change-quantity') ? event.target : event.target.parentElement;
+                const index = parseInt(button.getAttribute('data-index'));
+                const change = parseInt(button.getAttribute('data-change'));
+
+                if (cart[index]) {
+                    // Add animation
+                    button.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        button.style.transform = 'scale(1)';
+                    }, 100);
+
+                    if (change === -1 && cart[index].quantity > 1) {
+                        cart[index].quantity -= 1;
+                    } else if (change === 1) {
+                        cart[index].quantity += 1;
+                    }
+                    updateCart();
+                }
+            }
+        });
+
+        // Remove Item from Cart
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('remove-item') || event.target.parentElement.classList.contains('remove-item')) {
+                const button = event.target.classList.contains('remove-item') ? event.target : event.target.parentElement;
+                const index = parseInt(button.getAttribute('data-index'));
+
+                if (cart[index]) {
+                    const cartItem = button.closest('.cart-item');
+                    cartItem.style.transform = 'translateX(100%)';
+                    cartItem.style.opacity = '0';
+
+                    setTimeout(() => {
+                        cart.splice(index, 1); // Remove the item from the array
+                        updateCart();
+                    }, 300);
+                }
+            }
+        });
+
+        // Cart Interactions with overlay
+        document.getElementById('cartBtn').addEventListener('click', () => {
+            document.body.classList.add('cart-active');
+            cartOverlay.classList.remove('hidden');
+
+            // Prevent scrolling when cart is open
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeCart() {
+            document.body.classList.remove('cart-active');
+            cartOverlay.classList.add('hidden');
+
+            // Re-enable scrolling
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('closeCart').addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Toast Notification with better animation
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('toast-active');
+            setTimeout(() => toast.classList.remove('toast-active'), 2500);
+        }
+
+        // Filter Functionality with smoother animation
+        function filterProducts(category) {
+            const allProducts = document.querySelectorAll('.product-card');
+            let delay = 0;
+
+            allProducts.forEach(product => {
+                if (category === 'all' || product.getAttribute('data-category') === category) {
+                    // First hide it
+                    product.style.opacity = '0';
+                    product.style.transform = 'scale(0.95) translateY(10px)';
+
+                    // Then show it with a delay for staggered animation
+                    setTimeout(() => {
+                        product.style.display = 'block';
+                        setTimeout(() => {
+                            product.style.opacity = '1';
+                            product.style.transform = 'scale(1) translateY(0)';
+                        }, 50);
+                    }, delay);
+
+                    delay += 50; // Stagger the animations
+                } else {
+                    product.style.opacity = '0';
+                    product.style.transform = 'scale(0.95) translateY(10px)';
+                    setTimeout(() => {
+                        product.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        // Event listener for filter buttons with active state
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const category = this.getAttribute('data-category');
+                filterProducts(category);
+
+                // Reset the active class from all buttons and set it on the clicked one
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('bg-emerald-600', 'text-white', 'active');
+                    btn.classList.add('bg-gray-200');
+                });
+
+                this.classList.remove('bg-gray-200');
+                this.classList.add('bg-emerald-600', 'text-white', 'active');
+            });
+        });
+
+        // Scroll to top functionality
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Improved search functionality
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsContainer = document.getElementById('suggestions');
+        const suggestionList = suggestionsContainer.querySelector('ul');
+
+        function updateSearchHistoryDisplay() {
+            // This function is referenced but not implemented in the original code
+            // Adding a basic implementation
+            const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            // We could display search history somewhere if needed
+        }
+
+        function addToSearchHistory(term) {
+            if (!term.trim()) return;
+
+            const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+            // Check if term already exists
+            if (!searchHistory.includes(term)) {
+                // Add to start of array and keep only last 10 searches
+                searchHistory.unshift(term);
+
+                if (searchHistory.length > 10) {
+                    searchHistory.pop();
+                }
+
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            }
+        }
+
+        // Function to generate suggestions
+        function generateSuggestions(searchTerm) {
+            if (!searchTerm.trim()) return [];
+
+            let suggestions = [];
+
+            // Suggest from history
+            const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            suggestions = suggestions.concat(history.filter(term =>
+                term.toLowerCase().includes(searchTerm.toLowerCase())
+            ));
+
+            // Suggest based on product names
+            const products = [];
+            document.querySelectorAll('.product-card h3').forEach(el => {
+                products.push(el.textContent);
+            });
+
+            suggestions = suggestions.concat(products.filter(product =>
+                product.toLowerCase().includes(searchTerm.toLowerCase())
+            ));
+
+            // Remove duplicates and limit to 5
+            return [...new Set(suggestions)].slice(0, 5);
+        }
+
+        // Function to show/hide and populate suggestions
+        function updateSuggestions(searchTerm) {
+            const suggestions = generateSuggestions(searchTerm);
+
+            if (suggestions.length > 0 && searchTerm.trim()) {
+                suggestionsContainer.classList.remove('hidden');
+                suggestionList.innerHTML = suggestions.map(term =>
+                    `<li class="px-4 py-2 cursor-pointer hover:bg-emerald-100 transition">${term}</li>`
+                ).join('');
+            } else {
+                suggestionsContainer.classList.add('hidden');
+            }
+        }
+
+        // Perform search
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            if (searchTerm) {
+                addToSearchHistory(searchTerm);
+            }
+
+            updateSuggestions(searchTerm);
+
+            // Search all products
+            document.querySelectorAll('.product-card').forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                const productDesc = product.querySelector('p').textContent.toLowerCase();
+
+                if (productName.includes(searchTerm) || productDesc.includes(searchTerm)) {
+                    product.style.display = 'block';
+                    setTimeout(() => {
+                        product.style.opacity = '1';
+                        product.style.transform = 'scale(1) translateY(0)';
+                    }, 50);
+                } else if (searchTerm) {
+                    product.style.opacity = '0';
+                    product.style.transform = 'scale(0.95) translateY(10px)';
+                    setTimeout(() => {
+                        product.style.display = 'none';
+                    }, 300);
+                } else {
+                    // If search term is empty, show all
+                    product.style.display = 'block';
+                    setTimeout(() => {
+                        product.style.opacity = '1';
+                        product.style.transform = 'scale(1) translateY(0)';
+                    }, 50);
+                }
+            });
+
+            // If no search term, reset category filters
+            if (!searchTerm) {
+                const activeFilter = document.querySelector('.filter-btn.active');
+                if (activeFilter) {
+                    filterProducts(activeFilter.getAttribute('data-category'));
+                } else {
+                    filterProducts('all');
+                }
+            }
+        }
+
+        // Event listener for selecting a suggestion
+        suggestionList.addEventListener('click', function (e) {
+            if (e.target.tagName === 'LI') {
+                searchInput.value = e.target.textContent;
+                performSearch();
+                suggestionsContainer.classList.add('hidden');
+            }
+        });
+
+        // Show suggestions on input
+        searchInput.addEventListener('input', performSearch);
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                suggestionsContainer.classList.add('hidden');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCart();
+            filterProducts('all');
+            updateSearchHistoryDisplay();
+
+            // Add animation delay to each product card
+            document.querySelectorAll('.product-card').forEach((card, index) => {
+                card.style.animationDelay = (index * 0.1) + 's';
+            });
+        });
+    </script>
+</body>
+
+</html>

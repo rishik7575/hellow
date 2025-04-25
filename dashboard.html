@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLift Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --primary-green-dark: #219a56;
+            --primary-green-light: #4ad485;
+            --secondary-green: #27ae60;
+            --accent-blue: #3498db;
+            --accent-blue-dark: #2980b9;
+            --accent-blue-light: #5dade2;
+            --accent-yellow: #f1c40f;
+            --background-light: #f9fcfa;
+            --text-dark: #2c3e50;
+            --card-background: #ffffff;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --input-border: #dcdfe6;
+            --input-focus: #3498db;
+            --transition-speed: 0.3s;
+            --error-color: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: url('data:image/svg+xml;charset=utf8,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z" fill="%232ecc71" fill-opacity="0.05" fill-rule="evenodd"/%3E%3C/svg%3E');
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-green);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-green);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -100% 0;
+            }
+
+            100% {
+                background-position: 100% 0;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 5%;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: padding 0.3s ease, background 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.6rem 5%;
+            background: rgba(46, 204, 113, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo img {
+            width: 165px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 1px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Weather Card */
+        .weather-card {
+            position: fixed;
+            top: 156px;
+            right: 20px;
+            background: white;
+            padding: 12px 18px;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            z-index: 999;
+            animation: fadeIn 0.5s ease-out;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .weather-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.95rem;
+        }
+
+        .weather-temp {
+            font-weight: 700;
+            color: var(--primary-green);
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        main {
+            flex-grow: 1;
+            padding: 120px 5% 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .dashboard-section {
+            margin-bottom: 30px;
+            background: var(--card-background);
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .dashboard-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            color: var(--text-dark);
+        }
+
+        .dashboard-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-green);
+            border-radius: 3px;
+        }
+
+        .upload-section {
+            text-align: center;
+        }
+
+        .upload-section p {
+            color: #777;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--secondary-green);
+            padding: 40px 30px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(46, 204, 113, 0.05);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-green);
+            background-color: rgba(46, 204, 113, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .next-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .next-button:hover {
+            border-color: var(--primary-green);
+            background-color: rgba(46, 204, 113, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+            background: linear-gradient(135deg, var(--secondary-green), var(--primary-green));
+        }
+
+        .upload-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .upload-area p {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+        }
+
+        .section-card {
+            background: var(--card-background);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary-green);
+            border-radius: 3px;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-bottom: 25px;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            background: white;
+            padding: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .parameter-card {
+            background: linear-gradient(135deg, var(--primary-green-light), var(--primary-green));
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .parameter-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
+        }
+
+        .parameter-card span:first-child {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .crop-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-green);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .crop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .crop-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: var(--primary-green);
+        }
+
+        .crop-card p {
+            margin-bottom: 10px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .crop-card p strong {
+            color: var(--text-dark);
+        }
+
+        .season-selector {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .season-selector:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+        }
+
+        .buy-seeds-btn {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-dark));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .buy-seeds-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue));
+        }
+
+        .buy-seeds-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .soil-layers {
+            perspective: 1000px;
+            width: 300px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+
+        .soil-layer {
+            width: 100%;
+            height: 20%;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .soil-layer div {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-origin: bottom;
+        }
+
+        .soil-layer div:nth-child(1) {
+            background: linear-gradient(to bottom, #8B4513, #654321);
+            transform: rotateX(0deg);
+        }
+
+        .soil-layer div:nth-child(2) {
+            background: linear-gradient(to bottom, #DAA520, #B8860B);
+            transform: rotateX(90deg) translateZ(100px);
+            opacity: 0.7;
+        }
+
+        .soil-layer:hover {
+            transform: rotateX(-20deg);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(46, 204, 113, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-green);
+            animation: rotate 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive Styling */
+        @media screen and (max-width: 991px) {
+            .navbar .logo img {
+                width: 140px;
+            }
+
+            .nav-button {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 3%;
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                overflow-x: auto;
+                padding: 10px 0;
+                gap: 10px;
+            }
+
+            .weather-card {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                top: 120px;
+            }
+
+            .weather-card:hover {
+                transform: translateX(-50%) translateY(-5px);
+            }
+
+            main {
+                padding-top: 170px;
+            }
+
+            .upload-area {
+                padding: 25px 15px;
+            }
+
+            .section-card {
+                padding: 20px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .navbar .logo img {
+                width: 120px;
+                margin-right: 10px;
+            }
+
+            .nav-button {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+
+            .dashboard-section {
+                padding: 20px;
+            }
+
+            .upload-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .weather-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="logo">
+            <img src="/AgriLift/image__1_-removebg-preview.png" alt="AgriLift Logo">
+        </div>
+        <div class="nav-links">
+            <button class="nav-button" onclick="window.location.href='home.html';">
+                <i class="fas fa-home"></i> Home
+            </button>
+            <button class="nav-button" onclick="window.location.href='loan.html';">
+                <i class="fas fa-money-bill-wave"></i> Loans
+            </button>
+            <button class="nav-button" onclick="window.location.href='contact.html';">
+                <i class="fas fa-envelope"></i> Contact
+            </button>
+            <button class="nav-button" onclick="window.location.href='seed.html';">
+                <i class="fas fa-seedling"></i> Market
+            </button>
+            <button class="nav-button" onclick="window.location.href='worker.html';">
+                <i class="fas fa-users"></i> Labour
+            </button>
+            <button class="nav-button" onclick="window.location.href='machinary.html';">
+                <i class="fas fa-tractor"></i> Machinery
+            </button>
+            <button class="nav-button" onclick="window.location.href='export.html';">
+                <i class="fas fa-shipping-fast"></i> Export
+            </button>
+            <button class="nav-button" onclick="window.location.href='mounitoring.html';">
+                <i class="fas fa-chart-line"></i> Monitoring
+            </button>
+        </div>
+    </nav>
+
+    <!-- Weather Card -->
+    <div class="weather-card">
+        <div class="weather-info">
+            <span class="weather-temp">25°C</span>
+            <span class="weather-condition">☀️ Sunny</span>
+            <span class="weather-humidity">💧 45%</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <div style="padding-top: 4rem;">
+            <section class="dashboard-section upload-section">
+                <h2>Smart Soil Analysis</h2>
+                <p>Upload your soil report for personalized crop recommendations and detailed insights</p>
+                <div id="fileUploadArea" class="upload-area">
+                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-upload"></i> Choose File
+                    </button>
+                    <p>Supported formats: PDF, JPG, JPEG, PNG</p>
+                    <div id="errorMessage" class="error-message"></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="section-card analysis-section">
+                <h3>Soil Analysis Results</h3>
+                <div class="chart-container">
+                    <canvas id="soilChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <!-- 3D Bar Chart will be appended here -->
+                </div>
+                <div class="soil-layers">
+                    <!-- Soil Layers will be dynamically added here -->
+                </div>
+                <div id="soilParameters"></div>
+            </div>
+
+            <div class="section-card recommendations-section">
+                <h3>Crop Recommendations</h3>
+                <select class="season-selector" id="seasonSelect" onchange="updateRecommendations()">
+                    <option value="none">Select Season</option>
+                    <option value="kharif">Kharif (Monsoon)</option>
+                    <option value="rabi">Rabi (Winter)</option>
+                    <option value="zaid">Zaid (Summer)</option>
+                </select>
+                <div id="cropRecommendations"></div>
+                <button class="next-button" onclick="window.location.href='3d2.html';">Next</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="languageHandler.js"></script>
+    <script src="translations.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // JavaScript for handling file uploads, updating charts, and real-time simulation
+        document.getElementById("fileInput").addEventListener("change", handleFileUpload);
+
+        let realTimeChart, pieChart, bar3DChart;
+        let realTimeData = {
+            pH: 7,
+            nitrogen: 50,
+            phosphorus: 50,
+            potassium: 50,
+            organicMatter: 2,
+            moisture: 50
+        };
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                document.getElementById('errorMessage').textContent = 'Please select a file.';
+                return;
+            }
+
+            document.getElementById('errorMessage').textContent = '';
+            document.getElementById('fileUploadArea').innerHTML = '<div class="loading-spinner"></div><p>Analyzing your soil sample...</p>';
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const text = e.target.result;
+
+                if (file.type.startsWith('image/')) {
+                    simulateImageAnalysis(text);
+                } else if (file.type === "application/pdf") {
+                    simulatePDFAnalysis(text);
+                } else {
+                    document.getElementById('errorMessage').textContent = 'Unsupported file type.';
+                }
+            };
+
+            if (file.type.startsWith('image/')) {
+                reader.readAsDataURL(file);
+            } else if (file.type === "application/pdf") {
+                reader.readAsText(file);
+            }
+
+            // Add a slight delay to simulate processing
+            setTimeout(() => {
+                if (file.type.startsWith('image/') || file.type === "application/pdf") {
+                    reader.onload(new Event('load'));
+                }
+            }, 2000);
+        }
+
+        function simulateImageAnalysis(text) {
+            realTimeData = {
+                pH: (Math.random() * 6) + 5, // pH range 5-11
+                nitrogen: Math.random() * 100,
+                phosphorus: Math.random() * 100,
+                potassium: Math.random() * 100,
+                organicMatter: Math.random() * 5,
+                moisture: Math.random() * 100
+            };
+            displayResults(realTimeData);
+        }
+
+        function simulatePDFAnalysis(text) {
+            realTimeData = {
+                pH: parseFloat(text.match(/pH:\s*(\d+(\.\d+)?)/)?.[1] || (Math.random() * 6) + 5),
+                nitrogen: parseFloat(text.match(/Nitrogen:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                phosphorus: parseFloat(text.match(/Phosphorus:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                potassium: parseFloat(text.match(/Potassium:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                organicMatter: parseFloat(text.match(/Organic Matter:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 5),
+                moisture: parseFloat(text.match(/Moisture:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100)
+            };
+            displayResults(realTimeData);
+        }
+
+        function displayResults(data) {
+            document.getElementById('fileUploadArea').innerHTML = '<div class="success-animation"><i class="fas fa-check-circle" style="font-size: 40px; color: var(--primary-green); margin-bottom: 15px;"></i></div><p>File Uploaded Successfully!</p><button class="upload-btn" onclick="document.getElementById(\'fileInput\').click()"><i class="fas fa-sync-alt"></i> Upload Another File</button>';
+
+            // Update or create charts
+            updateLineChart(data);
+            updatePieChart(data);
+            update3DBarChart(data);
+            updateSoilLayers(data);
+
+            // Display soil parameters
+            let paramsHTML = '';
+            for (let [key, value] of Object.entries(data)) {
+                paramsHTML += `
+                    <div class="parameter-card">
+                        <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                        <span>${value.toFixed(2)} ${key === 'pH' ? '' : 'mg/kg'}</span>
+                    </div>
+                `;
+            }
+            document.getElementById('soilParameters').innerHTML = paramsHTML;
+
+            updateRecommendations();
+            startRealTimeSimulation();
+        }
+
+        function updateLineChart(data) {
+            const ctx = document.getElementById('soilChart').getContext('2d');
+
+            // Advanced gradient background
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(46, 204, 113, 0.4)');
+            gradient.addColorStop(1, 'rgba(46, 204, 113, 0.05)');
+
+            if (!realTimeChart) {
+                realTimeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Object.keys(data).map(key => key.charAt(0).toUpperCase() + key.slice(1)),
+                        datasets: [{
+                            label: 'Soil Parameters',
+                            data: Object.values(data),
+                            borderColor: 'rgba(46, 204, 113, 1)',
+                            backgroundColor: gradient,
+                            fill: true,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            pointBackgroundColor: 'white',
+                            pointBorderColor: 'rgba(46, 204, 113, 1)',
+                            pointBorderWidth: 2,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(200, 200, 200, 0.2)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Soil Nutrient Parameters',
+                                color: '#2c3e50',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold',
+                                    family: "'Poppins', sans-serif"
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 15
+                                }
+                            },
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                titleColor: '#2c3e50',
+                                bodyColor: '#2c3e50',
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold',
+                                    family: "'Poppins', sans-serif"
+                                },
+                                bodyFont: {
+                                    size: 13,
+                                    family: "'Poppins', sans-serif"
+                                },
+                                borderColor: 'rgba(46, 204, 113, 0.5)',
+                                borderWidth: 1,
+                                displayColors: false,
+                                padding: 10
+                            }
+                        }
+                    }
+                });
+            } else {
+                realTimeChart.data.datasets[0].data = Object.values(data);
+                realTimeChart.update();
+            }
+        }
+
+        function updatePieChart(data) {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            if (!pieChart) {
+                pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Nitrogen', 'Phosphorus', 'Potassium', 'Organic Matter', 'Moisture'],
+                        datasets: [{
+                            data: [data.nitrogen, data.phosphorus, data.potassium, data.organicMatter * 20, data.moisture],
+                            backgroundColor: [
+                                'rgba(46, 204, 113, 0.8)',
+                                'rgba(52, 152, 219, 0.8)',
+                                'rgba(155, 89, 182, 0.8)',
+                                'rgba(241, 196, 15, 0.8)',
+                                'rgba(52, 73, 94, 0.8)'
+                            ],
+                            borderColor: 'white',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: {
+                                        family: "'Poppins', sans-serif",
+                                        size: 12
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Soil Composition',
+                                color: '#2c3e50',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold',
+                                    family: "'Poppins', sans-serif"
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 15
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                titleColor: '#2c3e50',
+                                bodyColor: '#2c3e50',
+                                borderColor: 'rgba(46, 204, 113, 0.5)',
+                                borderWidth: 1
+                            }
+                        }
+                    }
+                });
+            } else {
+                pieChart.data.datasets[0].data = [
+                    data.nitrogen,
+                    data.phosphorus,
+                    data.potassium,
+                    data.organicMatter * 20,
+                    data.moisture
+                ];
+                pieChart.update();
+            }
+        }
+
+        function update3DBarChart(data) {
+            // First, clear the previous canvas if it exists
+            const container = document.querySelector('.chart-container:nth-of-type(3)');
+            container.innerHTML = '';
+
+            // Create a new canvas
+            const ctx = document.createElement('canvas');
+            container.appendChild(ctx);
+
+            const barColors = [
+                'rgba(46, 204, 113, 0.8)',
+                'rgba(52, 152, 219, 0.8)',
+                'rgba(155, 89, 182, 0.8)',
+                'rgba(241, 196, 15, 0.8)',
+                'rgba(231, 76, 60, 0.8)',
+                'rgba(52, 73, 94, 0.8)'
+            ];
+
+            bar3DChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data).map(key => key.charAt(0).toUpperCase() + key.slice(1)),
+                    datasets: [{
+                        label: 'Value',
+                        data: Object.values(data),
+                        backgroundColor: barColors,
+                        borderColor: barColors.map(color => color.replace('0.8', '1')),
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(200, 200, 200, 0.2)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Soil Parameter Comparison',
+                            color: '#2c3e50',
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                                family: "'Poppins', sans-serif"
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 15
+                            }
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#2c3e50',
+                            bodyColor: '#2c3e50',
+                            titleFont: {
+                                family: "'Poppins', sans-serif"
+                            },
+                            bodyFont: {
+                                family: "'Poppins', sans-serif"
+                            },
+                            borderColor: 'rgba(46, 204, 113, 0.5)',
+                            borderWidth: 1,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    const key = context.label.toLowerCase();
+                                    const value = context.raw.toFixed(2);
+                                    return `${key === 'ph' ? 'pH' : key}: ${value} ${key === 'ph' ? '' : 'mg/kg'}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSoilLayers(data) {
+            const soilLayers = document.querySelector('.soil-layers');
+            soilLayers.innerHTML = ''; // Clear existing layers
+
+            // Calculate heights based on data
+            const moistureLayer = Math.min(40, data.moisture / 2.5); // Max 40% of height
+            const organicLayer = Math.min(30, data.organicMatter * 10); // Max 30% of height
+            const mineralsLayer = Math.min(20, (data.phosphorus + data.potassium) / 10); // Max 20% of height
+            const soilLayer = 100 - moistureLayer - organicLayer - mineralsLayer; // Remaining space
+
+            // Create layers with color gradients
+            const layers = [
+                { name: 'Moisture', height: moistureLayer, color1: '#5dade2', color2: '#3498db' },
+                { name: 'Organic Matter', height: organicLayer, color1: '#2ecc71', color2: '#27ae60' },
+                { name: 'Minerals', height: mineralsLayer, color1: '#f1c40f', color2: '#f39c12' },
+                { name: 'Soil Base', height: soilLayer, color1: '#a0522d', color2: '#8b4513' }
+            ];
+
+            // Create layers with labels
+            layers.forEach(layer => {
+                if (layer.height <= 0) return;
+
+                const layerDiv = document.createElement('div');
+                layerDiv.className = 'soil-layer';
+                layerDiv.style.height = `${layer.height}%`;
+                layerDiv.style.position = 'relative';
+                layerDiv.style.marginBottom = '2px';
+                layerDiv.style.background = `linear-gradient(to bottom, ${layer.color1}, ${layer.color2})`;
+                layerDiv.style.borderRadius = '5px';
+                layerDiv.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+                layerDiv.style.display = 'flex';
+                layerDiv.style.alignItems = 'center';
+                layerDiv.style.justifyContent = 'center';
+
+                // Add label for each layer
+                const label = document.createElement('span');
+                label.textContent = layer.name;
+                label.style.color = 'white';
+                label.style.fontSize = '0.75rem';
+                label.style.fontWeight = 'bold';
+                label.style.textShadow = '0 1px 2px rgba(0,0,0,0.5)';
+
+                layerDiv.appendChild(label);
+                soilLayers.appendChild(layerDiv);
+            });
+        }
+
+        function startRealTimeSimulation() {
+            clearInterval(window.simInterval);
+            window.simInterval = setInterval(() => {
+                // Simulate small natural changes in soil parameters
+                for (let key in realTimeData) {
+                    // Make smaller, more realistic changes
+                    let change = (Math.random() - 0.5) * 0.8;
+
+                    switch (key) {
+                        case 'pH':
+                            // pH should stay within realistic bounds (4-9)
+                            realTimeData[key] = Math.min(Math.max(realTimeData[key] + change * 0.05, 4), 9);
+                            break;
+                        case 'organicMatter':
+                            // Organic matter changes more slowly
+                            realTimeData[key] = Math.min(Math.max(realTimeData[key] + change * 0.01, 0.5), 5);
+                            break;
+                        case 'moisture':
+                            // Moisture can change more quickly with weather
+                            realTimeData[key] = Math.min(Math.max(realTimeData[key] + change * 0.5, 20), 80);
+                            break;
+                        default:
+                            // Nutrients change slowly
+                            realTimeData[key] = Math.min(Math.max(realTimeData[key] + change * 0.2, 10), 100);
+                    }
+                }
+
+                // Update charts and soil parameters display
+                updateLineChart(realTimeData);
+                updatePieChart(realTimeData);
+                update3DBarChart(realTimeData);
+                updateSoilLayers(realTimeData);
+
+                // Update the parameter cards with the new values
+                let paramsHTML = '';
+                for (let [key, value] of Object.entries(realTimeData)) {
+                    let status = '';
+
+                    // Add status indicators based on parameter values
+                    if (key === 'pH') {
+                        if (value < 5.5) status = '<span style="color: #ffcc00">⚠️ Low</span>';
+                        else if (value > 7.5) status = '<span style="color: #ffcc00">⚠️ High</span>';
+                        else status = '<span style="color: #2ecc71">✓ Optimal</span>';
+                    } else if (key === 'nitrogen' || key === 'phosphorus' || key === 'potassium') {
+                        if (value < 30) status = '<span style="color: #e74c3c">❌ Deficient</span>';
+                        else if (value < 60) status = '<span style="color: #ffcc00">⚠️ Low</span>';
+                        else status = '<span style="color: #2ecc71">✓ Good</span>';
+                    } else if (key === 'organicMatter') {
+                        if (value < 1) status = '<span style="color: #e74c3c">❌ Very Low</span>';
+                        else if (value < 2) status = '<span style="color: #ffcc00">⚠️ Low</span>';
+                        else status = '<span style="color: #2ecc71">✓ Good</span>';
+                    } else if (key === 'moisture') {
+                        if (value < 30) status = '<span style="color: #e74c3c">❌ Dry</span>';
+                        else if (value > 70) status = '<span style="color: #ffcc00">⚠️ Wet</span>';
+                        else status = '<span style="color: #2ecc71">✓ Good</span>';
+                    }
+
+                    paramsHTML += `
+                        <div class="parameter-card">
+                            <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                            <span>${value.toFixed(2)} ${key === 'pH' ? '' : 'mg/kg'} ${status}</span>
+                        </div>
+                    `;
+                }
+                document.getElementById('soilParameters').innerHTML = paramsHTML;
+            }, 5000); // Update every 5 seconds
+        }
+
+        function updateRecommendations() {
+            const season = document.getElementById('seasonSelect').value;
+            if (season === 'none') {
+                document.getElementById('cropRecommendations').innerHTML = `
+                    <div style="text-align: center; padding: 30px 20px;">
+                        <i class="fas fa-seedling" style="font-size: 40px; color: var(--primary-green); margin-bottom: 15px;"></i>
+                        <p>Please select a growing season to see crop recommendations.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const recommendations = getCropRecommendations(season, realTimeData);
+
+            let recsHTML = '';
+            recommendations.forEach(crop => {
+                // Add suitability score based on soil match
+                const suitabilityScore = crop.suitability;
+                let suitabilityClass = '';
+                let suitabilityText = '';
+
+                if (suitabilityScore > 80) {
+                    suitabilityClass = 'excellent';
+                    suitabilityText = '🌟 Excellent match';
+                } else if (suitabilityScore > 60) {
+                    suitabilityClass = 'good';
+                    suitabilityText = '✅ Good match';
+                } else {
+                    suitabilityClass = 'fair';
+                    suitabilityText = '⚠️ Fair match';
+                }
+
+                recsHTML += `
+                    <div class="crop-card ${suitabilityClass}">
+                        <h4>${crop.name}</h4>
+                        <p>${crop.description}</p>
+                        <p><strong>Growing Period:</strong> ${crop.period}</p>
+                        <p><strong>Water Requirement:</strong> ${crop.water}</p>
+                        <p><strong>Soil Suitability:</strong> <span style="color: ${suitabilityScore > 80 ? '#2ecc71' : suitabilityScore > 60 ? '#f39c12' : '#e74c3c'}">${suitabilityText} (${suitabilityScore}%)</span></p>
+                        <button class="buy-seeds-btn" onclick="buySeeds('${crop.name}')">
+                            <i class="fas fa-shopping-cart"></i> Buy Seeds
+                        </button>
+                    </div>
+                `;
+            });
+            document.getElementById('cropRecommendations').innerHTML = recsHTML;
+        }
+
+        function buySeeds(cropName) {
+            alert('Redirecting to purchase ' + cropName + ' seeds');
+            window.location.href = 'seed.html';
+        }
+
+        function getCropRecommendations(season, soilData) {
+            // Base recommendations
+            const recommendations = {
+                kharif: [
+                    {
+                        name: 'Rice',
+                        description: 'Ideal for high moisture soils with good water retention.',
+                        period: 'June - November',
+                        water: 'High',
+                        idealSoil: { pH: 6.0, nitrogen: 70, phosphorus: 60, potassium: 50, moisture: 80 }
+                    },
+                    {
+                        name: 'Cotton',
+                        description: 'Suitable for well-drained soils with moderate fertility.',
+                        period: 'May - November',
+                        water: 'Medium',
+                        idealSoil: { pH: 6.5, nitrogen: 60, phosphorus: 50, potassium: 60, moisture: 60 }
+                    },
+                    {
+                        name: 'Soybean',
+                        description: 'A nitrogen-fixing crop that improves soil health and provides protein-rich beans.',
+                        period: 'June - October',
+                        water: 'Medium',
+                        idealSoil: { pH: 6.8, nitrogen: 50, phosphorus: 60, potassium: 40, moisture: 65 }
+                    }
+                ],
+                rabi: [
+                    {
+                        name: 'Wheat',
+                        description: 'Perfect for moderate pH levels and fertile soils.',
+                        period: 'November - April',
+                        water: 'Medium',
+                        idealSoil: { pH: 7.0, nitrogen: 65, phosphorus: 55, potassium: 45, moisture: 60 }
+                    },
+                    {
+                        name: 'Mustard',
+                        description: 'Ideal for nitrogen-rich soils with good drainage.',
+                        period: 'October - March',
+                        water: 'Low',
+                        idealSoil: { pH: 6.5, nitrogen: 70, phosphorus: 40, potassium: 40, moisture: 50 }
+                    },
+                    {
+                        name: 'Chickpea',
+                        description: 'A legume that thrives in well-drained soils with moderate fertility.',
+                        period: 'October - March',
+                        water: 'Low',
+                        idealSoil: { pH: 7.2, nitrogen: 45, phosphorus: 50, potassium: 40, moisture: 45 }
+                    }
+                ],
+                zaid: [
+                    {
+                        name: 'Watermelon',
+                        description: 'Best for sandy loam soils with good drainage.',
+                        period: 'March - June',
+                        water: 'Medium',
+                        idealSoil: { pH: 6.0, nitrogen: 50, phosphorus: 60, potassium: 70, moisture: 55 }
+                    },
+                    {
+                        name: 'Cucumber',
+                        description: 'Suitable for well-fertilized soils rich in organic matter.',
+                        period: 'February - May',
+                        water: 'Medium',
+                        idealSoil: { pH: 6.5, nitrogen: 60, phosphorus: 50, potassium: 60, moisture: 60 }
+                    },
+                    {
+                        name: 'Mung Bean',
+                        description: 'A short-duration pulse crop that enhances soil fertility.',
+                        period: 'March - June',
+                        water: 'Low',
+                        idealSoil: { pH: 7.0, nitrogen: 50, phosphorus: 40, potassium: 50, moisture: 50 }
+                    }
+                ]
+            };
+
+            // Calculate suitability score for each crop based on current soil data
+            const cropsWithSuitability = recommendations[season]?.map(crop => {
+                let totalDifference = 0;
+                let factors = 0;
+
+                for (const [key, idealValue] of Object.entries(crop.idealSoil)) {
+                    if (soilData[key] !== undefined) {
+                        // Calculate difference percentage (0-100%)
+                        let maxRange;
+                        switch (key) {
+                            case 'pH': maxRange = 14; break;
+                            case 'organicMatter': maxRange = 5; break;
+                            default: maxRange = 100;
+                        }
+
+                        const difference = Math.abs(soilData[key] - idealValue) / maxRange;
+                        totalDifference += difference;
+                        factors++;
+                    }
+                }
+
+                // Calculate average difference and convert to similarity percentage
+                const avgDifference = totalDifference / factors;
+                const suitabilityScore = Math.round((1 - avgDifference) * 100);
+
+                return {
+                    ...crop,
+                    suitability: suitabilityScore
+                };
+            }) || [];
+
+            // Sort by suitability
+            return cropsWithSuitability.sort((a, b) => b.suitability - a.suitability);
+        }
+
+        // Function to map weather condition codes to icons and descriptions
+        const getWeatherIcon = (code) => {
+            const iconMap = {
+                "01d": { icon: "☀️", description: "Sunny" },
+                "01n": { icon: "🌙", description: "Clear" },
+                "02d": { icon: "⛅", description: "Partly Cloudy" },
+                "02n": { icon: "☁️", description: "Partly Cloudy" },
+                "03d": { icon: "☁️", description: "Cloudy" },
+                "03n": { icon: "☁️", description: "Cloudy" },
+                "04d": { icon: "☁️", description: "Overcast" },
+                "04n": { icon: "☁️", description: "Overcast" },
+                "09d": { icon: "🌧️", description: "Rainy" },
+                "09n": { icon: "🌧️", description: "Rainy" },
+                "10d": { icon: "🌦️", description: "Rain Showers" },
+                "10n": { icon: "🌧️", description: "Rain Showers" },
+                "11d": { icon: "⛈️", description: "Thunderstorm" },
+                "11n": { icon: "⛈️", description: "Thunderstorm" },
+                "13d": { icon: "❄️", description: "Snow" },
+                "13n": { icon: "❄️", description: "Snow" },
+                "50d": { icon: "🌫️", description: "Foggy" },
+                "50n": { icon: "🌫️", description: "Foggy" },
+            };
+
+        };
+
+        // Fetch Weather Data
+        async function fetchWeather() {
+            try {
+                const weatherContainer = document.getElementById('weatherInfo');
+
+                // Get user location first (using geolocation API)
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        async (position) => {
+                            const { latitude, longitude } = position.coords;
+
+                            // Use OpenWeatherMap API with user's coordinates
+                            // Note: In a production app, you would store this API key in environment variables
+                            const API_KEY = "1635890035cbba097fd5c26c8ea672a1";
+                            const response = await fetch(
+                                `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${API_KEY}`
+                            );
+
+                            if (!response.ok) {
+                                throw new Error("Weather data not available");
+                            }
+
+                            const data = await response.json();
+
+                            const weatherInfo = getWeatherIcon(data.weather[0].icon);
+
+                            weatherContainer.innerHTML = `
+                                <span class="weather-temp">${Math.round(data.main.temp)}°C</span>
+                                <span class="weather-condition">${weatherInfo.icon} ${weatherInfo.description}</span>
+                                <span class="weather-humidity">💧 ${data.main.humidity}%</span>
+                                <span class="weather-city">${data.name}</span>
+                            `;
+                        },
+                        (error) => {
+                            // Fallback to default location (New Delhi) if geolocation fails
+                            fetchWeatherForDefaultLocation();
+                            console.error("Geolocation error:", error);
+                        }
+                    );
+                } else {
+                    // Fallback if geolocation is not supported
+                    fetchWeatherForDefaultLocation();
+                }
+            } catch (error) {
+                console.error("Failed to fetch weather data:", error);
+                document.getElementById('weatherInfo').innerHTML = `
+                    <span class="weather-temp">--°C</span>
+                    <span class="weather-condition">Weather unavailable</span>
+                `;
+            }
+        }
+
+        // Fetch weather for default location
+        async function fetchWeatherForDefaultLocation() {
+            try {
+                const weatherContainer = document.getElementById('weatherInfo');
+
+                // Default to New Delhi
+                const API_KEY = "1635890035cbba097fd5c26c8ea672a1";
+                const response = await fetch(
+                    `https://api.openweathermap.org/data/2.5/weather?q=New Delhi&units=metric&appid=${API_KEY}`
+                );
+
+                if (!response.ok) {
+                    throw new Error("Weather data not available");
+                }
+
+                const data = await response.json();
+
+                const weatherInfo = getWeatherIcon(data.weather[0].icon);
+
+                weatherContainer.innerHTML = `
+                    <span class="weather-temp">${Math.round(data.main.temp)}°C</span>
+                    <span class="weather-condition">${weatherInfo.icon} ${weatherInfo.description}</span>
+                    <span class="weather-humidity">💧 ${data.main.humidity}%</span>
+                    <span class="weather-city">${data.name}</span>
+                `;
+            } catch (error) {
+                console.error("Failed to fetch weather data:", error);
+                document.getElementById('weatherInfo').innerHTML = `
+                    <span class="weather-temp">--°C</span>
+                    <span class="weather-condition">Weather unavailable</span>
+                `;
+            }
+        }
+
+
+        // Add animation to the navigation buttons
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('mouseenter', function () {
+                this.querySelector('i')?.classList.add('fa-bounce');
+            });
+
+            button.addEventListener('mouseleave', function () {
+                this.querySelector('i')?.classList.remove('fa-bounce');
+            });
+        });
+
+        // Animate sections on scroll
+        function checkScroll() {
+            const elements = document.querySelectorAll('.dashboard-section, .section-card');
+
+            elements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+
+                if (elementTop < window.innerHeight - elementVisible) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Initialize elements with opacity 0
+        document.querySelectorAll('.dashboard-section, .section-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+
+        // Check elements on load and scroll
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+
+        // Initial check
+        checkScroll();
+    </script>
+</body>
+
+</html>

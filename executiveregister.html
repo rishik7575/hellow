@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Executive Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #2ecc71;
+      --primary-dark: #27ae60;
+      --primary-light: #a3ffb5;
+      --secondary-color: #3498db;
+      --accent-color: #f1c40f;
+      --text-dark: #2c3e50;
+      --text-light: #ecf0f1;
+      --background-light: #f9fcfa;
+      --card-bg: #ffffff;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --input-bg: #f7f9fc;
+      --input-border: #e2e8f0;
+      --input-focus: #d1f6e0;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      line-height: 1.7;
+      color: var(--text-dark);
+      background-color: var(--background-light);
+      background-image: radial-gradient(circle at 25px 25px,
+          rgba(46, 204, 113, 0.05) 2%,
+          transparent 0%),
+        radial-gradient(circle at 75px 75px,
+          rgba(46, 204, 113, 0.025) 2%,
+          transparent 0%);
+      background-size: 100px 100px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+      }
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: linear-gradient(135deg,
+          var(--primary-color),
+          var(--primary-dark));
+      padding: 15px 0;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+    }
+
+    .navbar.scrolled {
+      padding: 10px 0;
+      background: rgba(46, 204, 113, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar-container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo::before {
+      content: "🌱";
+      margin-right: 8px;
+      font-size: 24px;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .navbar-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .navbar-links li {
+      margin-left: 30px;
+    }
+
+    .navbar-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      transition: var(--transition);
+      position: relative;
+      padding: 5px 0;
+    }
+
+    .navbar-links a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--accent-color);
+      transition: width 0.3s;
+    }
+
+    .navbar-links a:hover {
+      transform: translateY(-2px);
+    }
+
+    .navbar-links a:hover::after {
+      width: 100%;
+    }
+
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+    }
+
+    /* Register Section Styles */
+    .register-section {
+      padding: 120px 0 80px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg,
+          var(--primary-color),
+          var(--secondary-color),
+          var(--accent-color));
+      background-size: 200% 200%;
+      animation: gradientBG 5s ease infinite;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+      text-align: center;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg,
+          var(--primary-color),
+          var(--secondary-color));
+      border-radius: 3px;
+    }
+
+    .section-description {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Form Styles */
+    .register-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-dark);
+      transition: var(--transition);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      background-color: var(--input-bg);
+      color: var(--text-dark);
+      font-family: "Poppins", sans-serif;
+      font-size: 15px;
+      transition: var(--transition);
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--input-focus);
+      background-color: white;
+    }
+
+    .form-group .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 42px;
+      color: #aaa;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus+.input-icon,
+    .form-group select:focus+.input-icon,
+    .form-group textarea:focus+.input-icon {
+      color: var(--primary-color);
+    }
+
+    .submit-btn {
+      grid-column: span 2;
+      background: linear-gradient(135deg,
+          var(--primary-color),
+          var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 16px 30px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 15px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .submit-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent);
+      transition: all 0.6s ease;
+      z-index: -1;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 7px 20px rgba(46, 204, 113, 0.4);
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:active {
+      transform: translateY(-2px);
+    }
+
+    /* Status Indicator for Form Fields */
+    .form-group .status-icon {
+      position: absolute;
+      right: 15px;
+      top: 45px;
+      transition: var(--transition);
+      opacity: 0;
+    }
+
+    .form-group.valid .status-icon.valid {
+      opacity: 1;
+      color: var(--primary-color);
+    }
+
+    .form-group.invalid .status-icon.invalid {
+      opacity: 1;
+      color: #e74c3c;
+    }
+
+    /* Footer Styles */
+    .footer {
+      background: linear-gradient(135deg,
+          var(--primary-color),
+          var(--primary-dark));
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .navbar-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--primary-dark);
+        padding: 20px 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-links.active {
+        display: flex;
+      }
+
+      .navbar-links li {
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .register-form {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full-width,
+      .submit-btn {
+        grid-column: span 1;
+      }
+
+      .container {
+        padding: 30px 20px;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    /* Form Field Animation */
+    .register-form .form-group {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.5s forwards;
+    }
+
+    .register-form .form-group:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .register-form .form-group:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .register-form .form-group:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .register-form .form-group:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .register-form .form-group:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    .register-form .submit-btn {
+      animation-delay: 0.6s;
+    }
+
+    /* Custom Select Styling */
+    .custom-select {
+      position: relative;
+    }
+
+    .custom-select select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+    }
+
+    .select-arrow {
+      position: absolute;
+      right: 15px;
+      top: 45px;
+      color: #aaa;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .custom-select select:focus+.select-arrow {
+      color: var(--primary-color);
+      transform: rotate(180deg);
+    }
+
+    /* Success Message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      background-color: rgba(46, 204, 113, 0.1);
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .success-message h3 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    .success-message p {
+      color: #666;
+    }
+
+    .success-icon {
+      font-size: 60px;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="#" class="logo">AgriLift</a>
+      <button class="hamburger" id="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="welcome.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="executive.html">Executive Login</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Executive Register Section -->
+  <section id="executive-register" class="register-section">
+    <div class="container">
+      <h1 class="section-title">Executive Register</h1>
+      <p class="section-description">
+        Fill out the form to become part of our executive team and help lead
+        the way for farmers.
+      </p>
+
+      <form action="#" class="register-form" id="executiveForm">
+        <div class="form-group">
+          <label for="full-name">Full Name</label>
+          <input type="text" id="full-name" placeholder="Enter your full name" required />
+          <i class="fas fa-user input-icon"></i>
+          <i class="fas fa-check status-icon valid"></i>
+          <i class="fas fa-times status-icon invalid"></i>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter your email" required />
+          <i class="fas fa-envelope input-icon"></i>
+          <i class="fas fa-check status-icon valid"></i>
+          <i class="fas fa-times status-icon invalid"></i>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" placeholder="Enter your phone number" required />
+          <i class="fas fa-phone input-icon"></i>
+          <i class="fas fa-check status-icon valid"></i>
+          <i class="fas fa-times status-icon invalid"></i>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required />
+          <i class="fas fa-lock input-icon"></i>
+          <i class="fas fa-check status-icon valid"></i>
+          <i class="fas fa-times status-icon invalid"></i>
+        </div>
+
+        <div class="form-group custom-select">
+          <label for="role">Desired Role</label>
+          <select id="role">
+            <option value="CEO">CEO</option>
+            <option value="COO">COO</option>
+            <option value="CTO">CTO</option>
+            <option value="Manager">Manager</option>
+          </select>
+          <i class="fas fa-chevron-down select-arrow"></i>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="experience">Experience</label>
+          <textarea id="experience" placeholder="Describe your relevant experience" required></textarea>
+          <i class="fas fa-briefcase input-icon"></i>
+          <i class="fas fa-check status-icon valid"></i>
+          <i class="fas fa-times status-icon invalid"></i>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-paper-plane"></i> Submit Application
+        </button>
+      </form>
+
+      <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle success-icon"></i>
+        <h3>Application Submitted Successfully!</h3>
+        <p>
+          Thank you for your interest. We will review your application and get
+          back to you soon.
+        </p>
+        <a href="executive.html">Get back to login page</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <p>&copy; 2024 AgriLift. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const hamburger = document.getElementById("hamburger");
+    const navLinks = document.getElementById("navLinks");
+
+    if (hamburger) {
+      hamburger.addEventListener("click", function () {
+        navLinks.classList.toggle("active");
+        this.innerHTML = navLinks.classList.contains("active")
+          ? '<i class="fas fa-times"></i>'
+          : '<i class="fas fa-bars"></i>';
+      });
+    }
+
+    // Navbar scroll effect
+    window.addEventListener("scroll", function () {
+      const navbar = document.getElementById("navbar");
+      if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    });
+
+    // Form validation and submission
+    const executiveForm = document.getElementById("executiveForm");
+    const formGroups = document.querySelectorAll(".form-group");
+    const successMessage = document.getElementById("successMessage");
+
+    // Basic field validation
+    formGroups.forEach((group) => {
+      const input = group.querySelector("input, textarea");
+      if (input) {
+        input.addEventListener("blur", function () {
+          if (this.value.trim() !== "") {
+            group.classList.add("valid");
+            group.classList.remove("invalid");
+          } else if (this.required) {
+            group.classList.add("invalid");
+            group.classList.remove("valid");
+          }
+        });
+
+        input.addEventListener("focus", function () {
+          group.classList.remove("invalid");
+        });
+      }
+    });
+
+    // Email validation
+    const emailInput = document.getElementById("email");
+    if (emailInput) {
+      emailInput.addEventListener("blur", function () {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailGroup = this.closest(".form-group");
+
+        if (this.value.trim() !== "" && !emailRegex.test(this.value)) {
+          emailGroup.classList.add("invalid");
+          emailGroup.classList.remove("valid");
+        }
+      });
+    }
+
+    // Phone validation
+    const phoneInput = document.getElementById("phone");
+    if (phoneInput) {
+      phoneInput.addEventListener("blur", function () {
+        const phoneRegex = /^\d{10}$/;
+        const phoneGroup = this.closest(".form-group");
+
+        if (
+          this.value.trim() !== "" &&
+          !phoneRegex.test(this.value.replace(/\D/g, ""))
+        ) {
+          phoneGroup.classList.add("invalid");
+          phoneGroup.classList.remove("valid");
+        }
+      });
+    }
+
+    // Input focus effects
+    const formInputs = document.querySelectorAll(
+      ".form-group input, .form-group textarea, .form-group select"
+    );
+    formInputs.forEach((input) => {
+      input.addEventListener("focus", function () {
+        this.parentElement.querySelector("label").style.color =
+          "var(--primary-color)";
+      });
+
+      input.addEventListener("blur", function () {
+        this.parentElement.querySelector("label").style.color = "";
+      });
+    });
+
+    // Form submission
+    if (executiveForm) {
+      executiveForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // Gather form data
+        const executiveData = {
+          fullName: document.getElementById("full-name").value,
+          email: document.getElementById("email").value,
+          phone: document.getElementById("phone").value,
+          role: document.getElementById("role").value,
+          experience: document.getElementById("experience").value,
+          password: document.getElementById("password").value,
+        };
+
+        try {
+          const response = await fetch(
+            "http://localhost:3000/executive-register",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(executiveData),
+            }
+          );
+
+          const data = await response.json();
+          if (response.ok) {
+            // Display success message
+            executiveForm.style.display = "none";
+            successMessage.style.display = "block";
+            successMessage.scrollIntoView({ behavior: "smooth" });
+
+            // Reset form after some time
+            setTimeout(() => {
+              executiveForm.reset();
+              formGroups.forEach((group) => {
+                group.classList.remove("valid", "invalid");
+              });
+            }, 300);
+          } else {
+            alert(`Error: ${data.message}`);
+          }
+        } catch (error) {
+          alert(`Error: ${error.message}`);
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

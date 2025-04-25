@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgriLift - Field Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .field-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .field-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .progress-bar {
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            background: #e5e7eb;
+        }
+
+        .progress {
+            background-color: #27ae60;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.4s ease;
+        }
+
+        .modal-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .modal-content li {
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <nav class="bg-emerald-700 text-white sticky top-0 z-50 shadow-lg p-4">
+        <h1 class="text-xl font-bold">AgriLift Dashboard</h1>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 text-emerald-700">Field Management</h1>
+
+        <div class="mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <input type="text" id="searchField" placeholder="Search fields..."
+                class="p-2 rounded border border-gray-300 w-full sm:w-1/2" />
+            <button id="addFieldBtn"
+                class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 transition duration-200">
+                Add New Field
+            </button>
+        </div>
+
+        <!-- Field List -->
+        <div id="fieldList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Field Cards are injected here -->
+        </div>
+
+        <!-- Modal for Adding/Editing Field -->
+        <div id="modalOverlay" class="modal-overlay">
+            <div class="modal-content">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="modalTitle" class="text-2xl font-bold">Add New Field</h2>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <form id="fieldForm" class="space-y-4">
+                    <div>
+                        <label for="fieldName" class="block text-sm font-medium text-gray-700">Field Name</label>
+                        <input type="text" id="fieldName" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+                    </div>
+                    <div>
+                        <label for="fieldLocation" class="block text-sm font-medium text-gray-700">Location</label>
+                        <input type="text" id="fieldLocation" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 transition duration-200">
+                        Save Field
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Detail Modal -->
+        <div id="detailModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="detailTitle" class="text-2xl font-bold">Field Details</h2>
+                    <button id="closeDetailModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <ul id="fieldDetails">
+                    <!-- Field details will be dynamically injected here -->
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Enhanced dummy data with more properties
+            let fields = [
+                {
+                    name: "Field A",
+                    location: "North Farm",
+                    moisture: 60,
+                    temperature: 25,
+                    area: "10 acres",
+                    crop: "Wheat",
+                    ph: 6.5,
+                    irrigation: "Automated Drip",
+                    lastInspection: "2025-01-15",
+                    fertilizer: "Nitrogen Rich",
+                    yieldPrediction: "High"
+                },
+                {
+                    name: "Field B",
+                    location: "South Farm",
+                    moisture: 70,
+                    temperature: 23,
+                    area: "15 acres",
+                    crop: "Corn",
+                    ph: 7.0,
+                    irrigation: "Sprinkler",
+                    lastInspection: "2025-01-10",
+                    fertilizer: "Phosphate Blend",
+                    yieldPrediction: "Medium"
+                },
+                {
+                    name: "Field C",
+                    location: "East Farm",
+                    moisture: 55,
+                    temperature: 24,
+                    area: "8 acres",
+                    crop: "Soybeans",
+                    ph: 6.8,
+                    irrigation: "Manual",
+                    lastInspection: "2025-01-20",
+                    fertilizer: "Organic Compost",
+                    yieldPrediction: "Low"
+                }
+            ];
+
+            const fieldList = document.getElementById('fieldList');
+            const searchField = document.getElementById('searchField');
+            const addFieldBtn = document.getElementById('addFieldBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const fieldForm = document.getElementById('fieldForm');
+            const closeModal = document.getElementById('closeModal');
+            const detailModal = document.getElementById('detailModal');
+            const detailTitle = document.getElementById('detailTitle');
+            const fieldDetails = document.getElementById('fieldDetails');
+            const closeDetailModal = document.getElementById('closeDetailModal');
+
+            // Function to populate field cards
+            function populateFields(displayFields = fields) {
+                fieldList.innerHTML = '';
+                displayFields.forEach((field, index) => {
+                    let card = document.createElement('div');
+                    card.classList.add('field-card', 'bg-white', 'p-6', 'rounded-lg', 'shadow-lg');
+                    card.innerHTML = `
+            <h2 class="text-xl font-bold mb-2">${field.name}</h2>
+            <p class="text-sm text-gray-500 mb-4">Location: ${field.location}</p>
+            <div class="mb-4">
+              <div class="mb-2">
+                <span class="text-gray-700 font-semibold">Soil Moisture:</span>
+                <div class="progress-bar mt-1">
+                  <div class="progress" style="width: ${field.moisture}%;"></div>
+                </div>
+              </div>
+              <div class="mb-2">
+                <span class="text-gray-700 font-semibold">Temperature:</span> ${field.temperature}°C
+              </div>
+            </div>
+            <button class="view-details-btn bg-emerald-700 text-white px-3 py-1 rounded hover:bg-emerald-800 transition duration-200" data-index="${index}">
+              View Details
+            </button>
+          `;
+                    fieldList.appendChild(card);
+                });
+            }
+
+            populateFields();
+
+            // Search functionality (filters by field name or location)
+            searchField.addEventListener('input', () => {
+                const term = searchField.value.toLowerCase();
+                const filteredFields = fields.filter(field =>
+                    field.name.toLowerCase().includes(term) ||
+                    field.location.toLowerCase().includes(term)
+                );
+                populateFields(filteredFields);
+            });
+
+            // Open modal for adding a new field
+            addFieldBtn.addEventListener('click', () => {
+                modalTitle.textContent = 'Add New Field';
+                modalOverlay.style.display = 'flex';
+            });
+
+            // Close add/edit modal on clicking close button
+            closeModal.addEventListener('click', () => modalOverlay.style.display = 'none');
+
+            // Handle new field submission
+            fieldForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('fieldName').value;
+                const location = document.getElementById('fieldLocation').value;
+                // Generate some random values for the demo; you can expand these fields as needed.
+                fields.push({
+                    name,
+                    location,
+                    moisture: Math.floor(Math.random() * 20) + 55,
+                    temperature: Math.floor(Math.random() * 10) + 20,
+                    area: "10 acres",
+                    crop: "Sample Crop",
+                    ph: (6.0 + Math.random() * 2).toFixed(1),
+                    irrigation: "Automated Drip",
+                    lastInspection: new Date().toISOString().split('T')[0],
+                    fertilizer: "Organic Blend",
+                    yieldPrediction: ["High", "Medium", "Low"][Math.floor(Math.random() * 3)]
+                });
+                populateFields();
+                modalOverlay.style.display = 'none';
+                fieldForm.reset();
+            });
+
+            // Close modal if clicking outside the content area
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    modalOverlay.style.display = 'none';
+                }
+            });
+
+            // Show field details in a modal when clicking the view details button
+            fieldList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('view-details-btn')) {
+                    const index = e.target.getAttribute('data-index');
+                    const field = fields[index];
+                    detailTitle.textContent = `${field.name} Details`;
+                    fieldDetails.innerHTML = `
+            <li><strong>Location:</strong> ${field.location}</li>
+            <li><strong>Area:</strong> ${field.area}</li>
+            <li><strong>Crop:</strong> ${field.crop}</li>
+            <li><strong>Soil Moisture:</strong> ${field.moisture}%</li>
+            <li><strong>Temperature:</strong> ${field.temperature}°C</li>
+            <li><strong>Soil pH:</strong> ${field.ph}</li>
+            <li><strong>Irrigation:</strong> ${field.irrigation}</li>
+            <li><strong>Last Inspection:</strong> ${field.lastInspection}</li>
+            <li><strong>Fertilizer:</strong> ${field.fertilizer}</li>
+            <li><strong>Yield Prediction:</strong> ${field.yieldPrediction}</li>
+          `;
+                    detailModal.style.display = 'flex';
+                }
+            });
+
+            // Close details modal on clicking close button
+            closeDetailModal.addEventListener('click', () => detailModal.style.display = 'none');
+
+            // Close details modal if clicking outside the modal content
+            detailModal.addEventListener('click', (e) => {
+                if (e.target === detailModal) {
+                    detailModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

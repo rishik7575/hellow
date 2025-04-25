@@ -1,0 +1,2275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agri-Lift | Elevating Organic Farming Standards</title>
+    <meta name="description"
+        content="Agri-Lift is dedicated to elevating organic farming standards through sustainable practices, innovation, and education." />
+    <meta name="author" content="Agri-Lift" />
+
+    <meta property="og:title" content="Agri-Lift | Elevating Organic Farming Standards" />
+    <meta property="og:description"
+        content="Agri-Lift is dedicated to elevating organic farming standards through sustainable practices, innovation, and education." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@agrilift" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap"
+        rel="stylesheet">
+
+    <!-- Embedded CSS -->
+    <style>
+        :root {
+            --background: 60 33% 98%;
+            --foreground: 20 10% 10%;
+            --card: 0 0% 100%;
+            --card-foreground: 20 10% 10%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 20 10% 10%;
+            --primary: 142 38% 30%;
+            --primary-foreground: 60 33% 98%;
+            --secondary: 34 46% 69%;
+            --secondary-foreground: 20 10% 10%;
+            --muted: 60 10% 96%;
+            --muted-foreground: 20 10% 40%;
+            --accent: 34 30% 82%;
+            --accent-foreground: 20 10% 10%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 60 33% 98%;
+            --border: 20 10% 90%;
+            --input: 20 10% 90%;
+            --ring: 142 38% 30%;
+            --radius: 0.5rem;
+
+            /* Colors */
+            --agri-green: #2a6b3c;
+            --agri-green-dark: #1a4a27;
+            --agri-green-light: #5c9b72;
+            --agri-brown: #6b5a45;
+            --agri-brown-light: #9c8a75;
+            --agri-cream: #f2e8cf;
+            --agri-off-white: #f9f7f3;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--agri-off-white);
+            color: var(--foreground);
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'DM Serif Display', serif;
+            line-height: 1.2;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Utility classes */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 6rem 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--agri-green-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .section-title {
+                font-size: 3.75rem;
+            }
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--agri-brown);
+            margin-bottom: 4rem;
+            max-width: 48rem;
+        }
+
+        /* Glass effect */
+        .glass-effect {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .glass-effect:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Animation classes */
+        .reveal-animation {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s, transform 0.8s;
+        }
+
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Shadow effects */
+        .shadow-neo {
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.08), -10px -10px 20px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            padding: 1.5rem 0;
+            transition: all 0.3s;
+        }
+
+        header.scrolled {
+            padding: 0.75rem 0;
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--agri-green-dark);
+        }
+
+        .logo span {
+            font-weight: 600;
+        }
+
+        .logo:hover {
+            color: var(--agri-green);
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        .nav-links a {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--agri-green-dark);
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--agri-green);
+        }
+
+        .mobile-menu-btn {
+            background: transparent;
+            border: none;
+            color: var(--agri-green-dark);
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 40;
+        }
+
+        .mobile-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mobile-menu a {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--agri-green-dark);
+            margin: 1rem 0;
+            transition: color 0.3s;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--agri-green);
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 2.5rem;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--agri-off-white);
+            position: relative;
+            overflow: hidden;
+            padding-top: 5rem;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            padding: 0 1rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.375rem 1rem;
+            background-color: var(--agri-cream);
+            color: var(--agri-green-dark);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--agri-green-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-title span {
+            color: var(--agri-green);
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--agri-brown);
+            max-width: 32rem;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: var(--agri-green);
+            color: white;
+            font-weight: 500;
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+
+        .hero-btn:hover {
+            background-color: var(--agri-green-dark);
+            transform: translateY(-4px);
+        }
+
+        .hero-bottom-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8rem;
+            background: linear-gradient(to top, var(--agri-off-white), transparent);
+        }
+
+        @media (min-width: 640px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-title {
+                font-size: 5rem;
+            }
+        }
+
+        /* About Section */
+        .about {
+            background-color: white;
+        }
+
+        .about-grid {
+            display: grid;
+            gap: 4rem;
+        }
+
+        .about-image-container {
+            position: relative;
+        }
+
+        .about-image {
+            border-radius: 1rem;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+
+        .about-decorator-1 {
+            position: absolute;
+            top: -1.5rem;
+            left: -1.5rem;
+            width: 8rem;
+            height: 8rem;
+            background-color: rgba(92, 155, 114, 0.2);
+            border-radius: 9999px;
+        }
+
+        .about-decorator-2 {
+            position: absolute;
+            bottom: -1.5rem;
+            right: -1.5rem;
+            width: 5rem;
+            height: 5rem;
+            background-color: rgba(156, 138, 117, 0.2);
+            border-radius: 9999px;
+        }
+
+        .about-tag {
+            color: var(--agri-green);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--agri-green-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--agri-brown);
+        }
+
+        @media (min-width: 768px) {
+            .about-grid {
+                grid-template-columns: repeat(2, 1fr);
+                align-items: center;
+            }
+        }
+
+        /* Services Section */
+        .services {
+            background-color: var(--agri-off-white);
+            position: relative;
+        }
+
+        .services-top-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6rem;
+            background: linear-gradient(to bottom, white, transparent);
+        }
+
+        .services-bottom-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6rem;
+            background: linear-gradient(to top, white, transparent);
+        }
+
+        .services-header {
+            text-align: center;
+            max-width: 48rem;
+            margin: 0 auto 4rem;
+        }
+
+        .services-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .service-card {
+            padding: 2rem;
+            border-radius: 1rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .service-icon {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            background-color: rgba(92, 155, 114, 0.2);
+            color: var(--agri-green);
+            margin-bottom: 1.5rem;
+            transition: all 0.5s;
+        }
+
+        .service-card:hover .service-icon {
+            background-color: var(--agri-green);
+            color: white;
+        }
+
+        .service-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--agri-green-dark);
+            margin-bottom: 1rem;
+            transition: color 0.5s;
+        }
+
+        .service-card:hover .service-title {
+            color: var(--agri-green);
+        }
+
+        .service-description {
+            color: var(--agri-brown);
+        }
+
+        .service-details {
+            margin-top: 1rem;
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s;
+            color: var(--agri-brown-light);
+        }
+
+        .service-card:hover .service-details {
+            height: auto;
+            opacity: 1;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(92, 155, 114, 0.3);
+        }
+
+        .service-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--agri-green);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s;
+        }
+
+        .service-card:hover .service-indicator {
+            transform: scaleX(1);
+        }
+
+        @media (min-width: 768px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Benefits Section */
+        .benefits {
+            background-color: white;
+        }
+
+        .benefits-grid {
+            display: grid;
+            gap: 4rem;
+        }
+
+        .benefits-list {
+            margin-top: 2.5rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-icon {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(92, 155, 114, 0.2);
+            color: var(--agri-green);
+            border-radius: 9999px;
+            margin-right: 0.75rem;
+            margin-top: 0.125rem;
+        }
+
+        .benefit-text {
+            color: var(--agri-brown-light);
+        }
+
+        .benefits-image-container {
+            position: relative;
+        }
+
+        .benefits-decorator-1 {
+            position: absolute;
+            top: -1rem;
+            right: -1rem;
+            width: 6rem;
+            height: 6rem;
+            background-color: rgba(156, 138, 117, 0.1);
+            border-radius: 9999px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .benefits-decorator-2 {
+            position: absolute;
+            bottom: -2rem;
+            left: -2rem;
+            width: 8rem;
+            height: 8rem;
+            background-color: rgba(92, 155, 114, 0.15);
+            border-radius: 9999px;
+            animation: float 6s ease-in-out infinite 2s;
+        }
+
+        @media (min-width: 768px) {
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+                align-items: center;
+            }
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background-color: white;
+            padding: 6rem 0;
+        }
+
+        .testimonials-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            position: relative;
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+
+        .testimonial-quote {
+            position: absolute;
+            top: -1.25rem;
+            left: -1.25rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--agri-green);
+            color: white;
+            border-radius: 9999px;
+        }
+
+        .testimonial-text {
+            color: var(--agri-brown-light);
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .testimonial-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-right: 1rem;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--agri-green-dark);
+        }
+
+        .testimonial-title {
+            font-size: 0.875rem;
+            color: var(--agri-brown);
+        }
+
+        @media (min-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Blog Preview Section */
+        .blog {
+            background-color: var(--agri-off-white);
+            position: relative;
+            padding: 6rem 0;
+        }
+
+        .blog-top-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6rem;
+            background: linear-gradient(to bottom, white, transparent);
+        }
+
+        .blog-bottom-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6rem;
+            background: linear-gradient(to top, white, transparent);
+        }
+
+        .blog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .blog-view-all {
+            display: flex;
+            align-items: center;
+            color: var(--agri-green);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .blog-view-all:hover {
+            color: var(--agri-green-dark);
+        }
+
+        .blog-view-all svg {
+            margin-left: 0.5rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .blog-card {
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .blog-card:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .blog-image {
+            height: 12rem;
+            overflow: hidden;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .blog-card:hover .blog-image img {
+            transform: scale(1.1);
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .blog-category {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--agri-green);
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(92, 155, 114, 0.2);
+            border-radius: 9999px;
+        }
+
+        .blog-date {
+            font-size: 0.75rem;
+            color: var(--agri-brown);
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--agri-green-dark);
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+
+        .blog-card:hover .blog-title {
+            color: var(--agri-green);
+        }
+
+        .blog-excerpt {
+            color: var(--agri-brown);
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-read-more {
+            display: flex;
+            align-items: center;
+            color: var(--agri-green);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .blog-read-more:hover {
+            color: var(--agri-green-dark);
+        }
+
+        .blog-read-more svg {
+            margin-left: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        .blog-card:hover .blog-read-more svg {
+            transform: translateX(4px);
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Newsletter Section */
+        .newsletter {
+            background-color: var(--agri-green);
+            padding: 6rem 0;
+        }
+
+        .newsletter-container {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        .newsletter-box {
+            padding: 3rem;
+            border-radius: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        .newsletter-icon {
+            width: 4rem;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            color: var(--agri-green-dark);
+            border-radius: 9999px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .newsletter-title {
+            font-size: 2rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-description {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            max-width: 32rem;
+            margin: 0 auto 2rem;
+        }
+
+        .newsletter-form {
+            max-width: 28rem;
+            margin: 0 auto;
+        }
+
+        .newsletter-form-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .newsletter-input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 9999px;
+            border: none;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .newsletter-input:focus {
+            box-shadow: 0 0 0 2px white;
+        }
+
+        .newsletter-button {
+            padding: 0.75rem 1.25rem;
+            background-color: white;
+            color: var(--agri-green-dark);
+            font-weight: 500;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .newsletter-button:hover {
+            background-color: var(--agri-cream);
+        }
+
+        .newsletter-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .newsletter-button svg {
+            margin-left: 0.5rem;
+        }
+
+        .newsletter-privacy {
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .newsletter-form-inner {
+                flex-direction: row;
+            }
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: var(--agri-off-white);
+            position: relative;
+        }
+
+        .contact-top-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6rem;
+            background: linear-gradient(to bottom, white, transparent);
+        }
+
+        .contact-header {
+            text-align: center;
+            max-width: 48rem;
+            margin: 0 auto 4rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            gap: 3rem;
+        }
+
+        .contact-form {
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--agri-green-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--agri-cream);
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--agri-green);
+            border-color: var(--agri-green);
+        }
+
+        .form-textarea {
+            resize: none;
+            height: 8rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--agri-green);
+            color: white;
+            font-weight: 500;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-submit:hover {
+            background-color: var(--agri-green-dark);
+            transform: translateY(-4px);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-info-item {
+            display: flex;
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .contact-info-icon {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(92, 155, 114, 0.2);
+            color: var(--agri-green);
+            border-radius: 9999px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .contact-info-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--agri-green-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-info-text {
+            color: var(--agri-brown);
+        }
+
+        .contact-info-subtext {
+            font-size: 0.875rem;
+            color: var(--agri-brown-light);
+            margin-top: 0.25rem;
+        }
+
+        .contact-map {
+            height: 300px;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.08), -10px -10px 20px rgba(255, 255, 255, 0.8);
+        }
+
+        @media (min-width: 640px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .contact-grid {
+                grid-template-columns: repeat(2, 1fr);
+                align-items: start;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background-color: white;
+            padding-top: 5rem;
+            padding-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .footer-grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--agri-green-dark);
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            color: var(--agri-brown);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(92, 155, 114, 0.2);
+            color: var(--agri-green);
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background-color: var(--agri-green);
+            color: white;
+        }
+
+        .footer-heading {
+            color: var(--agri-green-dark);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-link {
+            color: var(--agri-brown);
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--agri-green);
+        }
+
+        .footer-form {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .footer-input {
+            flex-grow: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--agri-cream);
+            border-radius: 0.5rem 0 0 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .footer-input:focus {
+            outline: none;
+        }
+
+        .footer-button {
+            padding: 0.5rem 1rem;
+            background-color: var(--agri-green);
+            color: white;
+            border: none;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .footer-button:hover {
+            background-color: var(--agri-green-dark);
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--agri-cream);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--agri-brown);
+            font-size: 0.875rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-legal-link {
+            color: var(--agri-brown);
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .footer-legal-link:hover {
+            color: var(--agri-green);
+        }
+
+        .back-to-top {
+            position: absolute;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--agri-green);
+            color: white;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .back-to-top:hover {
+            background-color: var(--agri-green-dark);
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header/Navbar -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="#" class="logo"><span>Agri</span>-Lift</a>
+
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#benefits">Benefits</a>
+                <a href="#contact">Contact</a>
+            </nav>
+
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <button class="mobile-menu-btn" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+            </svg>
+        </button>
+        <a href="#home" class="mobile-link">Home</a>
+        <a href="#about" class="mobile-link">About</a>
+        <a href="#services" class="mobile-link">Services</a>
+        <a href="#benefits" class="mobile-link">Benefits</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content reveal-animation">
+            <span class="hero-badge reveal-animation">Sustainable · Organic · Pure</span>
+            <h1 class="hero-title reveal-animation">
+                Elevating Organic <br class="hidden-mobile">
+                <span>Farming</span> Standards
+            </h1>
+            <p class="hero-description reveal-animation">
+                Cultivating a sustainable future with organic practices that respect nature's wisdom and restore
+                ecological balance.
+            </p>
+            <a href="#services" class="hero-btn glass-effect reveal-animation">
+                Explore Our Services
+            </a>
+        </div>
+        <div class="hero-bottom-gradient"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="section-container">
+            <div class="about-grid">
+                <div class="about-image-container reveal-animation">
+                    <div class="about-decorator-1"></div>
+                    <div class="about-decorator-2"></div>
+                    <div class="about-image shadow-neo">
+                        <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80"
+                            alt="Organic farm field with crops growing">
+                    </div>
+                </div>
+
+                <div>
+                    <span class="about-tag reveal-animation">Our Story</span>
+                    <h2 class="section-title reveal-animation">Pioneering Organic Excellence</h2>
+
+                    <div class="reveal-animation">
+                        <p class="mb-4 text-agri-brown-light">
+                            At Agri-Lift, we believe in the harmonious balance between nature and agriculture. Founded
+                            with a vision to revolutionize farming practices, we've dedicated ourselves to promoting
+                            sustainable and organic methods that respect our planet.
+                        </p>
+                        <p class="mb-4 text-agri-brown-light">
+                            Our journey began with a simple idea: farming should nourish both people and the earth.
+                            Today, we're proud to lead the organic farming movement, providing innovative solutions that
+                            enhance soil health, preserve biodiversity, and produce nutrient-rich crops.
+                        </p>
+                        <p class="mb-4 text-agri-brown-light">
+                            We partner with farmers across the country, guiding them through the transition to organic
+                            practices and supporting them with cutting-edge research and technology.
+                        </p>
+                    </div>
+
+                    <div class="about-stats reveal-animation">
+                        <div class="stat-item">
+                            <div class="stat-value">15+</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">500+</div>
+                            <div class="stat-label">Acres Transformed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">300+</div>
+                            <div class="stat-label">Happy Farmers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="services-top-gradient"></div>
+
+        <div class="section-container">
+            <div class="services-header">
+                <h2 class="section-title reveal-animation">Our Services</h2>
+                <p class="section-subtitle reveal-animation">
+                    We offer comprehensive solutions for every stage of organic farming, from initial transition to
+                    ongoing optimization and growth.
+                </p>
+            </div>
+
+            <div class="services-grid reveal-animation">
+                <!-- Service 1 -->
+                <div class="service-card glass-effect" data-service="1">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                    </div>
+                    <h3 class="service-title">Organic Certification</h3>
+                    <p class="service-description">We guide farmers through the organic certification process, ensuring
+                        compliance with all regulations.</p>
+                    <div class="service-details">
+                        Our certification experts help you navigate the complex requirements of USDA organic
+                        certification, EU organic standards, and other global certifications. We manage the paperwork,
+                        conduct pre-audits, and develop custom compliance plans.
+                    </div>
+                    <div class="service-indicator"></div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card glass-effect" data-service="2">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v8" />
+                            <path d="M4.93 10.93 12 18l7.07-7.07" />
+                            <path d="M2 22h20" />
+                        </svg>
+                    </div>
+                    <h3 class="service-title">Sustainable Farming</h3>
+                    <p class="service-description">Implement eco-friendly farming practices that regenerate soil health
+                        and promote biodiversity.</p>
+                    <div class="service-details">
+                        Our sustainable farming programs include crop rotation planning, cover crop selection,
+                        integrated pest management, and biodiversity enhancement. These practices improve long-term soil
+                        fertility and ecosystem resilience.
+                    </div>
+                    <div class="service-indicator"></div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card glass-effect" data-service="3">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22a8 8 0 0 0 8-8c0-5-8-13-8-13S4 9 4 14a8 8 0 0 0 8 8Z" />
+                        </svg>
+                    </div>
+                    <h3 class="service-title">Water Conservation</h3>
+                    <p class="service-description">Innovative irrigation systems that reduce water usage while
+                        maintaining optimal crop hydration.</p>
+                    <div class="service-details">
+                        We design and implement precision irrigation systems, soil moisture monitoring networks,
+                        rainwater harvesting solutions, and drought-resistant planting strategies to maximize water
+                        efficiency.
+                    </div>
+                    <div class="service-indicator"></div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card glass-effect" data-service="4">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+                            <path d="m13 13 6 6" />
+                        </svg>
+                    </div>
+                    <h3 class="service-title">Yield Optimization</h3>
+                    <p class="service-description">Data-driven approaches to maximize crop yields without compromising
+                        organic standards.</p>
+                    <div class="service-details">
+                        Our yield optimization program combines soil analysis, microclimate monitoring, planting density
+                        optimization, and organic nutrient management to achieve maximum productivity while maintaining
+                        sustainability.
+                    </div>
+                    <div class="service-indicator"></div>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="service-card glass-effect" data-service="5">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 11h.01" />
+                            <path d="M11 15h.01" />
+                            <path d="M16 16h.01" />
+                            <path d="m2 9 20-5-5 20-15-15z" />
+                        </svg>
+                    </div>
+                    <h3 class="service-title">Modern Equipment</h3>
+                    <p class="service-description">Access to specialized organic farming equipment designed for minimal
+                        environmental impact.</p>
+                    <div class="service-details">
+                        We provide access to precision weeding tools, no-till planters, compost spreaders, and other
+                        specialized equipment that supports organic practices. Rental and purchase options available
+                        with training included.
+                    </div>
+                    <div class="service-indicator"></div>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="service-card glass-effect" data-service="6">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                    </div>
+                    <h3 class="service-title">Soil Enrichment</h3>
+                    <p class="service-description">Custom soil analysis and enhancement programs to build robust,
+                        nutrient-rich growing environments.</p>
+                    <div class="service-details">
+                        Our comprehensive soil program includes detailed soil testing, custom compost formulations,
+                        cover crop strategies, and microbial inoculation techniques to build living soil ecosystems.
+                    </div>
+                    <div class="service-indicator"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="services-bottom-gradient"></div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="benefits">
+        <div class="section-container">
+            <div class="benefits-grid">
+                <div>
+                    <h2 class="section-title reveal-animation">Why Choose Organic Farming?</h2>
+                    <p class="text-xl text-agri-brown mb-10 reveal-animation">
+                        Organic farming offers numerous advantages for farmers, consumers, and our planet. Discover the
+                        transformative benefits of embracing natural agricultural methods.
+                    </p>
+
+                    <ul class="benefits-list reveal-animation">
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Higher nutritional value in crops</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Elimination of synthetic pesticides and fertilizers</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Improved soil fertility and structure</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Reduced water pollution</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Enhanced biodiversity and ecosystem health</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Decreased carbon footprint</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Better resistance to pests and disease</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Sustainable long-term yields</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Preserving farmland for future generations</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="benefit-text">Premium market prices for organic produce</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="benefits-image-container reveal-animation">
+                    <div class="benefits-decorator-1"></div>
+                    <div class="benefits-decorator-2"></div>
+
+                    <div class="shadow-neo rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1574943320219-361843c01738?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2671&q=80"
+                            alt="Organic vegetables and produce">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="section-container">
+            <h2 class="testimonials-title section-title reveal-animation">What Our Farmers Say</h2>
+
+            <div class="testimonials-grid reveal-animation">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card glass-effect">
+                    <div class="testimonial-quote">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
+                            <path
+                                d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
+                        </svg>
+                    </div>
+                    <p class="testimonial-text">Switching to organic farming with Agri-Lift's guidance has transformed
+                        our land. The soil quality has improved dramatically and our yields have been consistently
+                        higher.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                                alt="Sarah Johnson">
+                        </div>
+                        <div>
+                            <h4 class="testimonial-name">Sarah Johnson</h4>
+                            <p class="testimonial-title">Apple Orchard Owner</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card glass-effect">
+                    <div class="testimonial-quote">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
+                            <path
+                                d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
+                        </svg>
+                    </div>
+                    <p class="testimonial-text">Their soil enhancement program brought my farm back to life after years
+                        of conventional practices had depleted it. My crops are healthier than ever.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
+                                alt="Michael Ramirez">
+                        </div>
+                        <div>
+                            <h4 class="testimonial-name">Michael Ramirez</h4>
+                            <p class="testimonial-title">Vegetable Farmer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card glass-effect">
+                    <div class="testimonial-quote">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
+                            <path
+                                d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
+                        </svg>
+                    </div>
+                    <p class="testimonial-text">The Agri-Lift team provided invaluable support during our organic
+                        certification process. Their expertise made a complex transition feel manageable.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                                alt="Emma Thompson">
+                        </div>
+                        <div>
+                            <h4 class="testimonial-name">Emma Thompson</h4>
+                            <p class="testimonial-title">Dairy Farm Manager</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Preview Section -->
+    <section id="blog" class="blog">
+        <div class="blog-top-gradient"></div>
+
+        <div class="section-container">
+            <div class="blog-header">
+                <h2 class="section-title reveal-animation">Latest Articles</h2>
+                <a href="#" class="blog-view-all">
+                    View all articles
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="blog-grid reveal-animation">
+                <!-- Blog Post 1 -->
+                <a href="#" class="blog-card glass-effect">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80"
+                            alt="The Complete Guide to Transitioning to Organic Farming">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Guides</span>
+                            <span class="blog-date">May 15, 2023</span>
+                        </div>
+                        <h3 class="blog-title">The Complete Guide to Transitioning to Organic Farming</h3>
+                        <p class="blog-excerpt">Discover the step-by-step process of transforming conventional farmland
+                            into thriving organic systems.</p>
+                        <span class="blog-read-more">
+                            Read more
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M5 12h14" />
+                                <path d="m12 5 7 7-7 7" />
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Blog Post 2 -->
+                <a href="#" class="blog-card glass-effect">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1620052581237-d9e3f2d6c572?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80"
+                            alt="Understanding Soil Health: The Foundation of Organic Success">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Education</span>
+                            <span class="blog-date">June 3, 2023</span>
+                        </div>
+                        <h3 class="blog-title">Understanding Soil Health: The Foundation of Organic Success</h3>
+                        <p class="blog-excerpt">Learn why soil health is critical to organic farming and how to build a
+                            thriving soil ecosystem.</p>
+                        <span class="blog-read-more">
+                            Read more
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M5 12h14" />
+                                <path d="m12 5 7 7-7 7" />
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Blog Post 3 -->
+                <a href="#" class="blog-card glass-effect">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80"
+                            alt="Top 5 Natural Pest Management Strategies That Actually Work">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">Tips & Tricks</span>
+                            <span class="blog-date">July 22, 2023</span>
+                        </div>
+                        <h3 class="blog-title">Top 5 Natural Pest Management Strategies That Actually Work</h3>
+                        <p class="blog-excerpt">Effective methods to manage pests without synthetic chemicals, backed by
+                            research and farmer experiences.</p>
+                        <span class="blog-read-more">
+                            Read more
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M5 12h14" />
+                                <path d="m12 5 7 7-7 7" />
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="blog-bottom-gradient"></div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section id="newsletter" class="newsletter">
+        <div class="newsletter-container reveal-animation">
+            <div class="newsletter-box">
+                <div class="newsletter-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="16" x="2" y="4" rx="2" />
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                </div>
+
+                <h2 class="newsletter-title">Stay Updated with Organic Farming Insights</h2>
+
+                <p class="newsletter-description">
+                    Subscribe to our newsletter to receive the latest news, tips, and resources for organic farming
+                    success.
+                </p>
+
+                <form id="newsletter-form" class="newsletter-form">
+                    <div class="newsletter-form-inner">
+                        <input type="email" placeholder="Your email address" class="newsletter-input" required />
+                        <button type="submit" class="newsletter-button" id="newsletter-submit">
+                            Subscribe
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M20 6 9 17l-5-5" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+
+                <p class="newsletter-privacy">
+                    We respect your privacy. Unsubscribe at any time.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="contact-top-gradient"></div>
+
+        <div class="section-container">
+            <div class="contact-header">
+                <h2 class="section-title reveal-animation">Get In Touch</h2>
+                <p class="text-xl text-agri-brown">
+                    Have questions about organic farming or interested in our services? We'd love to hear from you.
+                </p>
+            </div>
+
+            <div class="contact-grid">
+                <form id="contact-form" class="contact-form glass-effect reveal-animation">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" id="firstName" class="form-input" placeholder="John" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" id="lastName" class="form-input" placeholder="Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-input" placeholder="john.doe@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" id="subject" class="form-input" placeholder="How can we help you?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea id="message" class="form-textarea"
+                            placeholder="Tell us about your project or inquiry..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="form-submit glass-effect">Send Message</button>
+                </form>
+
+                <div class="contact-info reveal-animation">
+                    <div class="contact-info-item glass-effect">
+                        <div class="contact-info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                            </svg>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>Phone</h3>
+                            <p class="contact-info-text">+1 (555) 123-4567</p>
+                            <p class="contact-info-subtext">Mon-Fri from 9am to 5pm</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item glass-effect">
+                        <div class="contact-info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2" />
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                            </svg>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>Email</h3>
+                            <p class="contact-info-text">info@agrilift.com</p>
+                            <p class="contact-info-subtext">We'll respond as soon as possible</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item glass-effect">
+                        <div class="contact-info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>Location</h3>
+                            <p class="contact-info-text">123 Nature Valley Road</p>
+                            <p class="contact-info-text">Green Fields, CA 94123</p>
+                            <p class="contact-info-subtext">Visit our demonstration farm</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-map">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.30596552044!2d-122.41941619999999!3d37.7749295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80859a6d00690021%3A0x4a501367f076adff!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sca!4v1625687256927!5m2!1sen!2sca"
+                            width="100%" height="100%" style="border:0;" loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="#" class="footer-brand"><span>Agri</span>-Lift</a>
+                    <p class="footer-description">
+                        Elevating organic farming standards through innovation, education, and sustainable practices.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                <rect width="4" height="12" x="2" y="9" />
+                                <circle cx="4" cy="4" r="2" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">Services</h4>
+                    <div class="footer-links">
+                        <a href="#services" class="footer-link">Organic Certification</a>
+                        <a href="#services" class="footer-link">Sustainable Farming</a>
+                        <a href="#services" class="footer-link">Water Conservation</a>
+                        <a href="#services" class="footer-link">Yield Optimization</a>
+                        <a href="#services" class="footer-link">Modern Equipment</a>
+                        <a href="#services" class="footer-link">Soil Enrichment</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">Company</h4>
+                    <div class="footer-links">
+                        <a href="#about" class="footer-link">About Us</a>
+                        <a href="#" class="footer-link">Our Team</a>
+                        <a href="#" class="footer-link">Careers</a>
+                        <a href="#" class="footer-link">News & Blog</a>
+                        <a href="#contact" class="footer-link">Contact Us</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">Newsletter</h4>
+                    <p class="footer-description">
+                        Subscribe to our newsletter for the latest updates on organic farming.
+                    </p>
+                    <form class="footer-form">
+                        <input type="email" placeholder="Your email" class="footer-input" required>
+                        <button type="submit" class="footer-button">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © <span id="current-year">2023</span> Agri-Lift. All rights reserved.
+                </p>
+
+                <div class="footer-legal">
+                    <a href="#" class="footer-legal-link">Privacy Policy</a>
+                    <a href="#" class="footer-legal-link">Terms of Service</a>
+                    <a href="#" class="footer-legal-link">Sitemap</a>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" class="back-to-top" id="back-to-top" aria-label="Back to top">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m18 15-6-6-6 6" />
+            </svg>
+        </a>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Update current year in the footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Scroll reveal animation
+        document.addEventListener('DOMContentLoaded', function () {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, {
+                root: null,
+                threshold: 0.1,
+            });
+
+            document.querySelectorAll('.reveal-animation').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Navbar scroll behavior
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 10) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelectorAll('.mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            mobileMenuBtn.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('open');
+                    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+                });
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            // Service card interactions
+            const serviceCards = document.querySelectorAll('.service-card');
+
+            serviceCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    const details = card.querySelector('.service-details');
+                    const indicator = card.querySelector('.service-indicator');
+
+                    details.style.height = 'auto';
+                    details.style.opacity = '1';
+                    details.style.marginTop = '1rem';
+                    details.style.paddingTop = '1rem';
+
+                    indicator.style.transform = 'scaleX(1)';
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    const details = card.querySelector('.service-details');
+                    const indicator = card.querySelector('.service-indicator');
+
+                    details.style.height = '0';
+                    details.style.opacity = '0';
+                    details.style.marginTop = '0';
+                    details.style.paddingTop = '0';
+
+                    indicator.style.transform = 'scaleX(0)';
+                });
+            });
+
+            // Back to top button
+            const backToTopBtn = document.getElementById('back-to-top');
+
+            backToTopBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Form submissions
+            const newsletterForm = document.getElementById('newsletter-form');
+            const contactForm = document.getElementById('contact-form');
+
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const emailInput = this.querySelector('input[type="email"]');
+                    const submitBtn = document.getElementById('newsletter-submit');
+
+                    if (emailInput.value) {
+                        // Simulate submission
+                        submitBtn.innerHTML = `
+                <svg class="animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                Subscribing...
+              `;
+                        submitBtn.disabled = true;
+
+                        setTimeout(() => {
+                            alert('Thank you for subscribing to our newsletter!');
+                            emailInput.value = '';
+                            submitBtn.innerHTML = `
+                  Subscribe
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                `;
+                            submitBtn.disabled = false;
+                        }, 1500);
+                    }
+                });
+            }
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    // Simulate submission
+                    alert('Thank you for your message! We\'ll get back to you soon.');
+                    this.reset();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

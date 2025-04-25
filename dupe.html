@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLand - Comprehensive Agricultural Solutions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #77daa0;
+            --secondary-green: #27ae60;
+            --accent-blue: #3498db;
+            --background-light: #f4f7f6;
+            --text-dark: #2c3e50;
+            --card-background: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeInDown 1s;
+        }
+
+        .navbar .logo img {
+            width: 165px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            font-size: larger;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #f1c40f;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 5%;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            max-height: 500px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            animation: zoomIn 1s;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: float 3s infinite;
+        }
+
+        .btn-farmer {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-executive {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 5%;
+            background-color: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background-color: var(--card-background);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            opacity: 0;
+            animation: fadeInUp 1s forwards;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover i {
+            transform: rotate(360deg);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+            animation: fadeInUp 1s;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #f1c40f;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="AgriLift/image__1_-removebg-preview.png" alt="AgriLand Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="loan.html">Loans</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <!-- Language Switcher -->
+        <select id="languageSwitcher">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="te">Telugu</option>
+        </select>
+    </nav>
+
+    <!-- Hero Section with Sliding Images -->
+    <section id="home" class="hero">
+        <div class="hero-slide active" style="background-image: url('AgriLift/welcome1.jpg');">
+            <div class="hero-content">
+                <h1>Empowering Farmers, Transforming Agriculture</h1>
+                <p>Comprehensive platform offering end-to-end agricultural solutions, from land testing to market
+                    selling</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-farmer">Farmer Login</button>
+                    <button class="btn btn-executive">Executive Portal</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide" style="background-image: url('AgriLift/welcome2.jpg');">
+            <div class="hero-content">
+                <h1>Empowering Farmers, Transforming Agriculture</h1>
+                <p>Comprehensive platform offering end-to-end agricultural solutions, from land testing to market
+                    selling</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-farmer">Farmer Login</button>
+                    <button class="btn btn-executive">Executive Portal</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide" style="background-image: url('AgriLift/welcome4.jpg');">
+            <div class="hero-content">
+                <h1>Empowering Farmers, Transforming Agriculture</h1>
+                <p>Comprehensive platform offering end-to-end agricultural solutions, from land testing to market
+                    selling</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-farmer">Farmer Login</button>
+                    <button class="btn btn-executive">Executive Portal</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide" style="background-image: url('AgriLift/welcome3.jpg');">
+            <div class="hero-content">
+                <h1>Empowering Farmers, Transforming Agriculture</h1>
+                <p>Comprehensive platform offering end-to-end agricultural solutions, from land testing to market
+                    selling</p>
+                <div class="cta-buttons">
+                    <a href="login.html">
+                        <button class="btn btn-farmer">Farmer Login</button>
+                    </a>
+                    <a href="executive.html">
+                        <button class="btn btn-executive">Executive Portal</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Our Comprehensive Solutions</h2>
+        <div class="features-grid">
+            <div class="feature-card" style="--delay: 1;">
+                <i class="fas fa-flask"></i>
+                <h3>Land Testing</h3>
+                <p>Advanced AI-driven soil analysis and crop recommendations</p>
+            </div>
+            <div class="feature-card" style="--delay: 2;">
+                <i class="fas fa-money-bill-wave"></i>
+                <h3>Loan Services</h3>
+                <p>Simplified access to government and private agricultural loans</p>
+            </div>
+            <div class="feature-card" style="--delay: 3;">
+                <i class="fas fa-seedling"></i>
+                <h3>Seeds & Plants</h3>
+                <p>Quality seeds and lab-grown plants sourced from trusted suppliers</p>
+            </div>
+            <div class="feature-card" style="--delay: 4;">
+                <i class="fas fa-tractor"></i>
+                <h3>Machinery Options</h3>
+                <p>Flexible ploughing and harvesting machinery rental</p>
+            </div>
+            <div class="feature-card" style="--delay: 5;">
+                <i class="fas fa-users"></i>
+                <h3>Labor Management</h3>
+                <p>Connect with skilled planting workers and farm managers</p>
+            </div>
+            <div class="feature-card" style="--delay: 6;">
+                <i class="fas fa-cloud-sun"></i>
+                <h3>Weather Forecasts</h3>
+                <p>Localized, real-time weather updates for precise planning</p>
+            </div>
+            <div class="feature-card" style="--delay: 7;">
+                <i class="fas fa-egg"></i>
+                <h3>Diverse Farming</h3>
+                <p>Support for poultry, dairy, and fishing farm operations</p>
+            </div>
+            <div class="feature-card" style="--delay: 8;">
+                <i class="fas fa-store"></i>
+                <h3>Market Connections</h3>
+                <p>Direct crop selling platform to maximize farmer profits</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h3>AgriLand - Your Agricultural Partner</h3>
+        <p>Innovating agriculture through technology and sustainable solutions</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/i18next@21.6.14/i18next.min.js"></script>
+    <script
+        src="https://unpkg.com/i18next-browser-languagedetector@6.1.4/i18nextBrowserLanguageDetector.min.js"></script>
+    <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/jquery-i18next@1.2.1/jquery-i18next.min.js"></script>
+    <script src="i18n-init.js"></script>
+
+    <script>
+        // Sliding Hero Images
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        let currentSlide = 0;
+
+        function changeSlide() {
+            heroSlides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % heroSlides.length;
+            heroSlides[currentSlide].classList.add('active');
+        }
+
+        setInterval(changeSlide, 5000);
+
+        // Stagger Feature Card Animations
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach((card, index) => {
+            card.style.setProperty('--delay', index + 1);
+        });
+
+        // Language Switcher (assuming i18n-init.js handles this)
+        document.getElementById('languageSwitcher').addEventListener('change', function () {
+            i18next.changeLanguage(this.value);
+        });
+    </script>
+</body>
+
+</html>

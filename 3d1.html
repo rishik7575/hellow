@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri-Optimizer-Pro - Agricultural Intelligence</title>
+    <meta name="description" content="Optimize your land distribution with AI-powered recommendations">
+    <meta name="author" content="Agri-Optimizer-Pro">
+
+    <!-- Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
+
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+
+    <style>
+        :root {
+            --background: hsl(120, 33%, 98%);
+            --foreground: hsl(0, 0%, 10%);
+            --card: hsl(0, 0%, 100%);
+            --card-foreground: hsl(0, 0%, 10%);
+            --popover: hsl(0, 0%, 100%);
+            --popover-foreground: hsl(0, 0%, 10%);
+            --primary: hsl(122, 39%, 37%);
+            --primary-foreground: hsl(0, 0%, 100%);
+            --primary-light: hsl(122, 39%, 92%);
+            --primary-dark: hsl(122, 39%, 32%);
+            --secondary: hsl(43, 74%, 63%);
+            --secondary-foreground: hsl(0, 0%, 10%);
+            --muted: hsl(120, 10%, 96%);
+            --muted-foreground: hsl(0, 0%, 45%);
+            --accent: hsl(122, 39%, 92%);
+            --accent-foreground: hsl(122, 39%, 25%);
+            --destructive: hsl(0, 84%, 60%);
+            --destructive-foreground: hsl(0, 0%, 100%);
+            --border: hsl(120, 10%, 90%);
+            --input: hsl(120, 10%, 90%);
+            --ring: hsl(122, 39%, 37%);
+            --radius: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            background: linear-gradient(to bottom right, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        main {
+            padding-top: 6rem;
+            min-height: calc(100vh - 4rem);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+        }
+
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 9999px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--muted-foreground);
+            max-width: 32rem;
+            margin: 0 auto;
+        }
+
+        .step-heading {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .step-description {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--foreground);
+            background-color: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.5rem 2rem 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--foreground);
+            background-color: var(--background);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            appearance: none;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .crop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .crop-card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .crop-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .crop-card.selected {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .crop-icon-container {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            border-radius: 9999px;
+            transition: transform 0.3s;
+        }
+
+        .crop-card:hover .crop-icon-container {
+            transform: scale(1.1);
+        }
+
+        .crop-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+        }
+
+        .crop-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .crop-yield {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-bottom: 0.5rem;
+        }
+
+        .efficiency-badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            font-size: 0.625rem;
+            border-radius: 9999px;
+        }
+
+        .efficiency-high {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .efficiency-medium {
+            background-color: #fff8e1;
+            color: #f57f17;
+        }
+
+        .efficiency-low {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        .visualization-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            z-index: 10;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 20;
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid rgba(76, 175, 80, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spinner 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spinner {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .instructions-card {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            z-index: 10;
+        }
+
+        .language-switcher {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            z-index: 10;
+        }
+
+        .language-select {
+            font-size: 0.75rem;
+            border: none;
+            background-color: transparent;
+            padding: 0.25rem;
+        }
+
+        .crop-info {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            width: 16rem;
+            font-size: 0.875rem;
+            z-index: 10;
+        }
+
+        .crop-info h4 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .crop-info ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0.25rem 0 0.75rem;
+        }
+
+        .crop-info li {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-bottom: 0.25rem;
+        }
+
+        .allocation-bar {
+            height: 0.5rem;
+            background-color: var(--muted);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .allocation-progress {
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .allocation-item {
+            margin-bottom: 1rem;
+        }
+
+        .allocation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .allocation-crop {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .allocation-color {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 9999px;
+        }
+
+        .allocation-details {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        .allocation-yield {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .insights-panel h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .insights-panel p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--destructive);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-cols-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .lg-grid-cols-12 {
+                grid-template-columns: repeat(12, 1fr);
+            }
+
+            .lg-col-span-8 {
+                grid-column: span 8 / span 8;
+            }
+
+            .lg-col-span-4 {
+                grid-column: span 4 / span 4;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <div class="logo-icon">A</div>
+                    <div class="logo-text">
+                        <span style="color: var(--primary)">Agri</span>-Optimizer
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="hero">
+                <div class="chip">Agricultural Intelligence</div>
+                <h1 class="hero-title">Optimize Your Land Distribution</h1>
+                <p class="hero-subtitle">
+                    Enter your land details and let our AI recommend the most efficient crop distribution
+                    with stunning 3D visualization
+                </p>
+            </div>
+
+            <div id="step-1" class="glass-panel" style="max-width: 40rem; margin: 0 auto;">
+                <div class="step-heading">
+                    <div class="chip">Step 1</div>
+                    <h2 class="step-title">Land Area</h2>
+                </div>
+                <p class="step-description">Enter the total land area in acres</p>
+
+                <form id="land-form">
+                    <div class="form-group">
+                        <label for="acres" class="form-label">Land Area</label>
+                        <div style="position: relative;">
+                            <input type="number" id="acres" class="form-control" value="100" min="1" placeholder="100"
+                                style="padding-right: 4rem;">
+                            <span
+                                style="position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); color: var(--muted-foreground);">
+                                acres
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md-grid-cols-2" style="grid-template-columns: repeat(2, 1fr);">
+                        <div class="form-group">
+                            <label for="soil-type" class="form-label">Soil Type</label>
+                            <select id="soil-type" class="form-select">
+                                <option value="clay">Clay</option>
+                                <option value="loam" selected>Loam</option>
+                                <option value="sand">Sandy</option>
+                                <option value="silt">Silt</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="climate-type" class="form-label">Climate Type</label>
+                            <select id="climate-type" class="form-select">
+                                <option value="arid">Arid</option>
+                                <option value="tropical">Tropical</option>
+                                <option value="temperate" selected>Temperate</option>
+                                <option value="continental">Continental</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Continue</button>
+                </form>
+            </div>
+
+            <div id="step-2" class="glass-panel" style="max-width: 50rem; margin: 2rem auto; display: none;">
+                <div class="step-heading">
+                    <div class="chip">Step 2</div>
+                    <h2 class="step-title">Select Crops</h2>
+                </div>
+                <p class="step-description">Choose the crops you want to cultivate (select at least 2)</p>
+
+                <div id="crop-selection" class="crop-grid"></div>
+
+                <div id="crop-error" class="error-message" style="display: none;">Please select at least 2 crops</div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button id="back-to-step-1" class="btn btn-outline" style="flex: 1;">Back</button>
+                    <button id="submit-crops" class="btn btn-primary" style="flex: 1;">Continue</button>
+                </div>
+            </div>
+
+            <div id="step-3" style="display: none;">
+                <div class="grid grid-cols-1 lg-grid-cols-12">
+                    <div class="lg-col-span-8">
+                        <div class="glass-panel">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                <div>
+                                    <div class="step-heading">
+                                        <div class="chip">Step 3</div>
+                                        <h2 class="step-title">3D Visualization</h2>
+                                    </div>
+                                    <p class="step-description">Interactive 3D view of your optimized land allocation
+                                    </p>
+                                </div>
+
+                                <button id="change-settings" class="btn btn-outline btn-sm">Change Settings</button>
+                            </div>
+
+                            <div id="visualization-container" class="visualization-container">
+                                <div id="visualization-loading" class="loading-overlay">
+                                    <div class="spinner"></div>
+                                    <p>Generating visualization...</p>
+                                </div>
+
+                                <div id="language-switcher" class="language-switcher">
+                                    <select id="language-select" class="language-select">
+                                        <option value="en">English</option>
+                                        <option value="hi">हिंदी</option>
+                                        <option value="ta">தமிழ்</option>
+                                        <option value="te">తెలుగు</option>
+                                        <option value="bn">বাংলা</option>
+                                    </select>
+                                </div>
+
+                                <div id="instructions-card" class="instructions-card">
+                                    <p style="margin: 0;">Click and drag to rotate | Scroll to zoom</p>
+                                    <p id="total-area-display" style="margin: 0;">Total area: 100 acres</p>
+                                </div>
+
+                                <div id="crop-info" class="crop-info"></div>
+
+                                <div id="legend" class="legend"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg-col-span-4">
+                        <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                            <div style="margin-bottom: 1rem;">
+                                <div
+                                    style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.25rem;">
+                                    <div>
+                                        <div class="chip">AI Recommendation</div>
+                                        <h3 style="font-size: 1.25rem; font-weight: 600; margin: 0;">Optimal Crop
+                                            Distribution</h3>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-outline btn-sm"
+                                            style="padding: 0.25rem; width: 2rem; height: 2rem;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="18" cy="5" r="3"></circle>
+                                                <circle cx="6" cy="12" r="3"></circle>
+                                                <circle cx="18" cy="19" r="3"></circle>
+                                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-outline btn-sm"
+                                            style="padding: 0.25rem; width: 2rem; height: 2rem; margin-left: 0.25rem;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                <polyline points="7 10 12 15 17 10"></polyline>
+                                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <p id="recommendation-subtitle"
+                                    style="font-size: 0.875rem; color: var(--muted-foreground); margin: 0;">
+                                    Based on your inputs for 100 acres of land
+                                </p>
+                            </div>
+
+                            <div id="allocations-container"></div>
+
+                            <div style="padding-top: 1rem; border-top: 1px solid var(--border); margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
+                                    <span style="color: var(--muted-foreground);">Total allocated:</span>
+                                    <span id="total-allocation" style="font-weight: 500;">100 acres (100%)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel insights-panel">
+                            <h3 style="font-size: 1.25rem; font-weight: 600; margin-top: 0; margin-bottom: 0.25rem;">
+                                Optimization Insights</h3>
+                            <p style="margin-bottom: 1.5rem;">Why this distribution is recommended</p>
+
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4>Maximized Profitability</h4>
+                                <p>
+                                    This distribution optimizes your profit potential based on current market conditions
+                                    and the specific characteristics of your land.
+                                </p>
+                            </div>
+
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4>Water Efficiency</h4>
+                                <p>
+                                    The recommended allocation takes into account water requirements,
+                                    suggesting more drought-resistant crops where appropriate.
+                                </p>
+                            </div>
+
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4>Growth Cycle Balance</h4>
+                                <p>
+                                    Crops are distributed to balance harvest times throughout the season,
+                                    ensuring consistent revenue and optimal resource usage.
+                                </p>
+                            </div>
+
+                            <button id="reset-all" class="btn btn-outline" style="width: 100%;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.5rem;">
+                                    <path d="M1 4v6h6"></path>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                                Start Over
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> Agri-Optimizer Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Define crop data
+        const crops = [
+            { id: 'wheat', name: 'Wheat', color: '#E3B448', yieldPerAcre: 70, waterRequirement: 6 },
+            { id: 'rice', name: 'Rice', color: '#DFD8CA', yieldPerAcre: 85, waterRequirement: 9 },
+            { id: 'corn', name: 'Corn', color: '#F3CE71', yieldPerAcre: 110, waterRequirement: 7 },
+            { id: 'soybeans', name: 'Soybeans', color: '#97BC62', yieldPerAcre: 55, waterRequirement: 5 },
+            { id: 'cotton', name: 'Cotton', color: '#F2F2F2', yieldPerAcre: 40, waterRequirement: 8 },
+            { id: 'sugarcane', name: 'Sugarcane', color: '#AB9563', yieldPerAcre: 130, waterRequirement: 8 },
+            { id: 'potatoes', name: 'Potatoes', color: '#B87E5A', yieldPerAcre: 95, waterRequirement: 6 },
+            { id: 'tomatoes', name: 'Tomatoes', color: '#E35555', yieldPerAcre: 65, waterRequirement: 7 }
+        ];
+
+        const soilTypes = [
+            { id: 'clay', name: 'Clay' },
+            { id: 'loam', name: 'Loam' },
+            { id: 'sand', name: 'Sandy' },
+            { id: 'silt', name: 'Silt' }
+        ];
+
+        const climateTypes = [
+            { id: 'arid', name: 'Arid' },
+            { id: 'tropical', name: 'Tropical' },
+            { id: 'temperate', name: 'Temperate' },
+            { id: 'continental', name: 'Continental' }
+        ];
+
+        // Language translations
+        const translations = {
+            en: {
+                wateringTitle: "Watering Guide",
+                productionTitle: "Production Tips",
+                selectCrop: "Select crop",
+                wateringTip: "Water early morning for best results",
+                productionTip1: "Use organic fertilizers for higher yield",
+                productionTip2: "Control weeds regularly for better growth",
+                productionTip3: "Monitor for pests weekly"
+            },
+            hi: {
+                wateringTitle: "सिंचाई गाइड",
+                productionTitle: "उत्पादन टिप्स",
+                selectCrop: "फसल चुनें",
+                wateringTip: "सर्वोत्तम परिणामों के लिए सुबह जल्दी पानी दें",
+                productionTip1: "अधिक उपज के लिए जैविक उर्वरकों का उपयोग करें",
+                productionTip2: "बेहतर विकास के लिए नियमित रूप से खरपतवार नियंत्रित करें",
+                productionTip3: "कीटों की साप्ताहिक निगरानी करें"
+            },
+            ta: {
+                wateringTitle: "நீர் பாய்ச்சல் வழிகாட்டி",
+                productionTitle: "உற்பத்தி குறிப்புகள்",
+                selectCrop: "பயிர் தேர்வு செய்க",
+                wateringTip: "சிறந்த முடிவுகளுக்கு அதிகாலையில் நீர் பாய்ச்சவும்",
+                productionTip1: "அதிக மகசூலுக்கு கரிம உரங்களைப் பயன்படுத்தவும்",
+                productionTip2: "சிறந்த வளர்ச்சிக்கு களைகளை தொடர்ந்து கட்டுப்படுத்தவும்",
+                productionTip3: "பூச்சிகளை வாராந்திர கண்காணிப்பு செய்யவும்"
+            },
+            te: {
+                wateringTitle: "నీటి మార్గదర్శకం",
+                productionTitle: "ఉత్పత్తి చిట్కాలు",
+                selectCrop: "పంట ఎంచుకోండి",
+                wateringTip: "మంచి ఫలితాల కోసం తెల్లవారుజామున నీరు పట్టండి",
+                productionTip1: "ఎక్కువ దిగుబడి కోసం సేంద్రియ ఎరువులను ఉపయోగించండి",
+                productionTip2: "మంచి పెరుగుదల కోసం కలుపు మొక్కలను క్రమం తప్పకుండా నియంత్రించండి",
+                productionTip3: "క్రిములు కోసం వారానికి ఒకసారి పర్యవేక్షించండి"
+            },
+            bn: {
+                wateringTitle: "সেচের গাইড",
+                productionTitle: "উৎপাদন টিপস",
+                selectCrop: "ফসল নির্বাচন করুন",
+                wateringTip: "সেরা ফলাফলের জন্য ভোরে জল দিন",
+                productionTip1: "বেশি ফলনের জন্য জৈব সার ব্যবহার করুন",
+                productionTip2: "ভালো বৃদ্ধির জন্য নিয়মিত আগাছা নিয়ন্ত্রণ করুন",
+                productionTip3: "কীটপতঙ্গের জন্য সাপ্তাহিক পর্যবেক্ষণ করুন"
+            }
+        };
+
+        // Application state
+        let state = {
+            step: 1,
+            acres: 100,
+            soilType: 'loam',
+            climateType: 'temperate',
+            selectedCrops: [],
+            allocations: [],
+            language: 'en',
+            selectedCropId: null
+        };
+
+        // DOM elements
+        const step1El = document.getElementById('step-1');
+        const step2El = document.getElementById('step-2');
+        const step3El = document.getElementById('step-3');
+        const landFormEl = document.getElementById('land-form');
+        const acresInput = document.getElementById('acres');
+        const soilTypeSelect = document.getElementById('soil-type');
+        const climateTypeSelect = document.getElementById('climate-type');
+        const cropSelectionEl = document.getElementById('crop-selection');
+        const cropErrorEl = document.getElementById('crop-error');
+        const backToStep1Btn = document.getElementById('back-to-step-1');
+        const submitCropsBtn = document.getElementById('submit-crops');
+        const changeSettingsBtn = document.getElementById('change-settings');
+        const resetAllBtn = document.getElementById('reset-all');
+        const totalAreaDisplay = document.getElementById('total-area-display');
+        const recommendationSubtitle = document.getElementById('recommendation-subtitle');
+        const allocationsContainer = document.getElementById('allocations-container');
+        const totalAllocation = document.getElementById('total-allocation');
+        const legendEl = document.getElementById('legend');
+        const cropInfoEl = document.getElementById('crop-info');
+        const visualizationLoading = document.getElementById('visualization-loading');
+        const languageSelect = document.getElementById('language-select');
+        const currentYearEl = document.getElementById('current-year');
+
+        // Set current year in footer
+        currentYearEl.textContent = new Date().getFullYear();
+
+        // Initialize app
+        function init() {
+            populateCropSelection();
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            landFormEl.addEventListener('submit', handleLandFormSubmit);
+            backToStep1Btn.addEventListener('click', goToStep1);
+            submitCropsBtn.addEventListener('click', handleCropSubmit);
+            changeSettingsBtn.addEventListener('click', goToStep1);
+            resetAllBtn.addEventListener('click', resetApp);
+            languageSelect.addEventListener('change', handleLanguageChange);
+        }
+
+        // Populate crop selection cards
+        function populateCropSelection() {
+            cropSelectionEl.innerHTML = '';
+
+            crops.forEach(crop => {
+                const isSelected = state.selectedCrops.includes(crop.id);
+                const waterEfficiency = 11 - crop.waterRequirement;
+                let efficiencyLabel, efficiencyClass;
+
+                if (waterEfficiency >= 7) {
+                    efficiencyLabel = 'High Efficiency';
+                    efficiencyClass = 'efficiency-high';
+                } else if (waterEfficiency >= 4) {
+                    efficiencyLabel = 'Medium Efficiency';
+                    efficiencyClass = 'efficiency-medium';
+                } else {
+                    efficiencyLabel = 'Low Efficiency';
+                    efficiencyClass = 'efficiency-low';
+                }
+
+                const cropCard = document.createElement('div');
+                cropCard.className = `crop-card ${isSelected ? 'selected' : ''}`;
+                cropCard.dataset.cropId = crop.id;
+                cropCard.innerHTML = `
+          <div class="crop-icon-container" style="background-color: ${crop.color}33">
+            <div class="crop-icon" style="background-color: ${crop.color}"></div>
+          </div>
+          <div class="crop-name">${crop.name}</div>
+          <div class="crop-yield">Yield: ${crop.yieldPerAcre} units/acre</div>
+          <span class="efficiency-badge ${efficiencyClass}">${efficiencyLabel}</span>
+          ${isSelected ? `
+            <div style="position: absolute; top: 0.5rem; right: 0.5rem; width: 1rem; height: 1rem; border-radius: 9999px; background-color: var(--primary); display: flex; align-items: center; justify-content: center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          ` : ''}
+        `;
+
+                cropSelectionEl.appendChild(cropCard);
+
+                // Add click event to select/deselect crop
+                cropCard.addEventListener('click', () => {
+                    toggleCropSelection(crop.id);
+                });
+            });
+        }
+
+        // Toggle crop selection
+        function toggleCropSelection(cropId) {
+            const index = state.selectedCrops.indexOf(cropId);
+            if (index === -1) {
+                state.selectedCrops.push(cropId);
+            } else {
+                state.selectedCrops.splice(index, 1);
+            }
+
+            // Update UI
+            populateCropSelection();
+
+            // Hide error message when making selections
+            cropErrorEl.style.display = 'none';
+        }
+
+        // Handle land form submission
+        function handleLandFormSubmit(e) {
+            e.preventDefault();
+
+            state.acres = parseFloat(acresInput.value);
+            state.soilType = soilTypeSelect.value;
+            state.climateType = climateTypeSelect.value;
+
+            goToStep2();
+        }
+
+        // Handle crop selection submission
+        function handleCropSubmit() {
+            if (state.selectedCrops.length < 2) {
+                cropErrorEl.style.display = 'block';
+                return;
+            }
+
+            // Calculate optimal allocation
+            calculateOptimalAllocation();
+
+            // Show step 3
+            goToStep3();
+        }
+
+        // Handle language change
+        function handleLanguageChange(e) {
+            state.language = e.target.value;
+            updateCropInfo();
+        }
+
+        // Calculate optimal allocation based on selected crops and inputs
+        function calculateOptimalAllocation() {
+            state.allocations = [];
+
+            let totalWeight = 0;
+            const cropWeights = state.selectedCrops.map(cropId => {
+                const crop = crops.find(c => c.id === cropId);
+
+                // Create a weight based on yield and water efficiency for the given soil and climate
+                let weight = crop.yieldPerAcre / (crop.waterRequirement * 0.5);
+
+                // Adjust weight based on soil type compatibility
+                if (state.soilType === 'loam') {
+                    weight *= 1.2;  // Loam is good for most crops
+                } else if (state.soilType === 'clay' && ['rice', 'wheat'].includes(cropId)) {
+                    weight *= 1.3;  // Clay is good for rice and wheat
+                } else if (state.soilType === 'sand' && ['potatoes', 'corn'].includes(cropId)) {
+                    weight *= 1.3;  // Sandy soil is good for potatoes and corn
+                }
+
+                // Adjust weight based on climate type
+                if (state.climateType === 'tropical' && ['rice', 'sugarcane'].includes(cropId)) {
+                    weight *= 1.3;  // Tropical climate is good for rice and sugarcane
+                } else if (state.climateType === 'temperate' && ['wheat', 'corn', 'soybeans'].includes(cropId)) {
+                    weight *= 1.2;  // Temperate climate is good for wheat, corn, soybeans
+                } else if (state.climateType === 'arid' && ['cotton'].includes(cropId)) {
+                    weight *= 1.1;  // Arid climate can be good for cotton
+                }
+
+                return { cropId, weight };
+            });
+
+            // Calculate total weight
+            totalWeight = cropWeights.reduce((sum, item) => sum + item.weight, 0);
+
+            // Calculate percentage and acres for each crop
+            state.selectedCrops.forEach((cropId, index) => {
+                const crop = crops.find(c => c.id === cropId);
+                const weight = cropWeights[index].weight;
+                const percentage = (weight / totalWeight) * 100;
+                const acres = (percentage / 100) * state.acres;
+
+                state.allocations.push({
+                    cropId,
+                    percentage,
+                    acres,
+                    yield: acres * crop.yieldPerAcre
+                });
+            });
+
+            // Sort by percentage (descending)
+            state.allocations.sort((a, b) => b.percentage - a.percentage);
+
+            // Set the first crop as selected for crop info
+            if (state.allocations.length > 0) {
+                state.selectedCropId = state.allocations[0].cropId;
+            }
+        }
+
+        // Show step 1
+        function goToStep1() {
+            state.step = 1;
+            step1El.style.display = 'block';
+            step2El.style.display = 'none';
+            step3El.style.display = 'none';
+        }
+
+        // Show step 2
+        function goToStep2() {
+            state.step = 2;
+            step1El.style.display = 'none';
+            step2El.style.display = 'block';
+            step3El.style.display = 'none';
+
+            // Repopulate crop selection in case crops data changes
+            populateCropSelection();
+        }
+
+        // Show step 3
+        function goToStep3() {
+            state.step = 3;
+            step1El.style.display = 'none';
+            step2El.style.display = 'none';
+            step3El.style.display = 'block';
+
+            // Update displays
+            totalAreaDisplay.textContent = `Total area: ${state.acres} acres`;
+            recommendationSubtitle.textContent = `Based on your inputs for ${state.acres} acres of land`;
+
+            // Update allocations display
+            updateAllocationsDisplay();
+
+            // Update legend
+            updateLegend();
+
+            // Update crop info
+            updateCropInfo();
+
+            // Create 3D visualization with a shorter timeout
+            setTimeout(() => {
+                createVisualization();
+            }, 300); // Reduced from 1000ms to make visualization appear faster
+        }
+
+        // Update allocations display
+        function updateAllocationsDisplay() {
+            allocationsContainer.innerHTML = '';
+
+            state.allocations.forEach(alloc => {
+                const crop = crops.find(c => c.id === alloc.cropId);
+                if (!crop) return;
+
+                const allocItem = document.createElement('div');
+                allocItem.className = 'allocation-item';
+                allocItem.innerHTML = `
+          <div class="allocation-header">
+            <div class="allocation-crop">
+              <div class="allocation-color" style="background-color: ${crop.color}"></div>
+              <div>
+                <div style="font-weight: 500;">${crop.name}</div>
+                <div class="allocation-details">${alloc.acres.toFixed(1)} acres (${alloc.percentage.toFixed(1)}%)</div>
+              </div>
+            </div>
+            <span class="allocation-yield">
+              Yield: ${Math.round(alloc.yield).toLocaleString()} units
+            </span>
+          </div>
+          <div class="allocation-bar">
+            <div class="allocation-progress" style="width: ${alloc.percentage}%"></div>
+          </div>
+        `;
+
+                allocationsContainer.appendChild(allocItem);
+            });
+
+            // Update total allocation
+            const totalAcres = state.allocations.reduce((sum, alloc) => sum + alloc.acres, 0);
+            totalAllocation.textContent = `${totalAcres.toFixed(2)} acres (100%)`;
+        }
+
+        // Update legend display
+        function updateLegend() {
+            legendEl.innerHTML = `
+        <div style="color: var(--muted-foreground); font-weight: 500; margin-bottom: 0.5rem;">Legend:</div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;">
+          ${state.allocations.map(alloc => {
+                const crop = crops.find(c => c.id === alloc.cropId);
+                if (!crop) return '';
+
+                return `
+              <div style="display: flex; align-items: center; gap: 0.375rem;">
+                <div style="width: 0.75rem; height: 0.75rem; border-radius: 9999px; background-color: ${crop.color}"></div>
+                <span>${crop.name} (${Math.round(alloc.percentage)}%)</span>
+              </div>
+            `;
+            }).join('')}
+        </div>
+      `;
+        }
+
+        // Update crop info display
+        function updateCropInfo() {
+            if (!state.selectedCropId) {
+                if (state.allocations.length > 0) {
+                    state.selectedCropId = state.allocations[0].cropId;
+                } else {
+                    return;
+                }
+            }
+
+            const crop = crops.find(c => c.id === state.selectedCropId);
+            if (!crop) return;
+
+            const text = translations[state.language] || translations.en;
+
+            cropInfoEl.innerHTML = `
+        <div style="margin-bottom: 0.75rem;">
+          <label style="display: block; font-size: 0.75rem; color: var(--muted-foreground); margin-bottom: 0.25rem;">
+            ${text.selectCrop}
+          </label>
+          <select id="crop-select" style="width: 100%; padding: 0.25rem; font-size: 0.875rem; border: 1px solid var(--border); border-radius: 0.25rem;">
+            ${state.allocations.map(alloc => {
+                const c = crops.find(crop => crop.id === alloc.cropId);
+                if (!c) return '';
+                return `<option value="${c.id}" ${c.id === state.selectedCropId ? 'selected' : ''}>${c.name}</option>`;
+            }).join('')}
+          </select>
+        </div>
+        
+        <div style="margin-bottom: 0.75rem;">
+          <h4>${text.wateringTitle}</h4>
+          <ul>
+            <li>• ${crop.waterRequirement} times per week</li>
+            <li>• ${text.wateringTip}</li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4>${text.productionTitle}</h4>
+          <ul>
+            <li>• ${text.productionTip1}</li>
+            <li>• ${text.productionTip2}</li>
+            <li>• ${text.productionTip3}</li>
+          </ul>
+        </div>
+      `;
+
+            // Add event listener to crop select
+            const cropSelect = document.getElementById('crop-select');
+            cropSelect.addEventListener('change', (e) => {
+                state.selectedCropId = e.target.value;
+                updateCropInfo();
+            });
+        }
+
+        // Create 3D visualization
+        function createVisualization() {
+            console.log("Starting visualization creation");
+
+            // Get the container
+            const container = document.getElementById('visualization-container');
+
+            // Remove any existing canvas
+            const existingCanvas = container.querySelector('canvas');
+            if (existingCanvas) {
+                existingCanvas.remove();
+            }
+
+            try {
+                // Check if THREE is defined
+                if (typeof THREE === 'undefined') {
+                    console.error("THREE is not defined. Make sure three.js is loaded properly.");
+                    visualizationLoading.innerHTML = `
+            <p>Unable to load 3D visualization. Please refresh the page or try a different browser.</p>
+            <button onclick="window.location.reload()" class="btn btn-primary mt-4">Refresh Page</button>
+          `;
+                    return;
+                }
+
+                // Set up the scene
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xf8f9fa);
+
+                // Set up the camera
+                const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                camera.position.set(0, 50, 50);
+
+                // Set up the renderer
+                const renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.shadowMap.enabled = true;
+                if (renderer.outputEncoding) {
+                    renderer.outputEncoding = THREE.sRGBEncoding;
+                }
+                container.appendChild(renderer.domElement);
+
+                // Add lights
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+                scene.add(ambientLight);
+
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(10, 20, 10);
+                directionalLight.castShadow = true;
+                scene.add(directionalLight);
+
+                const hemisphereLight = new THREE.HemisphereLight(0x87CEEB, 0x4CAF50, 0.3);
+                scene.add(hemisphereLight);
+
+                console.log("Basic scene setup complete");
+
+                // Fixed field size for visualization
+                const fieldWidth = 100;
+                const fieldLength = 100;
+
+                // Create ground (with greener color for more realistic look)
+                const groundGeometry = new THREE.PlaneGeometry(fieldWidth * 1.5, fieldLength * 1.5, 32, 32);
+                const groundMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x5D8233, // Greener color for the field
+                    roughness: 0.9,
+                    metalness: 0.1
+                });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2; // Rotate to be horizontal
+                ground.receiveShadow = true;
+                scene.add(ground);
+
+                // Add border around farming area
+                const borderGeometry = new THREE.BoxGeometry(fieldWidth + 2, 1, fieldLength + 2);
+                const borderMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+                const border = new THREE.Mesh(borderGeometry, borderMaterial);
+                border.position.y = 0.5;
+                scene.add(border);
+
+                // Create the actual farming area with slightly different color
+                const farmGeometry = new THREE.PlaneGeometry(fieldWidth, fieldLength, 32, 32);
+                const farmMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x8B4513,
+                    roughness: 0.9,
+                    metalness: 0.1
+                });
+                const farm = new THREE.Mesh(farmGeometry, farmMaterial);
+                farm.rotation.x = -Math.PI / 2;
+                farm.position.y = 0.01; // Slightly above ground
+                farm.receiveShadow = true;
+                scene.add(farm);
+
+                console.log("Ground and farm area created");
+
+                // Add decorative trees and bushes around the farming area
+                const addGreenery = () => {
+                    // Create groups of trees and bushes around the perimeter
+                    for (let i = 0; i < 40; i++) {
+                        // Determine position around the perimeter
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = (fieldWidth / 2) + 5 + Math.random() * 15;
+                        const x = Math.cos(angle) * distance;
+                        const z = Math.sin(angle) * distance;
+
+                        // Randomly decide if this will be a tree or bush
+                        if (Math.random() > 0.5) {
+                            // Create a tree
+                            const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.8, 4, 8);
+                            const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+                            const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                            trunk.position.set(x, 2, z);
+                            trunk.castShadow = true;
+                            scene.add(trunk);
+
+                            // Create tree top
+                            const treeTopGeometry = new THREE.ConeGeometry(3, 6, 8);
+                            const treeTopMaterial = new THREE.MeshStandardMaterial({
+                                color: 0x2E8B57,
+                                roughness: 0.8
+                            });
+                            const treeTop = new THREE.Mesh(treeTopGeometry, treeTopMaterial);
+                            treeTop.position.set(x, 7, z);
+                            treeTop.castShadow = true;
+                            scene.add(treeTop);
+                        } else {
+                            // Create a bush
+                            const bushGeometry = new THREE.SphereGeometry(1.5 + Math.random(), 8, 8);
+                            const bushMaterial = new THREE.MeshStandardMaterial({
+                                color: 0x3CB371,
+                                roughness: 0.9
+                            });
+                            const bush = new THREE.Mesh(bushGeometry, bushMaterial);
+                            bush.position.set(x, 1.5, z);
+                            bush.castShadow = true;
+                            scene.add(bush);
+                        }
+                    }
+                };
+
+                addGreenery();
+                console.log("Greenery added");
+
+                // Generate crop grid
+                const gridSize = 20; // Grid divisions
+                const cellWidth = fieldWidth / gridSize;
+                const cellLength = fieldLength / gridSize;
+
+                // Create allocation ranges for grid cells
+                const totalCells = gridSize * gridSize;
+                let allocRanges = [];
+                let currentStart = 0;
+
+                state.allocations.forEach(alloc => {
+                    const cellCount = Math.round((alloc.percentage / 100) * totalCells);
+                    allocRanges.push({
+                        cropId: alloc.cropId,
+                        start: currentStart,
+                        end: currentStart + cellCount - 1
+                    });
+                    currentStart += cellCount;
+                });
+
+                // Handle rounding errors by adjusting the last range
+                if (allocRanges.length > 0) {
+                    allocRanges[allocRanges.length - 1].end = totalCells - 1;
+                }
+
+                console.log("Allocation ranges created:", allocRanges);
+
+                // Helper function to create a crop model
+                const createCropModel = (crop, x, z, width, depth) => {
+                    let geometry, material, cropObj;
+
+                    // Different shapes for different crop types
+                    switch (crop.id) {
+                        case 'wheat':
+                        case 'rice':
+                            // Tall, thin crops
+                            geometry = new THREE.CylinderGeometry(width / 2, width / 3, 3, 6);
+                            break;
+                        case 'corn':
+                            // Taller crops
+                            geometry = new THREE.CylinderGeometry(width / 2, width / 3, 4, 8);
+                            break;
+                        case 'cotton':
+                        case 'soybeans':
+                            // Bushy crops
+                            geometry = new THREE.SphereGeometry(width / 2, 8, 8);
+                            break;
+                        case 'sugarcane':
+                            // Tall straight crops
+                            geometry = new THREE.BoxGeometry(width / 2, 4, width / 2);
+                            break;
+                        case 'potatoes':
+                        case 'tomatoes':
+                            // Low, round crops
+                            geometry = new THREE.SphereGeometry(width / 2, 8, 8);
+                            break;
+                        default:
+                            // Default shape
+                            geometry = new THREE.BoxGeometry(width, 2, depth);
+                    }
+
+                    // Create material with crop color
+                    material = new THREE.MeshStandardMaterial({
+                        color: parseInt(crop.color.replace('#', '0x')),
+                        roughness: 0.7,
+                        metalness: 0.1
+                    });
+
+                    cropObj = new THREE.Mesh(geometry, material);
+
+                    // Position the crop with correct y-offset
+                    let yOffset;
+                    if (geometry.parameters && 'height' in geometry.parameters) {
+                        yOffset = geometry.parameters.height / 2;
+                    } else if (geometry.parameters && 'radius' in geometry.parameters) {
+                        yOffset = geometry.parameters.radius;
+                    } else {
+                        yOffset = 1;
+                    }
+                    cropObj.position.set(x, yOffset, z);
+
+                    cropObj.castShadow = true;
+                    cropObj.receiveShadow = true;
+
+                    // Add slight random rotation for natural look
+                    cropObj.rotation.y = Math.random() * Math.PI;
+
+                    scene.add(cropObj);
+
+                    return cropObj;
+                };
+
+                console.log("Starting to create crop models");
+
+                // Create crop models for each grid cell
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        const cellIndex = i * gridSize + j;
+
+                        // Find which crop allocation this cell belongs to
+                        const allocation = allocRanges.find(range =>
+                            cellIndex >= range.start && cellIndex <= range.end
+                        );
+
+                        if (!allocation) continue;
+
+                        const crop = crops.find(c => c.id === allocation.cropId);
+                        if (!crop) continue;
+
+                        // Calculate position
+                        const x = (i - gridSize / 2) * cellWidth + cellWidth / 2;
+                        const z = (j - gridSize / 2) * cellLength + cellLength / 2;
+
+                        // Create crop model
+                        createCropModel(crop, x, z, cellWidth * 0.8, cellLength * 0.8);
+                    }
+                }
+
+                console.log("Crop models created");
+
+                // Set up manual controls
+                let isDragging = false;
+                let previousMousePosition = { x: 0, y: 0 };
+                let rotationSpeed = 0.01;
+                let cameraDistance = camera.position.length();
+
+                // Update camera position while maintaining distance from target (0,0,0)
+                const updateCameraPosition = () => {
+                    const vector = new THREE.Vector3(0, 0, 0).sub(camera.position).normalize();
+                    camera.position.copy(vector.multiplyScalar(-cameraDistance));
+                    camera.lookAt(0, 0, 0);
+                };
+
+                const onMouseDown = (e) => {
+                    isDragging = true;
+                    previousMousePosition = { x: e.clientX, y: e.clientY };
+                };
+
+                const onMouseMove = (e) => {
+                    if (!isDragging) return;
+
+                    const deltaX = e.clientX - previousMousePosition.x;
+                    const deltaY = e.clientY - previousMousePosition.y;
+
+                    // Rotate camera around target
+                    const theta = -deltaX * rotationSpeed;
+                    const phi = -deltaY * rotationSpeed;
+
+                    // Calculate new camera position using spherical coordinates
+                    const spherical = new THREE.Spherical().setFromVector3(camera.position);
+                    spherical.theta += theta;
+                    spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi + phi));
+
+                    camera.position.setFromSpherical(spherical);
+                    camera.lookAt(0, 0, 0);
+
+                    previousMousePosition = { x: e.clientX, y: e.clientY };
+                };
+
+                const onMouseUp = () => {
+                    isDragging = false;
+                };
+
+                const onWheel = (e) => {
+                    e.preventDefault();
+
+                    // Adjust camera distance based on wheel direction
+                    cameraDistance += e.deltaY * 0.05;
+                    cameraDistance = Math.max(20, Math.min(150, cameraDistance));
+
+                    // Update camera position
+                    const direction = new THREE.Vector3().subVectors(camera.position, new THREE.Vector3(0, 0, 0)).normalize();
+                    camera.position.copy(direction.multiplyScalar(cameraDistance));
+                    camera.lookAt(0, 0, 0);
+                };
+
+                // Add event listeners
+                container.addEventListener('mousedown', onMouseDown);
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('mouseup', onMouseUp);
+                container.addEventListener('wheel', onWheel, { passive: false });
+
+                console.log("Event listeners added");
+
+                // Simple rotate animation when not dragging
+                let rotationAngle = 0;
+
+                const animate = () => {
+                    requestAnimationFrame(animate);
+
+                    // Auto-rotate when not dragging
+                    if (!isDragging) {
+                        rotationAngle += 0.001;
+                        camera.position.x = Math.sin(rotationAngle) * cameraDistance;
+                        camera.position.z = Math.cos(rotationAngle) * cameraDistance;
+                        camera.lookAt(0, 0, 0);
+                    }
+
+                    renderer.render(scene, camera);
+                };
+
+                // Start animation loop
+                animate();
+                console.log("Animation started");
+
+                // Handle window resize
+                const handleResize = () => {
+                    if (!container) return;
+
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                };
+
+                window.addEventListener('resize', handleResize);
+
+                // Hide loading overlay after scene setup
+                setTimeout(() => {
+                    visualizationLoading.style.display = 'none';
+                    console.log("Visualization ready and loading overlay hidden");
+                }, 500);
+
+            } catch (error) {
+                console.error("Error in createVisualization:", error);
+                visualizationLoading.innerHTML = `
+          <p>Error loading visualization: ${error.message}</p>
+          <button onclick="window.location.reload()" class="btn btn-primary mt-4">Try Again</button>
+        `;
+            }
+        }
+
+        // Reset the app to initial state
+        function resetApp() {
+            state = {
+                step: 1,
+                acres: 100,
+                soilType: 'loam',
+                climateType: 'temperate',
+                selectedCrops: [],
+                allocations: [],
+                language: 'en',
+                selectedCropId: null
+            };
+
+            acresInput.value = state.acres;
+            soilTypeSelect.value = state.soilType;
+            climateTypeSelect.value = state.climateType;
+            languageSelect.value = state.language;
+
+            goToStep1();
+        }
+
+        // Initialize the app when the document is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

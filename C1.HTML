@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLift - Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .checkout-step {
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .active-step {
+            display: block;
+        }
+
+        .step-indicator {
+            @apply flex items-center justify-center w-8 h-8 rounded-full bg-emerald-600 text-white cursor-pointer transition-all;
+        }
+
+        .step-indicator:hover {
+            @apply scale-110;
+        }
+
+        .step-divider {
+            @apply flex-1 h-1 bg-gray-200;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .order-summary {
+            @apply sticky top-20;
+        }
+
+        .error {
+            @apply text-red-500 text-sm;
+        }
+
+        .success {
+            @apply text-green-500 text-sm;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-emerald-800 text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold flex items-center">
+                <i class="fas fa-leaf mr-2"></i>AgriLift
+            </a>
+        </div>
+    </nav>
+
+    <!-- Checkout Progress -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex items-center mb-8">
+            <div class="step-indicator" onclick="goToStep(1)">1</div>
+            <div class="step-divider"></div>
+            <div class="step-indicator" onclick="goToStep(2)">2</div>
+            <div class="step-divider"></div>
+            <div class="step-indicator" onclick="goToStep(3)">3</div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Checkout Steps -->
+            <div class="lg:col-span-2">
+                <!-- Step 1: Cart Review -->
+                <div id="step1" class="checkout-step active-step">
+                    <h2 class="text-2xl font-bold mb-6">Review Your Order</h2>
+                    <div id="checkoutItems" class="space-y-4 mb-6">
+                        <!-- Sample cart items -->
+                        <div class="flex justify-between">
+                            <span>Organic Seeds x2</span>
+                            <span>$4.99</span>
+                            <button class="remove-item">Remove</button>
+                            <button class="increase-item">+</button>
+                            <button class="decrease-item">-</button>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Soil Enhancer x1</span>
+                            <span>$19.99</span>
+                            <button class="remove-item">Remove</button>
+                            <button class="increase-item">+</button>
+                            <button class="decrease-item">-</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Shipping Details -->
+                <div id="step2" class="checkout-step">
+                    <h2 class="text-2xl font-bold mb-6">Shipping Information</h2>
+                    <form id="shippingForm" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">First Name</label>
+                                <input type="text" required class="w-full p-2 border rounded" id="firstName">
+                                <span class="error" id="firstNameError"></span>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Last Name</label>
+                                <input type="text" required class="w-full p-2 border rounded" id="lastName">
+                                <span class="error" id="lastNameError"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Address</label>
+                            <input type="text" required class="w-full p-2 border rounded" id="address">
+                            <span class="error" id="addressError"></span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">City</label>
+                                <input type="text" required class="w-full p-2 border rounded" id="city">
+                                <span class="error" id="cityError"></span>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">State</label>
+                                <select class="w-full p-2 border rounded" required id="state">
+                                    <option value="">Select State</option>
+                                    <option value="te">Telangana</option>
+                                    <option value="ap">Andhra Pradesh</option>
+                                    <!-- Add more states -->
+                                </select>
+                                <span class="error" id="stateError"></span>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">ZIP Code</label>
+                                <input type="text" pattern="\d{5}" required class="w-full p-2 border rounded" id="zip">
+                                <span class="error" id="zipError"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="saveAddress">
+                            <label for="saveAddress">Save this address for future orders</label>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 3: Payment -->
+                <div id="step3" class="checkout-step">
+                    <h2 class="text-2xl font-bold mb-6">Payment Details</h2>
+                    <form id="paymentForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Card Number</label>
+                            <input type="text" pattern="\d{16}" required class="w-full p-2 border rounded"
+                                id="cardNumber" placeholder="4242 4242 4242 4242">
+                            <span class="error" id="cardNumberError"></span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Expiration Date</label>
+                                <input type="text" pattern="\d{2}/\d{2}" required class="w-full p-2 border rounded"
+                                    id="expirationDate" placeholder="MM/YY">
+                                <span class="error" id="expirationDateError"></span>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">CVV</label>
+                                <input type="text" pattern="\d{3,4}" required class="w-full p-2 border rounded" id="cvv"
+                                    placeholder="123">
+                                <span class="error" id="cvvError"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="paymentMethod">Payment Method</label>
+                            <select id="paymentMethod">
+                                <option value="creditCard">Credit Card</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="applePay">Apple Pay</option>
+                                <option value="googlePay">Google Pay</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="mt-8 flex justify-between">
+                    <button id="prevStep" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 hidden">
+                        Previous
+                    </button>
+                    <button id="nextStep" class="bg-emerald-600 text-white px-6 py-2 rounded hover:bg-emerald-700">
+                        Next: Shipping Details
+                    </button>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Order Summary</h3>
+                    <div id="orderSummaryItems" class="space-y-2 mb-4">
+                        <div class="flex justify-between">
+                            <span>Organic Seeds x2</span>
+                            <span>$4.99</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Soil Enhancer x1</span>
+                            <span>$19.99</span>
+                        </div>
+                    </div>
+                    <div class="border-t pt-4 space-y-2">
+                        <div class="flex justify-between">
+                            <span>Subtotal:</span>
+                            <span id="orderSubtotal">$24.98</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Shipping:</span>
+                            <span>$5.00</span>
+                        </div>
+                        <div class="flex justify-between font-bold">
+                            <span>Total:</span>
+                            <span id="orderTotal">$29.98</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Confirmation -->
+    <div id="orderConfirmation" class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
+        <div class="bg-white p-8 rounded-xl max-w-md text-center">
+            <i class="fas fa-check-circle text-6xl text-emerald-600 mb-4"></i>
+            <h2 class="text-2xl font-bold mb-2">Order Placed Successfully!</h2>
+            <p class="mb-4">Your order ID: <span id="orderId" class="font-mono">AGRI-123456</span></p>
+            <button onclick="redirectToWelcome()"
+                class="bg-emerald-600 text-white px-6 py-2 rounded hover:bg-emerald-700">
+                Continue Shopping
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const cart = [
+            { name: "Organic Seeds", price: 2.49, quantity: 2 },
+            { name: "Soil Enhancer", price: 19.99, quantity: 1 }
+        ];
+
+        // Initialize Checkout
+        function initializeCheckout() {
+            updateOrderSummary();
+            updateStepNavigation();
+        }
+
+        // Update Order Summary
+        function updateOrderSummary() {
+            const itemsContainer = document.getElementById('orderSummaryItems');
+            let subtotal = 0;
+
+            itemsContainer.innerHTML = cart.map(item => {
+                subtotal += item.price * item.quantity;
+                return `
+                    <div class="flex justify-between">
+                        <span>${item.name} x${item.quantity}</span>
+                        <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('orderSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('orderTotal').textContent = `$${(subtotal + 5).toFixed(2)}`;
+        }
+
+        // Step Navigation
+        function updateStepNavigation() {
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                indicator.classList.toggle('bg-emerald-600', index < currentStep - 1);
+                indicator.classList.toggle('bg-gray-300', index >= currentStep - 1);
+            });
+
+            document.getElementById('prevStep').classList.toggle('hidden', currentStep === 1);
+
+            const nextButton = document.getElementById('nextStep');
+            if (currentStep === 3) {
+                nextButton.textContent = 'Place Order';
+                nextButton.classList.add('bg-green-600');
+            } else {
+                nextButton.textContent = `Next: ${currentStep === 1 ? 'Shipping Details' : 'Payment Information'}`;
+                nextButton.classList.remove('bg-green-600');
+            }
+        }
+
+        function goToStep(step) {
+            if (step < currentStep) {
+                document.getElementById(`step${currentStep}`).classList.remove('active-step');
+                currentStep = step;
+                document.getElementById(`step${currentStep}`).classList.add('active-step');
+                updateStepNavigation();
+            }
+        }
+
+        // Step Transitions
+        document.getElementById('nextStep').addEventListener('click', () => {
+            if (currentStep === 3) {
+                // Submit Order
+                document.getElementById('orderConfirmation').classList.remove('hidden');
+                localStorage.removeItem('cart');
+                return;
+            }
+
+            if (currentStep === 2 && !document.getElementById('shippingForm').checkValidity()) {
+                alert('Please fill all required shipping fields');
+                return;
+            }
+
+            if (currentStep === 3 && !document.getElementById('paymentForm').checkValidity()) {
+                alert('Please fill all required payment fields');
+                return;
+            }
+
+            document.getElementById(`step${currentStep}`).classList.remove('active-step');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.add('active-step');
+            updateStepNavigation();
+        });
+
+        document.getElementById('prevStep').addEventListener('click', () => {
+            document.getElementById(`step${currentStep}`).classList.remove('active-step');
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.add('active-step');
+            updateStepNavigation();
+        });
+
+        // Generate Random Order ID
+        document.getElementById('orderId').textContent = `AGRI-${Math.floor(100000 + Math.random() * 900000)}`;
+
+        // Real-time validation
+        function validateField(fieldId, pattern, message) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(`${fieldId}Error`);
+            if (!pattern.test(field.value)) {
+                field.setCustomValidity(message);
+                errorElement.textContent = message;
+            } else {
+                field.setCustomValidity('');
+                errorElement.textContent = '';
+            }
+        }
+
+        document.getElementById('zip').addEventListener('input', function () {
+            validateField('zip', /^\d{5}$/, 'Please enter a valid 5-digit ZIP code');
+        });
+
+        document.getElementById('cardNumber').addEventListener('input', function () {
+            validateField('cardNumber', /^\d{16}$/, 'Please enter a valid 16-digit card number');
+        });
+
+        document.getElementById('expirationDate').addEventListener('input', function () {
+            validateField('expirationDate', /^(0[1-9]|1[0-2])\/\d{2}$/, 'Please use format MM/YY');
+        });
+
+        document.getElementById('cvv').addEventListener('input', function () {
+            validateField('cvv', /^\d{3,4}$/, 'CVV should be 3 or 4 digits');
+        });
+
+        // Redirect to welcome page after successful transaction
+        function redirectToWelcome() {
+            window.location.href = 'welcome.html';
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeCheckout);
+    </script>
+</body>
+
+</html>

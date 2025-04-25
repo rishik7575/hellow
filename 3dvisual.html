@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional 3D Farm Visualizer</title>
+  <style>
+    :root {
+      --primary: #25a561;
+      --primary-light: #3bb978;
+      --primary-dark: #1a7a47;
+      --secondary: #f6ad52;
+      --secondary-light: #ffc680;
+      --secondary-dark: #e69138;
+      --background: #f8faf8;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --text-lighter: #999999;
+      --wheat-color: #F5DEB3;
+      --corn-color: #FFD700;
+      --soybean-color: #6B8E23;
+      --cotton-color: #F5F5F5;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      background-image:
+        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23228b22' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E"),
+        radial-gradient(circle at center, rgba(255, 255, 255, 0) 0%, rgba(0, 100, 0, 0.05) 100%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding: 1.5rem 0;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(37, 165, 97, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 1rem;
+      transition: var(--transition);
+    }
+
+    .badge:hover {
+      background-color: rgba(37, 165, 97, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .badge-icon {
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+
+    .badge-text {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: var(--text-light);
+      max-width: 36rem;
+      margin: 0 auto 2rem;
+      line-height: 1.5;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(37, 165, 97, 0.2);
+      transition: var(--transition);
+      height: fit-content;
+      position: relative;
+      overflow: hidden;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom right, rgba(37, 165, 97, 0.05), rgba(246, 173, 82, 0.05));
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card-title-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      background-color: rgba(37, 165, 97, 0.1);
+      border-radius: 50%;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 0.75rem 1.25rem;
+      border: 2px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      transition: var(--transition);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      appearance: none;
+      -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 165, 97, 0.2);
+      outline: none;
+    }
+
+    .input-suffix {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-lighter);
+      pointer-events: none;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+    }
+
+    .button {
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      margin-top: 0.75rem;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s;
+      z-index: -1;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 165, 97, 0.3);
+    }
+
+    .button:hover::before {
+      left: 100%;
+    }
+
+    .button:active {
+      transform: translateY(0);
+    }
+
+    .button.loading {
+      background: linear-gradient(to right, var(--primary-dark), var(--primary));
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .visualization-container {
+      background-color: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(37, 165, 97, 0.2);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      height: 600px;
+      transition: var(--transition);
+      animation: fadeUp 0.8s ease-out;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .visualization-container:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .placeholder {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to bottom, rgba(165, 220, 185, 0.2), rgba(37, 165, 97, 0.1));
+    }
+
+    .placeholder img {
+      width: 80px;
+      height: 80px;
+      opacity: 0.3;
+      margin-bottom: 1.5rem;
+    }
+
+    .placeholder p {
+      color: var(--text-light);
+      font-size: 1.125rem;
+    }
+
+    #farm-canvas {
+      width: 100%;
+      height: 100%;
+      outline: none;
+      display: block;
+    }
+
+    .crop-allocation {
+      margin-top: 1.5rem;
+    }
+
+    .allocation-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .allocation-title h3 {
+      font-size: 1.125rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .allocation-title-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .acres-badge {
+      padding: 0.375rem 0.75rem;
+      background-color: rgba(37, 165, 97, 0.1);
+      color: var(--primary);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .acres-badge svg {
+      margin-right: 0.375rem;
+    }
+
+    .allocation-list {
+      list-style-type: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .allocation-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.625rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+      background-color: rgba(240, 240, 240, 0.5);
+      transition: var(--transition);
+      border-left: 3px solid transparent;
+    }
+
+    .allocation-item:hover {
+      background-color: rgba(240, 240, 240, 0.8);
+      transform: translateX(5px);
+    }
+
+    .crop-color {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .crop-wheat {
+      background-color: var(--wheat-color);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .allocation-item.wheat {
+      border-left-color: var(--wheat-color);
+    }
+
+    .crop-corn {
+      background-color: var(--corn-color);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .allocation-item.corn {
+      border-left-color: var(--corn-color);
+    }
+
+    .crop-soybean {
+      background-color: var(--soybean-color);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .allocation-item.soybean {
+      border-left-color: var(--soybean-color);
+    }
+
+    .crop-cotton {
+      background-color: var(--cotton-color);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .allocation-item.cotton {
+      border-left-color: var(--cotton-color);
+    }
+
+    .crop-name {
+      flex: 1;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .crop-percentage {
+      font-weight: 600;
+      color: var(--text-light);
+      margin-right: 1rem;
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-full);
+      min-width: 3rem;
+      text-align: center;
+    }
+
+    .crop-acres {
+      font-size: 0.875rem;
+      color: var(--text-lighter);
+      min-width: 5rem;
+      text-align: right;
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background-color: rgba(0, 0, 0, 0.75);
+      color: white;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      display: flex;
+      gap: 0.625rem;
+      z-index: 10;
+    }
+
+    .control-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .control-btn:hover {
+      background-color: rgba(37, 165, 97, 0.2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .control-btn:active {
+      transform: translateY(0);
+    }
+
+    .control-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--text);
+    }
+
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      backdrop-filter: blur(4px);
+    }
+
+    .loading-spinner {
+      width: 3rem;
+      height: 3rem;
+      border: 4px solid rgba(37, 165, 97, 0.3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    .help-panel {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 20;
+    }
+
+    .help-toggle {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .help-toggle:hover {
+      background-color: rgba(37, 165, 97, 0.2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .help-content {
+      position: absolute;
+      top: calc(100% + 0.625rem);
+      right: 0;
+      width: 16rem;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      padding: 1rem;
+      transform-origin: top right;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(4px);
+    }
+
+    .help-content.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .help-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+    }
+
+    .help-title svg {
+      margin-right: 0.375rem;
+    }
+
+    .help-list {
+      list-style-type: none;
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    .help-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .help-icon {
+      margin-right: 0.375rem;
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .notice {
+      font-size: 0.75rem;
+      color: var(--text-lighter);
+      margin-top: 1rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background-color: white;
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 9999;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      transform: translateX(120%);
+      max-width: 24rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(37, 165, 97, 0.1);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .toast-icon svg {
+      width: 1rem;
+      height: 1rem;
+      color: var(--primary);
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--text);
+      font-size: 0.875rem;
+    }
+
+    .toast-message {
+      color: var(--text-light);
+      font-size: 0.8125rem;
+    }
+
+    .toast-close {
+      width: 1.5rem;
+      height: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-lighter);
+      border-radius: 50%;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .toast-close:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--text);
+    }
+
+    .toast.success {
+      border-left-color: #22c55e;
+    }
+
+    .toast.success .toast-icon {
+      background-color: rgba(34, 197, 94, 0.1);
+    }
+
+    .toast.success .toast-icon svg {
+      color: #22c55e;
+    }
+
+    .toast.error {
+      border-left-color: #ef4444;
+    }
+
+    .toast.error .toast-icon {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+
+    .toast.error .toast-icon svg {
+      color: #ef4444;
+    }
+
+    .toast.warning {
+      border-left-color: #f59e0b;
+    }
+
+    .toast.warning .toast-icon {
+      background-color: rgba(245, 158, 11, 0.1);
+    }
+
+    .toast.warning .toast-icon svg {
+      color: #f59e0b;
+    }
+
+    .info-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      z-index: 5;
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(4px);
+      color: var(--text-light);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .info-badge svg {
+      margin-right: 0.375rem;
+      width: 0.875rem;
+      height: 0.875rem;
+      color: var(--primary);
+    }
+
+    .sunlight-toggle {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: var(--radius-full);
+      padding: 0.5rem;
+      display: flex;
+      z-index: 5;
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(4px);
+      gap: 0.25rem;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .sun-btn {
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.375rem 0.75rem;
+      border-radius: var(--radius-full);
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+
+    .sun-btn.active {
+      background-color: rgba(37, 165, 97, 0.1);
+      color: var(--primary);
+    }
+
+    .sun-btn:hover:not(.active) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Responsive styles */
+    @media (max-width: 1024px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+
+      .visualization-container {
+        height: 500px;
+        order: -1;
+        margin-bottom: 1.5rem;
+      }
+
+      .card {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .visualization-container {
+        height: 400px;
+      }
+
+      .card-title {
+        font-size: 1.25rem;
+      }
+
+      .help-content {
+        width: 14rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      .badge {
+        padding: 0.375rem 0.75rem;
+      }
+
+      .visualization-container {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">
+        <svg class="badge-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 10V8a2 2 0 0 0-2-2H8l-2-2H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6"></path>
+          <path d="M18 14v6"></path>
+          <path d="M18 17h5v3h-5z"></path>
+        </svg>
+        <span class="badge-text">AI-Powered Farm Planning</span>
+      </div>
+      <h1>Professional 3D Farm Visualizer</h1>
+      <p class="subtitle">Enter your land size to visualize your farm in 3D with AI-recommended crop allocations. Our
+        system analyzes your farm size to suggest the optimal crop mix.</p>
+    </header>
+
+    <div class="main-content">
+      <div id="input-section">
+        <div class="card">
+          <h2 class="card-title">
+            <span class="card-title-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18"></path>
+                <path d="M18.4 9.6 8.3 12 7 16.3l7.3 3 4-9.4z"></path>
+              </svg>
+            </span>
+            Enter Your Land Details
+          </h2>
+          <div class="input-group">
+            <label for="acres">How many acres of land do you have?</label>
+            <input type="number" id="acres" min="1" max="1000" placeholder="Enter acres" value="50">
+            <span class="input-suffix">acres</span>
+          </div>
+          <button id="visualize-btn" class="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 8V1l-5.34 5.34z" />
+            </svg>
+            Generate 3D Farm Visualization
+          </button>
+          <p class="notice">Recommended range: 1-1000 acres</p>
+        </div>
+      </div>
+
+      <div class="visualization-container">
+        <div class="placeholder" id="placeholder">
+          <img src="https://cdn-icons-png.flaticon.com/512/2329/2329865.png" alt="Farm icon">
+          <p>Enter your land size to visualize your farm</p>
+        </div>
+        <canvas id="farm-canvas" style="display: none;"></canvas>
+
+        <div class="info-badge" id="info-badge" style="display: none;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span>Drag to rotate • Scroll to zoom • Right-click to pan</span>
+        </div>
+
+        <div class="sunlight-toggle" id="sunlight-toggle" style="display: none;">
+          <button class="sun-btn active" id="morning-btn">Morning</button>
+          <button class="sun-btn" id="noon-btn">Noon</button>
+          <button class="sun-btn" id="evening-btn">Evening</button>
+        </div>
+
+        <div class="controls" id="controls" style="display: none;">
+          <div class="control-btn" id="reset-view" title="Reset View">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+            </svg>
+          </div>
+          <div class="control-btn" id="top-view" title="Top View">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <div class="control-btn" id="fullscreen" title="Toggle Fullscreen">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+          </div>
+        </div>
+
+        <div class="help-panel">
+          <div class="help-toggle" id="help-toggle" title="Help">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </div>
+          <div class="help-content" id="help-content">
+            <div class="help-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              How to Use 3D Viewer
+            </div>
+            <ul class="help-list">
+              <li class="help-item">
+                <svg class="help-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+                <span>Left-click and drag to rotate view</span>
+              </li>
+              <li class="help-item">
+                <svg class="help-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+                <span>Scroll to zoom in and out</span>
+              </li>
+              <li class="help-item">
+                <svg class="help-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+                <span>Right-click and drag to pan</span>
+              </li>
+              <li class="help-item">
+                <svg class="help-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+                <span>Use the controls in the bottom right to reset view or switch to top-down perspective</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+          <div class="loading-spinner"></div>
+          <p>Creating your farm visualization...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">
+    <div class="toast-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    <div class="toast-content">
+      <div class="toast-title">Success</div>
+      <div class="toast-message">Your farm has been visualized successfully!</div>
+    </div>
+    <div class="toast-close" id="toast-close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Load THREE.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <script>
+    // Farm visualization logic
+    let renderer, scene, camera, controls;
+    let cropObjects = [];
+    let isSceneInitialized = false;
+    let helpPanelVisible = false;
+    let directionalLight; // Store light reference for time of day changes
+    let isFullscreen = false;
+
+    // Crop types and colors with enhanced properties
+    const cropTypes = {
+      wheat: {
+        color: 0xF5DEB3,
+        displayName: 'Wheat',
+        height: 1.2,
+        density: 80,
+        growthSpeed: 1.2
+      },
+      corn: {
+        color: 0xFFD700,
+        displayName: 'Corn',
+        height: 1.8,
+        density: 60,
+        growthSpeed: 1.0
+      },
+      soybean: {
+        color: 0x6B8E23,
+        displayName: 'Soybean',
+        height: 0.8,
+        density: 100,
+        growthSpeed: 1.5
+      },
+      cotton: {
+        color: 0xF5F5F5,
+        displayName: 'Cotton',
+        height: 1.0,
+        density: 70,
+        growthSpeed: 0.8
+      }
+    };
+
+    // Toast notification system
+    const toast = {
+      element: document.getElementById('toast'),
+      iconElement: document.querySelector('.toast-icon svg'),
+      titleElement: document.querySelector('.toast-title'),
+      messageElement: document.querySelector('.toast-message'),
+      timer: null,
+
+      show: function (type, title, message, duration = 4000) {
+        // Clear any existing timer
+        if (this.timer) {
+          clearTimeout(this.timer);
+        }
+
+        // Set content
+        this.titleElement.textContent = title;
+        this.messageElement.textContent = message;
+
+        // Set type
+        this.element.className = 'toast show ' + type;
+
+        // Set icon based on type
+        switch (type) {
+          case 'success':
+            this.iconElement.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>';
+            break;
+          case 'error':
+            this.iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
+            break;
+          case 'warning':
+            this.iconElement.innerHTML = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>';
+            break;
+          default:
+            this.iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>';
+        }
+
+        // Auto hide after duration
+        this.timer = setTimeout(() => {
+          this.hide();
+        }, duration);
+      },
+
+      hide: function () {
+        this.element.className = 'toast';
+        if (this.timer) {
+          clearTimeout(this.timer);
+          this.timer = null;
+        }
+      }
+    };
+
+    // Close toast on click
+    document.getElementById('toast-close').addEventListener('click', () => {
+      toast.hide();
+    });
+
+    // Initialize help panel toggle
+    document.getElementById('help-toggle').addEventListener('click', function () {
+      helpPanelVisible = !helpPanelVisible;
+      const helpContent = document.getElementById('help-content');
+
+      if (helpPanelVisible) {
+        helpContent.classList.add('active');
+      } else {
+        helpContent.classList.remove('active');
+      }
+    });
+
+    // Hide help panel when clicking outside
+    document.addEventListener('click', function (event) {
+      const helpPanel = document.querySelector('.help-panel');
+      const helpToggle = document.getElementById('help-toggle');
+
+      if (helpPanelVisible && !helpPanel.contains(event.target)) {
+        helpPanelVisible = false;
+        document.getElementById('help-content').classList.remove('active');
+      }
+    });
+
+    // Visualize button click handler
+    document.getElementById('visualize-btn').addEventListener('click', function () {
+      const acresInput = document.getElementById('acres');
+      const acres = parseFloat(acresInput.value);
+
+      if (!acres || isNaN(acres) || acres <= 0) {
+        toast.show('error', 'Input Error', 'Please enter a valid number of acres greater than 0.', 4000);
+        return;
+      }
+
+      if (acres > 1000) {
+        toast.show('warning', 'Large Farm', 'Visualizing a large farm may affect performance.', 4000);
+      }
+
+      // Show button loading state
+      this.classList.add('loading');
+      this.innerHTML = '<span class="spinner"></span> Processing...';
+
+      // Hide placeholder, show loading and canvas
+      document.getElementById('placeholder').style.display = 'none';
+      document.getElementById('loading-overlay').style.display = 'flex';
+      document.getElementById('farm-canvas').style.display = 'block';
+
+      // Generate crop allocations based on acreage with enhanced AI algorithm
+      const cropAllocations = getAIRecommendation(acres);
+
+      // Initialize or update the 3D scene
+      if (!isSceneInitialized) {
+        initScene();
+        isSceneInitialized = true;
+      }
+
+      // Show visualization and controls with a small delay for better UX
+      setTimeout(() => {
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('controls').style.display = 'flex';
+        document.getElementById('info-badge').style.display = 'flex';
+        document.getElementById('sunlight-toggle').style.display = 'flex';
+
+        // Create the visualization
+        createFarmVisualization(acres, cropAllocations);
+
+        // Update farm info display
+        updateFarmDisplay(acres, cropAllocations);
+
+        // Reset button state
+        this.classList.remove('loading');
+        this.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 8V1l-5.34 5.34z"/></svg> Generate 3D Farm Visualization';
+
+        // Show success toast
+        toast.show('success', 'Visualization Complete', `Your ${acres} acre farm has been visualized with optimal crop allocations.`, 4000);
+      }, 2000);
+    });
+
+    // Function to initialize the 3D scene with enhanced rendering
+    function initScene() {
+      const container = document.querySelector('.visualization-container');
+      const canvas = document.getElementById('farm-canvas');
+
+      // Scene setup with better atmosphere
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xB3E5FC); // Sky blue color
+      scene.fog = new THREE.FogExp2(0xE1F5FE, 0.0015); // Subtle distance fog
+
+      // Camera setup with better perspective
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
+      camera.position.set(30, 20, 30);
+      camera.lookAt(0, 0, 0);
+
+      // Renderer setup with improved quality
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true,
+        alpha: true
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // Setup enhanced lighting system
+      setupLighting('morning');
+
+      // Create realistic environment
+      createEnvironment();
+
+      // Setup enhanced OrbitControls for better user interaction
+      controls = new THREE.OrbitControls(camera, canvas);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.1;
+      controls.rotateSpeed = 0.8;
+      controls.zoomSpeed = 0.8;
+      controls.panSpeed = 0.8;
+      controls.screenSpacePanning = false;
+      controls.minDistance = 5;
+      controls.maxDistance = 200;
+      controls.maxPolarAngle = Math.PI / 1.8; // Prevent going below the ground
+      controls.autoRotate = true; // Auto-rotate for better initial experience
+      controls.autoRotateSpeed = 0.5;
+
+      // User starts interacting, stop auto-rotation
+      canvas.addEventListener('mousedown', () => {
+        controls.autoRotate = false;
+      });
+
+      // Handle window resize for responsive canvas
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(width, height);
+      });
+
+      // Control buttons functionality
+      document.getElementById('reset-view').addEventListener('click', () => {
+        controls.reset();
+        camera.position.set(30, 20, 30);
+        camera.lookAt(0, 0, 0);
+        controls.update();
+        toast.show('success', 'View Reset', 'Camera view has been reset to default position.', 2000);
+      });
+
+      document.getElementById('top-view').addEventListener('click', () => {
+        camera.position.set(0, 50, 0.001); // Small z value to avoid gimbal lock
+        camera.lookAt(0, 0, 0);
+        controls.update();
+        toast.show('success', 'Top View', 'Camera switched to top-down perspective.', 2000);
+      });
+
+      document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
+
+      // Time of day toggles
+      document.getElementById('morning-btn').addEventListener('click', function () {
+        document.querySelectorAll('.sun-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        setupLighting('morning');
+        toast.show('success', 'Lighting Changed', 'Morning sunlight applied to the scene.', 2000);
+      });
+
+      document.getElementById('noon-btn').addEventListener('click', function () {
+        document.querySelectorAll('.sun-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        setupLighting('noon');
+        toast.show('success', 'Lighting Changed', 'Noon sunlight applied to the scene.', 2000);
+      });
+
+      document.getElementById('evening-btn').addEventListener('click', function () {
+        document.querySelectorAll('.sun-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        setupLighting('evening');
+        toast.show('success', 'Lighting Changed', 'Evening sunlight applied to the scene.', 2000);
+      });
+
+      // Animation loop with enhanced rendering
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+
+        // Animate crops with gentle wind effect
+        const time = Date.now() * 0.001;
+        cropObjects.forEach(crop => {
+          if (crop.userData && crop.userData.type === 'crop') {
+            const windStrength = crop.userData.windFactor || 0.05;
+            const windFrequency = crop.userData.windSpeed || 1.5;
+
+            // Apply gentle swaying motion based on position for natural variation
+            crop.rotation.z = Math.sin(time * windFrequency + crop.position.x * 0.1) * windStrength;
+            crop.rotation.x = Math.cos(time * windFrequency * 0.7 + crop.position.z * 0.1) * windStrength * 0.3;
+          }
+        });
+
+        // Animate clouds
+        scene.children.forEach(child => {
+          if (child.userData && child.userData.type === 'cloud') {
+            const speed = child.userData.speed || 0.1;
+            child.position.x += speed;
+            if (child.position.x > 500) {
+              child.position.x = -500;
+            }
+          }
+        });
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    }
+
+    // Setup realistic lighting based on time of day
+    function setupLighting(timeOfDay) {
+      // Remove existing lights
+      scene.children.forEach(child => {
+        if (child.type === 'DirectionalLight' || child.type === 'HemisphereLight' || child.type === 'AmbientLight') {
+          scene.remove(child);
+        }
+      });
+
+      // Create new lighting based on time of day
+      let ambientIntensity, directionalIntensity, directionalColor, directionalPos, hemisphereIntensity;
+
+      switch (timeOfDay) {
+        case 'morning':
+          scene.background = new THREE.Color(0xB3E5FC); // Soft morning sky
+          scene.fog = new THREE.FogExp2(0xE1F5FE, 0.0015);
+          ambientIntensity = 0.4;
+          directionalIntensity = 0.9;
+          directionalColor = 0xFFF4E0; // Warm morning light
+          directionalPos = new THREE.Vector3(50, 80, 50);
+          hemisphereIntensity = 0.6;
+          break;
+        case 'noon':
+          scene.background = new THREE.Color(0x87CEEB); // Bright noon sky
+          scene.fog = new THREE.FogExp2(0xADE4FF, 0.001);
+          ambientIntensity = 0.6;
+          directionalIntensity = 1.2;
+          directionalColor = 0xFFFFFF; // Bright white noon light
+          directionalPos = new THREE.Vector3(0, 100, 0);
+          hemisphereIntensity = 0.8;
+          break;
+        case 'evening':
+          scene.background = new THREE.Color(0xFFB74D); // Orange evening sky
+          scene.fog = new THREE.FogExp2(0xFFDFC4, 0.002);
+          ambientIntensity = 0.3;
+          directionalIntensity = 0.7;
+          directionalColor = 0xFFA07A; // Golden orange evening light
+          directionalPos = new THREE.Vector3(-50, 30, -50);
+          hemisphereIntensity = 0.5;
+          break;
+      }
+
+      // Add ambient light
+      const ambientLight = new THREE.AmbientLight(0xffffff, ambientIntensity);
+      scene.add(ambientLight);
+
+      // Add main directional light (sun)
+      directionalLight = new THREE.DirectionalLight(directionalColor, directionalIntensity);
+      directionalLight.position.copy(directionalPos);
+      directionalLight.castShadow = true;
+
+      // Improve shadow quality
+      directionalLight.shadow.mapSize.width = 2048;
+      directionalLight.shadow.mapSize.height = 2048;
+      directionalLight.shadow.camera.near = 0.5;
+      directionalLight.shadow.camera.far = 500;
+      directionalLight.shadow.camera.left = -100;
+      directionalLight.shadow.camera.right = 100;
+      directionalLight.shadow.camera.top = 100;
+      directionalLight.shadow.camera.bottom = -100;
+      directionalLight.shadow.bias = -0.0005;
+      directionalLight.shadow.normalBias = 0.02;
+
+      scene.add(directionalLight);
+
+      // Add hemisphere light for better environment lighting
+      const hemisphereLight = new THREE.HemisphereLight(0x87CEEB, 0x3D5E3D, hemisphereIntensity);
+      scene.add(hemisphereLight);
+    }
+
+    // Create realistic environment with enhanced details
+    function createEnvironment() {
+      // Create ground plane with realistic terrain
+      const groundSize = 1000;
+      const groundSegments = 100;
+      const groundGeometry = new THREE.PlaneGeometry(groundSize, groundSize, groundSegments, groundSegments);
+
+      // Add natural terrain variations
+      const vertices = groundGeometry.attributes.position.array;
+      for (let i = 0; i < vertices.length; i += 3) {
+        const x = vertices[i];
+        const z = vertices[i + 2];
+        const distanceFromCenter = Math.sqrt(x * x + z * z);
+
+        if (distanceFromCenter > 75) {
+          // More pronounced terrain farther from center
+          vertices[i + 1] = simplex2(x * 0.01, z * 0.01) * 5;
+
+          // Add some larger hills in the distance
+          if (distanceFromCenter > 200) {
+            vertices[i + 1] += simplex2(x * 0.003, z * 0.003) * 20;
+          }
+        } else {
+          // Subtle variations near center (where the farm will be)
+          vertices[i + 1] = simplex2(x * 0.05, z * 0.05) * 0.5;
+        }
+      }
+
+      // Update normals for proper lighting
+      groundGeometry.computeVertexNormals();
+
+      // Create realistic ground material with color variations
+      const groundMaterial = new THREE.MeshStandardMaterial({
+        color: 0x558B2F,
+        roughness: 0.9,
+        metalness: 0,
+        flatShading: false,
+        vertexColors: false
+      });
+
+      const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.y = -0.5;
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      // Add distant mountains
+      createMountains();
+
+      // Add realistic clouds
+      createClouds();
+
+      // Add trees around the periphery
+      createTreesAndVegetation();
+
+      // Add water features
+      createWaterFeature();
+    }
+
+    // Create realistic mountain ranges
+    function createMountains() {
+      // First mountain range (closer, smaller)
+      createMountainRange(350, 60, 0x5D4037, 40, 0.8);
+
+      // Second mountain range (farther, larger)
+      createMountainRange(600, 120, 0x4E342E, 30, 0.6);
+
+      // Third mountain range (most distant, highest)
+      createMountainRange(800, 200, 0x3E2723, 25, 0.4);
+    }
+
+    // Create a mountain range with the given parameters
+    function createMountainRange(distance, height, color, count, opacity) {
+      const group = new THREE.Group();
+
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2;
+        const radius = distance + (Math.random() * 100 - 50);
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        const mountainHeight = height * (0.7 + Math.random() * 0.6);
+
+        // Create a mountain with a realistic shape
+        const mountainGeometry = new THREE.ConeGeometry(
+          radius * 0.15, // Base size
+          mountainHeight, // Height
+          8, // Segments
+          1, // Height segments
+          false // Open ended
+        );
+
+        const mountainMaterial = new THREE.MeshStandardMaterial({
+          color: color,
+          roughness: 0.9,
+          metalness: 0,
+          flatShading: true,
+          transparent: true,
+          opacity: opacity
+        });
+
+        const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);
+        mountain.position.set(x, mountainHeight / 2 - 0.5, z);
+
+        // Add some randomness to the rotation
+        mountain.rotation.y = Math.random() * Math.PI * 2;
+
+        group.add(mountain);
+      }
+
+      scene.add(group);
+    }
+
+    // Create realistic cloud formations
+    function createClouds() {
+      // Number of cloud groups
+      const cloudGroups = 20;
+
+      for (let i = 0; i < cloudGroups; i++) {
+        // Create a group for this cloud formation
+        const cloudGroup = new THREE.Group();
+        cloudGroup.userData = { type: 'cloud', speed: 0.05 + Math.random() * 0.1 };
+
+        // Random position in the sky
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 300 + Math.random() * 400;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        const y = 80 + Math.random() * 80;
+
+        cloudGroup.position.set(x, y, z);
+
+        // Number of cloud puffs in this formation
+        const puffCount = 3 + Math.floor(Math.random() * 8);
+
+        for (let j = 0; j < puffCount; j++) {
+          // Create a cloud puff
+          const puffSize = 10 + Math.random() * 20;
+          const puffGeometry = new THREE.SphereGeometry(puffSize, 8, 8);
+          const puffMaterial = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 1,
+            metalness: 0,
+            transparent: true,
+            opacity: 0.8 - (j / puffCount) * 0.3, // Outer puffs are more transparent
+          });
+
+          const puff = new THREE.Mesh(puffGeometry, puffMaterial);
+
+          // Position within the cloud group
+          const puffAngle = j * (Math.PI * 2 / puffCount);
+          const puffRadius = Math.random() * 15;
+          puff.position.x = Math.cos(puffAngle) * puffRadius;
+          puff.position.z = Math.sin(puffAngle) * puffRadius;
+          puff.position.y = Math.random() * 6 - 3;
+
+          // Add some randomness to shape
+          puff.scale.set(
+            0.8 + Math.random() * 0.4,
+            0.7 + Math.random() * 0.6,
+            0.8 + Math.random() * 0.4
+          );
+
+          cloudGroup.add(puff);
+        }
+
+        scene.add(cloudGroup);
+      }
+    }
+
+    // Create trees and vegetation around the periphery
+    function createTreesAndVegetation() {
+      // Parameters
+      const minRadius = 100; // Minimum distance from center
+      const maxRadius = 200; // Maximum distance from center
+      const treeCount = 200; // Number of trees
+
+      for (let i = 0; i < treeCount; i++) {
+        // Random position around the periphery
+        const angle = Math.random() * Math.PI * 2;
+        const radius = minRadius + Math.random() * (maxRadius - minRadius);
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+
+        // Get ground height at this position
+        const raycaster = new THREE.Raycaster();
+        raycaster.set(new THREE.Vector3(x, 100, z), new THREE.Vector3(0, -1, 0));
+
+        // Find intersections with the ground
+        const intersects = raycaster.intersectObjects(scene.children.filter(obj => obj.geometry instanceof THREE.PlaneGeometry));
+
+        if (intersects.length > 0) {
+          const y = intersects[0].point.y;
+
+          // Randomly choose tree type
+          const treeType = Math.random() < 0.7 ? 'pine' : 'deciduous';
+
+          if (treeType === 'pine') {
+            createPineTree(x, y, z);
+          } else {
+            createDeciduousTree(x, y, z);
+          }
+        }
+      }
+    }
+
+    // Create a pine tree
+    function createPineTree(x, y, z) {
+      const group = new THREE.Group();
+
+      // Tree height
+      const height = 10 + Math.random() * 15;
+
+      // Trunk
+      const trunkGeometry = new THREE.CylinderGeometry(0.4, 0.6, height * 0.3, 8);
+      const trunkMaterial = new THREE.MeshStandardMaterial({
+        color: 0x8B4513,
+        roughness: 0.9,
+        metalness: 0
+      });
+
+      const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+      trunk.position.y = height * 0.15;
+      trunk.castShadow = true;
+      trunk.receiveShadow = true;
+      group.add(trunk);
+
+      // Foliage layers
+      const layerCount = 4 + Math.floor(Math.random() * 3);
+      const totalFoliageHeight = height * 0.7;
+      const layerHeight = totalFoliageHeight / layerCount;
+
+      for (let i = 0; i < layerCount; i++) {
+        const radius = 3 * (1 - (i / layerCount) * 0.7); // Wider at bottom
+        const foliageGeometry = new THREE.ConeGeometry(radius, layerHeight * 1.2, 8);
+        const foliageMaterial = new THREE.MeshStandardMaterial({
+          color: 0x2E7D32,
+          roughness: 0.8,
+          metalness: 0
+        });
+
+        const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+        foliage.position.y = height * 0.3 + i * layerHeight;
+        foliage.castShadow = true;
+        foliage.receiveShadow = true;
+        group.add(foliage);
+      }
+
+      group.position.set(x, y, z);
+      group.userData = { type: 'tree' };
+
+      scene.add(group);
+    }
+
+    // Create a deciduous tree
+    function createDeciduousTree(x, y, z) {
+      const group = new THREE.Group();
+
+      // Tree height
+      const height = 8 + Math.random() * 12;
+
+      // Trunk
+      const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.5, height * 0.6, 8);
+      const trunkMaterial = new THREE.MeshStandardMaterial({
+        color: 0x8B4513,
+        roughness: 0.9,
+        metalness: 0
+      });
+
+      const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+      trunk.position.y = height * 0.3;
+      trunk.castShadow = true;
+      trunk.receiveShadow = true;
+      group.add(trunk);
+
+      // Foliage as a sphere
+      const foliageRadius = height * 0.3;
+      const foliageGeometry = new THREE.SphereGeometry(foliageRadius, 8, 8);
+      const foliageMaterial = new THREE.MeshStandardMaterial({
+        color: 0x558B2F,
+        roughness: 0.8,
+        metalness: 0
+      });
+
+      const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+      foliage.position.y = height * 0.6 + foliageRadius * 0.2;
+      foliage.scale.y = 1.3; // Slightly elongate vertically
+      foliage.castShadow = true;
+      foliage.receiveShadow = true;
+      group.add(foliage);
+
+      group.position.set(x, y, z);
+      group.userData = { type: 'tree' };
+
+      scene.add(group);
+    }
+
+    // Create water feature
+    function createWaterFeature() {
+      // Create a small lake
+      const lakeRadius = 50;
+      const lakeGeometry = new THREE.CircleGeometry(lakeRadius, 32);
+      const lakeMaterial = new THREE.MeshStandardMaterial({
+        color: 0x29B6F6,
+        metalness: 0.8,
+        roughness: 0.1,
+      });
+
+      const lake = new THREE.Mesh(lakeGeometry, lakeMaterial);
+      lake.rotation.x = -Math.PI / 2;
+      lake.position.set(-150, -0.2, 100);
+      lake.receiveShadow = true;
+
+      scene.add(lake);
+    }
+
+    // Create farm visualization with enhanced detail
+    function createFarmVisualization(acres, cropAllocations) {
+      // Clear previous objects
+      cropObjects.forEach(obj => {
+        scene.remove(obj);
+      });
+      cropObjects = [];
+
+      // Scale the farm size based on acreage
+      const farmRadius = Math.sqrt(acres / Math.PI) * 5;
+
+      // Create a farm ground base
+      const farmGroundGeometry = new THREE.CircleGeometry(farmRadius, 64);
+      const farmGroundMaterial = new THREE.MeshStandardMaterial({
+        color: 0x8B4513, // Rich soil color
+        roughness: 1,
+        metalness: 0
+      });
+
+      const farmGround = new THREE.Mesh(farmGroundGeometry, farmGroundMaterial);
+      farmGround.rotation.x = -Math.PI / 2;
+      farmGround.position.y = 0;
+      farmGround.receiveShadow = true;
+
+      scene.add(farmGround);
+      cropObjects.push(farmGround);
+
+      // Create a circular farm divided into sectors for each crop
+      let startAngle = 0;
+
+      cropAllocations.forEach(crop => {
+        if (crop.percentage > 0) {
+          // Calculate sector angle based on percentage
+          const angle = (crop.percentage / 100) * Math.PI * 2;
+          createRealisticCropSector(farmRadius, startAngle, angle, crop.crop);
+          startAngle += angle;
+        }
+      });
+
+      // Update camera and controls to focus on the farm
+      camera.position.set(farmRadius * 2, farmRadius * 1.5, farmRadius * 2);
+      controls.target.set(0, 0, 0);
+      controls.update();
+    }
+
+    // Create a realistic crop sector with enhanced visuals
+    function createRealisticCropSector(radius, startAngle, sectorAngle, cropType) {
+      const segments = Math.ceil(sectorAngle * 20); // Increased segments for better detail
+      const cropColor = cropTypes[cropType].color;
+
+      // Create a sector shape
+      const shape = new THREE.Shape();
+      shape.moveTo(0, 0);
+
+      for (let i = 0; i <= segments; i++) {
+        const angle = startAngle + (i / segments) * sectorAngle;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        shape.lineTo(x, y);
+      }
+      shape.lineTo(0, 0);
+
+      // Create sector ground
+      const geometry = new THREE.ShapeGeometry(shape);
+      const material = new THREE.MeshStandardMaterial({
+        color: cropColor,
+        metalness: 0.1,
+        roughness: 0.8,
+        side: THREE.DoubleSide
+      });
+
+      const sector = new THREE.Mesh(geometry, material);
+      sector.rotation.x = -Math.PI / 2;
+      sector.position.y = 0.05;
+      sector.receiveShadow = true;
+
+      scene.add(sector);
+      cropObjects.push(sector);
+
+      // Add 3D crop elements with improved distribution
+      addRealisticCrops(radius, startAngle, sectorAngle, cropType);
+    }
+
+    // Add realistic 3D crops to a sector
+    function addRealisticCrops(radius, startAngle, sectorAngle, cropType) {
+      const cropTypeData = cropTypes[cropType];
+      const cropHeight = cropTypeData.height || 1;
+      const cropDensity = cropTypeData.density || 50;
+
+      // Calculate number of plants based on sector area and density
+      const sectorArea = (Math.PI * radius * radius) * (sectorAngle / (2 * Math.PI));
+      const plantCount = Math.floor(sectorArea * (cropDensity / 1000));
+
+      // Create crops with a more natural distribution pattern
+      for (let i = 0; i < plantCount; i++) {
+        // Use squared random for better distribution (more dense near center)
+        const radialPosition = Math.sqrt(Math.random()) * radius * 0.95;
+        const angularPosition = startAngle + Math.random() * sectorAngle;
+
+        const x = Math.cos(angularPosition) * radialPosition;
+        const z = Math.sin(angularPosition) * radialPosition;
+
+        let cropMesh;
+
+        // Create different crop types with realistic models
+        switch (cropType) {
+          case 'wheat':
+            cropMesh = createRealisticWheat(cropHeight);
+            break;
+          case 'corn':
+            cropMesh = createRealisticCorn(cropHeight);
+            break;
+          case 'soybean':
+            cropMesh = createRealisticSoybean(cropHeight);
+            break;
+          case 'cotton':
+            cropMesh = createRealisticCotton(cropHeight);
+            break;
+        }
+
+        // Position and rotate the crop
+        cropMesh.position.set(x, 0, z);
+        cropMesh.rotation.y = Math.random() * Math.PI * 2;
+
+        // Add wind animation properties
+        cropMesh.userData = {
+          type: 'crop',
+          cropType: cropType,
+          windFactor: 0.03 + Math.random() * 0.04,
+          windSpeed: 1 + Math.random() * 1
+        };
+
+        // Initially set scale to 0 for growth animation
+        cropMesh.scale.y = 0;
+
+        scene.add(cropMesh);
+        cropObjects.push(cropMesh);
+      }
+
+      // Animate crop growth
+      animateCropGrowth();
+    }
+
+    // Create realistic wheat plant
+    function createRealisticWheat(height) {
+      const group = new THREE.Group();
+
+      // Stem
+      const stemGeometry = new THREE.CylinderGeometry(0.03, 0.03, height, 8);
+      const stemMaterial = new THREE.MeshStandardMaterial({
+        color: 0xBDB76B,
+        roughness: 0.8,
+        metalness: 0
+      });
+
+      const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+      stem.position.y = height / 2;
+      stem.castShadow = true;
+      group.add(stem);
+
+      // Wheat head
+      const headGeometry = new THREE.CylinderGeometry(0.08, 0.03, height * 0.3, 8);
+      const headMaterial = new THREE.MeshStandardMaterial({
+        color: 0xF5DEB3,
+        roughness: 0.7,
+        metalness: 0
+      });
+
+      const head = new THREE.Mesh(headGeometry, headMaterial);
+      head.position.y = height + (height * 0.15);
+      head.castShadow = true;
+      group.add(head);
+
+      // Add some wheat grains
+      for (let i = 0; i < 12; i++) {
+        const grainGeometry = new THREE.SphereGeometry(0.03, 4, 4);
+        const grain = new THREE.Mesh(grainGeometry, headMaterial);
+
+        // Position grains around the head
+        const angle = (i / 12) * Math.PI * 2;
+        const grainRadius = 0.06;
+        grain.position.x = Math.cos(angle) * grainRadius;
+        grain.position.z = Math.sin(angle) * grainRadius;
+        grain.position.y = height + (height * 0.15) + (i % 4) * 0.06;
+
+        group.add(grain);
+      }
+
+      return group;
+    }
+
+    // Create realistic corn plant
+    function createRealisticCorn(height) {
+      const group = new THREE.Group();
+
+      // Stem
+      const stemGeometry = new THREE.CylinderGeometry(0.08, 0.1, height, 8);
+      const stemMaterial = new THREE.MeshStandardMaterial({
+        color: 0x33691E,
+        roughness: 0.8,
+        metalness: 0
+      });
+
+      const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+      stem.position.y = height / 2;
+      stem.castShadow = true;
+      group.add(stem);
+
+      // Corn cob
+      const cobGeometry = new THREE.CylinderGeometry(0.12, 0.12, height * 0.4, 8);
+      const cobMaterial = new THREE.MeshStandardMaterial({
+        color: 0xFFEB3B,
+        roughness: 0.7,
+        metalness: 0
+      });
+
+      const cob = new THREE.Mesh(cobGeometry, cobMaterial);
+      cob.position.y = height * 0.6;
+      cob.rotation.x = Math.PI / 2;
+      cob.position.z = 0.15;
+      cob.castShadow = true;
+      group.add(cob);
+
+      // Add leaves
+      const leafCount = 6;
+      const leafGeometry = new THREE.PlaneGeometry(0.6, height * 0.8);
+      const leafMaterial = new THREE.MeshStandardMaterial({
+        color: 0x558B2F,
+        side: THREE.DoubleSide,
+        roughness: 0.8,
+        metalness: 0
+      });
+
+      for (let i = 0; i < leafCount; i++) {
+        const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
+        leaf.position.y = height * 0.4 + (i / leafCount) * height * 0.5;
+        leaf.rotation.y = (Math.PI / leafCount) * i * 2;
+        leaf.rotation.x = Math.PI / 6;
+        leaf.castShadow = true;
+        group.add(leaf);
+      }
+
+      return group;
+    }
+
+    // Create realistic soybean plant
+    function createRealisticSoybean(height) {
+      const group = new THREE.Group();
+
+      // Main stem
+      const stemGeometry = new THREE.CylinderGeometry(0.03, 0.04, height, 8);
+      const stemMaterial = new THREE.MeshStandardMaterial({
+        color: 0x7B5E57,
+        roughness: 0.8,
+        metalness: 0
+      });
+
+      const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+      stem.position.y = height / 2;
+      stem.castShadow = true;
+      group.add(stem);
+
+      // Add branches with pods
+      const branchCount = 5 + Math.floor(Math.random() * 3);
+
+      for (let i = 0; i < branchCount; i++) {
+        // Branch position along main stem
+        const branchY = height * 0.3 + (i / branchCount) * height * 0.6;
+
+        // Add a branch
+        const branchLength = 0.2 + Math.random() * 0.2;
+        const branchGeometry = new THREE.CylinderGeometry(0.02, 0.02, branchLength, 4);
+        const branch = new THREE.Mesh(branchGeometry, stemMaterial);
+
+        // Position and rotate branch
+        const branchAngle = (i / branchCount) * Math.PI * 4;
+        branch.position.y = branchY;
+        branch.position.x = 0;
+        branch.position.z = 0;
+        branch.rotation.z = Math.PI / 2 - Math.PI / 8; // Angle slightly upward
+        branch.rotation.y = branchAngle;
+        branch.castShadow = true;
+
+        group.add(branch);
+
+        // Add soybean pods
+        const podCount = 1 + Math.floor(Math.random() * 2);
+        for (let j = 0; j < podCount; j++) {
+          const podGeometry = new THREE.SphereGeometry(0.04, 8, 8);
+          podGeometry.scale(1, 0.5, 0.3); // Flatten to pod shape
+
+          const podMaterial = new THREE.MeshStandardMaterial({
+            color: 0x8D6E63,
+            roughness: 0.7,
+            metalness: 0
+          });
+
+          const pod = new THREE.Mesh(podGeometry, podMaterial);
+
+          // Position pod along branch
+          const podX = Math.cos(branchAngle) * branchLength * 0.8;
+          const podZ = Math.sin(branchAngle) * branchLength * 0.8;
+          pod.position.set(podX, branchY, podZ);
+          pod.rotation.set(
+            Math.random() * Math.PI,
+            branchAngle,
+            Math.PI / 2 + Math.random() * Math.PI / 4
+          );
+          pod.castShadow = true;
+
+          group.add(pod);
+        }
+
+        // Add leaves
+        const leafGeometry = new THREE.CircleGeometry(0.08, 8);
+        const leafMaterial = new THREE.MeshStandardMaterial({
+          color: 0x4CAF50,
+          side: THREE.DoubleSide,
+          roughness: 0.8,
+          metalness: 0
+        });
+
+        const leaf1 = new THREE.Mesh(leafGeometry, leafMaterial);
+        leaf1.position.y = branchY + 0.05;
+        leaf1.rotation.x = Math.PI / 2;
+        leaf1.rotation.y = branchAngle + Math.PI / 4;
+        leaf1.castShadow = true;
+
+        const leaf2 = new THREE.Mesh(leafGeometry, leafMaterial);
+        leaf2.position.y = branchY + 0.05;
+        leaf2.rotation.x = Math.PI / 2;
+        leaf2.rotation.y = branchAngle - Math.PI / 4;
+        leaf2.castShadow = true;
+
+        group.add(leaf1, leaf2);
+      }
+
+      return group;
+    }
+
+    // Create realistic cotton plant
+    function createRealisticCotton(height) {
+      const group = new THREE.Group();
+
+      // Main stem
+      const stemGeometry = new THREE.CylinderGeometry(0.04, 0.05, height, 8);
+      const stemMaterial = new THREE.MeshStandardMaterial({
+        color: 0x8D6E63,
+        roughness: 0.8,
+        metalness: 0
+      });
+
+      const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+      stem.position.y = height / 2;
+      stem.castShadow = true;
+      group.add(stem);
+
+      // Add branches
+      const branchCount = 4 + Math.floor(Math.random() * 3);
+
+      for (let i = 0; i < branchCount; i++) {
+        // Branch position along main stem
+        const branchY = height * 0.3 + (i / branchCount) * height * 0.6;
+
+        // Add a branch
+        const branchLength = 0.3 + Math.random() * 0.2;
+        const branchGeometry = new THREE.CylinderGeometry(0.02, 0.02, branchLength, 4);
+        const branch = new THREE.Mesh(branchGeometry, stemMaterial);
+
+        // Position and rotate branch
+        const branchAngle = (i / branchCount) * Math.PI * 4;
+        branch.position.y = branchY;
+        branch.rotation.z = Math.PI / 2 - Math.PI / 8; // Angle slightly upward
+        branch.rotation.y = branchAngle;
+        branch.castShadow = true;
+
+        group.add(branch);
+
+        // Add cotton bolls
+        if (Math.random() > 0.2) { // Not all branches have cotton
+          const bollGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+          const bollMaterial = new THREE.MeshStandardMaterial({
+            color: 0xFFFFFF,
+            roughness: 0.4,
+            metalness: 0.1
+          });
+
+          const boll = new THREE.Mesh(bollGeometry, bollMaterial);
+
+          // Position boll at end of branch
+          const bollX = Math.cos(branchAngle) * branchLength * 0.8;
+          const bollZ = Math.sin(branchAngle) * branchLength * 0.8;
+          const bollY = branchY + Math.sin(Math.PI / 8) * branchLength * 0.8; // Account for branch angle
+
+          boll.position.set(bollX, bollY, bollZ);
+          boll.castShadow = true;
+
+          group.add(boll);
+        }
+
+        // Add leaves
+        const leafGeometry = new THREE.CircleGeometry(0.1, 5);
+        const leafMaterial = new THREE.MeshStandardMaterial({
+          color: 0x33691E,
+          side: THREE.DoubleSide,
+          roughness: 0.8,
+          metalness: 0
+        });
+
+        const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
+        leaf.position.y = branchY;
+        leaf.rotation.x = Math.PI / 2;
+        leaf.rotation.y = branchAngle;
+        leaf.castShadow = true;
+
+        group.add(leaf);
+      }
+
+      return group;
+    }
+
+    // Animate crop growth for better visual effect
+    function animateCropGrowth() {
+      // Get only crop objects
+      const crops = cropObjects.filter(obj => obj.userData && obj.userData.type === 'crop');
+
+      // Start time
+      const startTime = Date.now();
+      const growthDuration = 2000; // 2 seconds for growth animation
+
+      // Animation function
+      function animate() {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / growthDuration, 1);
+
+        // Use easing function for more natural growth
+        const easedProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+
+        // Update each crop's scale
+        crops.forEach((crop, index) => {
+          // Stagger growth for more natural look
+          const delay = index % 20 * 50; // 50ms delay between every 20th plant
+          const delayedProgress = Math.max(0, Math.min((elapsed - delay) / growthDuration, 1));
+          const delayedEasedProgress = 1 - Math.pow(1 - delayedProgress, 3);
+
+          // Apply growth
+          crop.scale.y = delayedEasedProgress;
+        });
+
+        // Continue animation if not complete
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      }
+
+      // Start animation
+      animate();
+    }
+
+    // Toggle fullscreen mode
+    function toggleFullscreen() {
+      const container = document.querySelector('.visualization-container');
+
+      if (!isFullscreen) {
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if (container.mozRequestFullScreen) {
+          container.mozRequestFullScreen();
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        } else if (container.msRequestFullscreen) {
+          container.msRequestFullscreen();
+        }
+        isFullscreen = true;
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+        isFullscreen = false;
+      }
+
+      // Show toast notification
+      toast.show('success', 'Display Mode Changed', isFullscreen ? 'Entered fullscreen mode' : 'Exited fullscreen mode', 2000);
+    }
+
+    // Update allocation display with enhanced visuals
+    function updateFarmDisplay(acres, cropAllocations) {
+      // Create or update crop allocation display
+      const inputSection = document.getElementById('input-section');
+
+      // Remove existing allocation if any
+      const existingAllocation = document.querySelector('.crop-allocation');
+      if (existingAllocation) {
+        existingAllocation.remove();
+      }
+
+      // Create new allocation display
+      const allocationDiv = document.createElement('div');
+      allocationDiv.className = 'crop-allocation';
+
+      // Build the content
+      let allocationHTML = `
+        <div class="card">
+          <h2 class="card-title">
+            <span class="card-title-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </span>
+            AI-Recommended Allocation
+          </h2>
+          <div class="allocation-title">
+            <h3>
+              <span class="allocation-title-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18"></path>
+                  <path d="M3 12h18"></path>
+                  <path d="M3 18h18"></path>
+                </svg>
+              </span>
+              Crop Distribution
+            </h3>
+            <div class="acres-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10L12 5 3 10l9 5 9-5z"></path>
+                <path d="M21 16L12 21 3 16"></path>
+                <path d="M21 10v6"></path>
+                <path d="M3 10v6"></path>
+              </svg>
+              ${acres.toFixed(1)} acres
+            </div>
+          </div>
+          <ul class="allocation-list">
+      `;
+
+      // Add each crop allocation
+      cropAllocations.forEach(crop => {
+        allocationHTML += `
+          <li class="allocation-item ${crop.crop}">
+            <div class="crop-color crop-${crop.crop}"></div>
+            <span class="crop-name">${cropTypes[crop.crop].displayName}</span>
+            <span class="crop-percentage">${crop.percentage}%</span>
+            <span class="crop-acres">${crop.acres.toFixed(1)} acres</span>
+          </li>
+        `;
+      });
+
+      allocationHTML += `
+          </ul>
+        </div>
+      `;
+
+      allocationDiv.innerHTML = allocationHTML;
+
+      // Add to the document
+      inputSection.appendChild(allocationDiv);
+    }
+
+    // Generate AI recommendations with enhanced algorithm
+    function getAIRecommendation(landSize) {
+      // Base allocation percentages
+      let wheatPercent = 30;
+      let cornPercent = 40;
+      let soybeanPercent = 20;
+      let cottonPercent = 10;
+
+      // Enhanced adjustment logic based on farm size
+      if (landSize < 5) {
+        // Very small farms: focus on high-value, low-space crops
+        cornPercent = 60;
+        soybeanPercent = 30;
+        wheatPercent = 10;
+        cottonPercent = 0;
+      } else if (landSize < 20) {
+        // Small farms: balanced approach with higher corn
+        cornPercent = 50;
+        soybeanPercent = 25;
+        wheatPercent = 25;
+        cottonPercent = 0;
+      } else if (landSize < 50) {
+        // Medium-small farms: introduce cotton
+        cornPercent = 45;
+        soybeanPercent = 25;
+        wheatPercent = 20;
+        cottonPercent = 10;
+      } else if (landSize < 100) {
+        // Medium farms: balanced approach
+        wheatPercent = 30;
+        cornPercent = 35;
+        soybeanPercent = 20;
+        cottonPercent = 15;
+      } else if (landSize < 300) {
+        // Medium-large farms: more wheat
+        wheatPercent = 40;
+        cornPercent = 30;
+        soybeanPercent = 15;
+        cottonPercent = 15;
+      } else {
+        // Large farms: highly diverse allocation
+        wheatPercent = 35;
+        cornPercent = 25;
+        soybeanPercent = 25;
+        cottonPercent = 15;
+      }
+
+      // Add some randomization for more natural results
+      const randomFactor = 5;
+      const randomizePercent = (basePercent) => {
+        const variation = Math.floor(Math.random() * randomFactor * 2) - randomFactor;
+        return Math.max(0, Math.min(100, basePercent + variation));
+      };
+
+      wheatPercent = randomizePercent(wheatPercent);
+      cornPercent = randomizePercent(cornPercent);
+      soybeanPercent = randomizePercent(soybeanPercent);
+      cottonPercent = randomizePercent(cottonPercent);
+
+      // Normalize to ensure total is exactly 100%
+      const total = wheatPercent + cornPercent + soybeanPercent + cottonPercent;
+      const normalizeFactor = 100 / total;
+
+      wheatPercent = Math.round(wheatPercent * normalizeFactor);
+      cornPercent = Math.round(cornPercent * normalizeFactor);
+      soybeanPercent = Math.round(soybeanPercent * normalizeFactor);
+      cottonPercent = Math.round(cottonPercent * normalizeFactor);
+
+      // Fix any rounding errors
+      const roundingError = 100 - (wheatPercent + cornPercent + soybeanPercent + cottonPercent);
+      cornPercent += roundingError;
+
+      return [
+        { crop: 'wheat', percentage: wheatPercent, acres: (wheatPercent / 100) * landSize },
+        { crop: 'corn', percentage: cornPercent, acres: (cornPercent / 100) * landSize },
+        { crop: 'soybean', percentage: soybeanPercent, acres: (soybeanPercent / 100) * landSize },
+        { crop: 'cotton', percentage: cottonPercent, acres: (cottonPercent / 100) * landSize }
+      ];
+    }
+
+    // Simplex noise implementation for more natural terrain
+    // Adapted from https://github.com/jwagner/simplex-noise.js
+    const F2 = 0.5 * (Math.sqrt(3) - 1);
+    const G2 = (3 - Math.sqrt(3)) / 6;
+
+    const p = new Uint8Array(256);
+    for (let i = 0; i < 256; i++) {
+      p[i] = Math.floor(Math.random() * 256);
+    }
+
+    const perm = new Uint8Array(512);
+    const permMod12 = new Uint8Array(512);
+    for (let i = 0; i < 512; i++) {
+      perm[i] = p[i & 255];
+      permMod12[i] = perm[i] % 12;
+    }
+
+    const grad3 = [
+      [1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
+      [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
+      [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]
+    ];
+
+    function simplex2(xin, yin) {
+      let n0, n1, n2;
+
+      const s = (xin + yin) * F2;
+      const i = Math.floor(xin + s);
+      const j = Math.floor(yin + s);
+
+      const t = (i + j) * G2;
+      const X0 = i - t;
+      const Y0 = j - t;
+      const x0 = xin - X0;
+      const y0 = yin - Y0;
+
+      let i1, j1;
+      if (x0 > y0) {
+        i1 = 1;
+        j1 = 0;
+      } else {
+        i1 = 0;
+        j1 = 1;
+      }
+
+      const x1 = x0 - i1 + G2;
+      const y1 = y0 - j1 + G2;
+      const x2 = x0 - 1 + 2 * G2;
+      const y2 = y0 - 1 + 2 * G2;
+
+      const ii = i & 255;
+      const jj = j & 255;
+
+      const gi0 = permMod12[ii + perm[jj]];
+      const gi1 = permMod12[ii + i1 + perm[jj + j1]];
+      const gi2 = permMod12[ii + 1 + perm[jj + 1]];
+
+      let t0 = 0.5 - x0 * x0 - y0 * y0;
+      if (t0 < 0) {
+        n0 = 0;
+      } else {
+        t0 *= t0;
+        n0 = t0 * t0 * dot2(grad3[gi0], x0, y0);
+      }
+
+      let t1 = 0.5 - x1 * x1 - y1 * y1;
+      if (t1 < 0) {
+        n1 = 0;
+      } else {
+        t1 *= t1;
+        n1 = t1 * t1 * dot2(grad3[gi1], x1, y1);
+      }
+
+      let t2 = 0.5 - x2 * x2 - y2 * y2;
+      if (t2 < 0) {
+        n2 = 0;
+      } else {
+        t2 *= t2;
+        n2 = t2 * t2 * dot2(grad3[gi2], x2, y2);
+      }
+
+      return 70 * (n0 + n1 + n2);
+    }
+
+    function dot2(g, x, y) {
+      return g[0] * x + g[1] * y;
+    }
+
+    // Auto-run with default value for demo purposes
+    document.getElementById('visualize-btn').click();
+  </script>
+</body>
+
+</html>

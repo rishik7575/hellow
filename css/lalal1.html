@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLift Dashboard - Enhanced</title>
+    <style>
+        :root {
+            --primary-color: #33691E;
+            /* A deep green for a natural look */
+            --secondary-color: #8BC34A;
+            /* A lighter green for accents */
+            --background-color: #FAFAFA;
+            /* Near-white for main content background */
+            --text-color: #333333;
+            --card-bg: #F5F5F5;
+            /* Light grey for cards */
+            --accent-color: #FFEB3B;
+            /* Yellow for highlights */
+            --error-color: #FF5722;
+            /* Deep orange for errors */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            padding: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1.logo {
+            color: var(--background-color);
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        h1.logo::before {
+            content: '🌱';
+            margin-right: 10px;
+        }
+
+        nav button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--background-color);
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+
+        nav button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        main {
+            flex-grow: 1;
+            padding-top: 80px;
+        }
+
+        .dashboard-section {
+            margin: 20px 0;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .upload-section {
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--secondary-color);
+            padding: 30px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(139, 195, 74, 0.1);
+        }
+
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .section-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .parameter-card {
+            background: var(--secondary-color);
+            color: var(--background-color);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .crop-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .season-selector {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .buy-seeds-btn {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buy-seeds-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            margin-top: 10px;
+        }
+
+        .soil-layers {
+            perspective: 1000px;
+            width: 300px;
+            height: 200px;
+            margin: 20px auto;
+        }
+
+        .soil-layer {
+            width: 100%;
+            height: 20%;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .soil-layer div {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-origin: bottom;
+        }
+
+        .soil-layer div:nth-child(1) {
+            background: #8B4513;
+            /* Brown for soil */
+            transform: rotateX(0deg);
+        }
+
+        .soil-layer div:nth-child(2) {
+            background: #DAA520;
+            /* Gold for sand */
+            transform: rotateX(90deg) translateZ(100px);
+            opacity: 0.7;
+        }
+
+        .soil-layer:hover {
+            transform: rotateX(-20deg);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            nav button {
+                margin: 5px 0;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <h1 class="logo">AgriLift Dashboard</h1>
+            <nav>
+                <button onclick="alert('Home functionality coming soon!')">Home</button>
+                <button onclick="alert('Contact functionality coming soon!')">Contact</button>
+                <button onclick="alert('Seeds functionality coming soon!')">Seeds</button>
+                <button onclick="alert('Machinery functionality coming soon!')">Machinery</button>
+                <button onclick="alert('Export functionality coming soon!')">Export</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="dashboard-section upload-section">
+            <h2>Smart Soil Analysis</h2>
+            <p>Upload your soil report for personalized crop recommendations</p>
+            <div id="fileUploadArea" class="upload-area">
+                <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
+                <p>Supported formats: PDF, JPG, JPEG, PNG</p>
+                <div id="errorMessage" class="error-message"></div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+            <div class="section-card analysis-section">
+                <h3>Soil Analysis Results</h3>
+                <div class="chart-container">
+                    <canvas id="soilChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <!-- 3D Bar Chart will be appended here -->
+                </div>
+                <div class="soil-layers">
+                    <!-- Soil Layers will be dynamically added here -->
+                </div>
+                <div id="soilParameters"></div>
+            </div>
+
+            <div class="section-card recommendations-section">
+                <h3>Crop Recommendations</h3>
+                <select class="season-selector" id="seasonSelect" onchange="updateRecommendations()">
+                    <option value="kharif">Kharif (Monsoon)</option>
+                    <option value="rabi">Rabi (Winter)</option>
+                    <option value="zaid">Zaid (Summer)</option>
+                </select>
+                <div id="cropRecommendations"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // JavaScript for handling file uploads, updating charts, and real-time simulation
+        document.getElementById("fileInput").addEventListener("change", handleFileUpload);
+
+        let realTimeChart, pieChart, bar3DChart;
+        let realTimeData = {
+            pH: 7,
+            nitrogen: 50,
+            phosphorus: 50,
+            potassium: 50,
+            organicMatter: 2,
+            moisture: 50
+        };
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                document.getElementById('errorMessage').textContent = 'Please select a file.';
+                return;
+            }
+
+            document.getElementById('errorMessage').textContent = '';
+            document.getElementById('fileUploadArea').innerHTML = '<p>Analyzing...</p>';
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const text = e.target.result;
+
+                if (file.type.startsWith('image/')) {
+                    simulateImageAnalysis(text);
+                } else if (file.type === "application/pdf") {
+                    simulatePDFAnalysis(text);
+                } else {
+                    document.getElementById('errorMessage').textContent = 'Unsupported file type.';
+                }
+            };
+
+            if (file.type.startsWith('image/')) {
+                reader.readAsDataURL(file);
+            } else if (file.type === "application/pdf") {
+                reader.readAsText(file);
+            }
+        }
+
+        function simulateImageAnalysis(text) {
+            realTimeData = {
+                pH: Math.random() * 14,
+                nitrogen: Math.random() * 100,
+                phosphorus: Math.random() * 100,
+                potassium: Math.random() * 100,
+                organicMatter: Math.random() * 5,
+                moisture: Math.random() * 100
+            };
+            displayResults(realTimeData);
+        }
+
+        function simulatePDFAnalysis(text) {
+            realTimeData = {
+                pH: parseFloat(text.match(/pH:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 14),
+                nitrogen: parseFloat(text.match(/Nitrogen:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                phosphorus: parseFloat(text.match(/Phosphorus:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                potassium: parseFloat(text.match(/Potassium:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100),
+                organicMatter: parseFloat(text.match(/Organic Matter:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 5),
+                moisture: parseFloat(text.match(/Moisture:\s*(\d+(\.\d+)?)/)?.[1] || Math.random() * 100)
+            };
+            displayResults(realTimeData);
+        }
+
+        function displayResults(data) {
+            document.getElementById('fileUploadArea').innerHTML = '<p>File Uploaded Successfully!</p><button class="upload-btn" onclick="document.getElementById(\'fileInput\').click()">Choose Another File</button>';
+
+            // Update or create charts
+            updateLineChart(data);
+            updatePieChart(data);
+            update3DBarChart(data);
+            updateSoilLayers(data);
+
+            // Display soil parameters
+            let paramsHTML = '';
+            for (let [key, value] of Object.entries(data)) {
+                paramsHTML += `
+                    <div class="parameter-card">
+                        <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                        <span>${value.toFixed(2)} ${key === 'pH' ? '' : 'mg/kg'}</span>
+                    </div>
+                `;
+            }
+            document.getElementById('soilParameters').innerHTML = paramsHTML;
+
+            updateRecommendations();
+            startRealTimeSimulation();
+        }
+
+        function updateLineChart(data) {
+            const ctx = document.getElementById('soilChart').getContext('2d');
+            if (!realTimeChart) {
+                realTimeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            label: 'Soil Parameters',
+                            data: Object.values(data),
+                            borderColor: 'rgba(51, 105, 30, 1)',
+                            fill: false,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            } else {
+                realTimeChart.data.datasets[0].data = Object.values(data);
+                realTimeChart.update();
+            }
+        }
+
+        function updatePieChart(data) {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            if (!pieChart) {
+                pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Nitrogen', 'Phosphorus', 'Potassium', 'Organic Matter', 'Moisture'],
+                        datasets: [{
+                            data: [data.nitrogen, data.phosphorus, data.potassium, data.organicMatter, data.moisture],
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Soil Composition'
+                            }
+                        }
+                    }
+                });
+            } else {
+                pieChart.data.datasets[0].data = [data.nitrogen, data.phosphorus, data.potassium, data.organicMatter, data.moisture];
+                pieChart.update();
+            }
+        }
+
+        function update3DBarChart(data) {
+            const ctx = document.createElement('canvas');
+            document.querySelector('.chart-container:last-of-type').appendChild(ctx);
+            if (!bar3DChart) {
+                bar3DChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            label: 'Soil Parameters',
+                            data: Object.values(data),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            } else {
+                bar3DChart.data.datasets[0].data = Object.values(data);
+                bar3DChart.update();
+            }
+        }
+
+        function updateSoilLayers(data) {
+            const soilLayers = document.querySelector('.soil-layers');
+            soilLayers.innerHTML = ''; // Clear existing layers
+            const totalHeight = 100; // Total height in percentage
+
+            const layers = [
+                { name: 'Moisture', height: data.moisture },
+                { name: 'Organic Matter', height: data.organicMatter * 10 },
+                { name: 'Soil', height: totalHeight - data.moisture - (data.organicMatter * 10) }
+            ];
+
+            layers.forEach(layer => {
+                const layerDiv = document.createElement('div');
+                layerDiv.className = 'soil-layer';
+                layerDiv.style.height = `${layer.height}%`;
+                layerDiv.innerHTML = `<div></div><div></div>`;
+                soilLayers.appendChild(layerDiv);
+            });
+        }
+
+        function startRealTimeSimulation() {
+            clearInterval(window.simInterval);
+            window.simInterval = setInterval(() => {
+                for (let key in realTimeData) {
+                    let change = (Math.random() - 0.5) * 2;
+                    switch (key) {
+                        case 'pH':
+                            realTimeData[key] = Math.min(Math.max(realTimeData[key] + change * 0.1, 0), 14);
+                            break;
+                        case 'organicMatter':
+                            realTimeData[key] = Math.min(Math.max(realTimeData[key] + change * 0.01, 0), 5);
+                            break;
+                        default:
+                            realTimeData[key] = Math.min(Math.max(realTimeData[key] + change, 0), 100);
+                    }
+                }
+
+                // Update charts and soil parameters display
+                updateLineChart(realTimeData);
+                updatePieChart(realTimeData);
+                update3DBarChart(realTimeData);
+                updateSoilLayers(realTimeData);
+
+                let paramsHTML = '';
+                for (let [key, value] of Object.entries(realTimeData)) {
+                    paramsHTML += `
+                        <div class="parameter-card">
+                            <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                            <span>${value.toFixed(2)} ${key === 'pH' ? '' : 'mg/kg'}</span>
+                        </div>
+                    `;
+                }
+                document.getElementById('soilParameters').innerHTML = paramsHTML;
+            }, 5000);
+        }
+
+        function updateRecommendations() {
+            const season = document.getElementById('seasonSelect').value;
+            const recommendations = getCropRecommendations(season);
+
+            let recsHTML = '';
+            recommendations.forEach(crop => {
+                recsHTML += `
+                    <div class="crop-card">
+                        <h4>${crop.name}</h4>
+                        <p>${crop.description}</p>
+                        <p><strong>Growing Period:</strong> ${crop.period}</p>
+                        <p><strong>Water Requirement:</strong> ${crop.water}</p>
+                        <button class="buy-seeds-btn" onclick="alert('Buy ${crop.name} Seeds - Coming soon!')">Buy Seeds</button>
+                    </div>
+                `;
+            });
+            document.getElementById('cropRecommendations').innerHTML = recsHTML;
+        }
+
+        function getCropRecommendations(season) {
+            const recommendations = {
+                kharif: [
+                    { name: 'Rice', description: 'Ideal for high moisture soils.', period: 'June - November', water: 'High' },
+                    { name: 'Cotton', description: 'Suitable for well-drained soils.', period: 'May - November', water: 'Medium' }
+                ],
+                rabi: [
+                    { name: 'Wheat', description: 'Perfect for moderate pH levels.', period: 'November - April', water: 'Medium' },
+                    { name: 'Mustard', description: 'Ideal for nitrogen-rich soils.', period: 'October - March', water: 'Low' }
+                ],
+                zaid: [
+                    { name: 'Watermelon', description: 'Best for sandy loam soils.', period: 'March - June', water: 'Medium' },
+                    { name: 'Cucumber', description: 'Suitable for well-fertilized soils.', period: 'February - May', water: 'Medium' }
+                ]
+            };
+            return recommendations[season] || [];
+        }
+    </script>
+</body>
+
+</html>

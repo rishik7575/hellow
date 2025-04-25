@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgriLift - Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <nav class="bg-emerald-700 text-white sticky top-0 z-50 shadow-lg p-4">
+        <h1 class="text-xl font-bold">AgriLift Dashboard</h1>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 text-emerald-700">Analytics</h1>
+
+        <!-- Moisture Trends Section -->
+        <section id="moistureTrends" class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Moisture Trends</h2>
+                <button id="refreshMoistureData"
+                    class="bg-emerald-600 text-white px-3 py-1 rounded hover:bg-emerald-700 transition duration-200">Refresh
+                    Data</button>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md card">
+                    <canvas id="moistureChart"></canvas>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md card">
+                    <h3 class="text-lg font-bold mb-2">Moisture Overview</h3>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li>Current Average: <span id="currentAverage">62%</span></li>
+                        <li>Last Week's Average: 58%</li>
+                        <li>Optimal Range: 55%-70%</li>
+                        <li>Highest Recorded: 75% (April 10th)</li>
+                        <li>Lowest Recorded: 42% (June 2nd)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health Index Section -->
+        <section id="healthIndex" class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">Health Index</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md card">
+                <canvas id="healthChart"></canvas>
+                <div class="mt-4">
+                    <p class="text-sm text-gray-600">
+                        Health Index is calculated based on soil moisture, temperature, nutrient levels, and pest
+                        detection. Click on any bar for more details.
+                    </p>
+                    <ul class="list-disc pl-5 text-gray-700 mt-2">
+                        <li>Overall Health: <span class="text-emerald-600">Good</span></li>
+                        <li>Average Index: 85/100</li>
+                        <li>Field A: 92 (Excellent)</li>
+                        <li>Field B: 78 (Moderate)</li>
+                        <li>Field C: 85 (Good)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Predictive Analytics Section -->
+        <section id="predictions" class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">Predictive Analytics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md card">
+                    <h3 class="text-lg font-bold mb-2">Predicted Yield</h3>
+                    <canvas id="yieldPredictionChart"></canvas>
+                    <div class="mt-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="toggleNegatives" class="form-checkbox h-4 w-4 text-emerald-600">
+                            <span class="ml-2 text-gray-700">Show Negative Predictions</span>
+                        </label>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">Based on current conditions, we predict:</p>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li>Field A: <span class="text-emerald-600">+12%</span> over last year</li>
+                        <li>Field B: <span class="text-yellow-600">+5%</span></li>
+                        <li>Field C: <span class="text-red-600">-3%</span></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md card">
+                    <h3 class="text-lg font-bold mb-2">Environmental Conditions Forecast</h3>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li>Temperature: Rising by 2°C in next 10 days</li>
+                        <li>Moisture: Expected decrease due to upcoming dry spell</li>
+                        <li>Nutrient Levels: Stable, no additional input needed</li>
+                        <li>Pest Risk: <span class="text-red-600">High</span> for aphids</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Health Index Details -->
+    <div id="healthModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="healthModalTitle" class="text-2xl font-bold">Field Details</h2>
+                <button id="closeHealthModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div id="healthModalContent" class="text-gray-700">
+                <!-- Dynamic content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Moisture Trends Data
+            const moistureLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            let moistureData = [55, 60, 65, 70, 62, 58];
+
+            const moistureCtx = document.getElementById('moistureChart').getContext('2d');
+            const moistureChart = new Chart(moistureCtx, {
+                type: 'line',
+                data: {
+                    labels: moistureLabels,
+                    datasets: [{
+                        label: 'Soil Moisture (%)',
+                        data: moistureData,
+                        borderColor: '#27ae60',
+                        fill: false,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Refresh Moisture Data
+            const refreshButton = document.getElementById('refreshMoistureData');
+            refreshButton.addEventListener('click', () => {
+                // Simulate new random moisture data between 50 and 75%
+                moistureData = moistureData.map(() => Math.floor(Math.random() * 26) + 50);
+                moistureChart.data.datasets[0].data = moistureData;
+                moistureChart.update();
+                // Update the average displayed in the overview card
+                const avg = Math.round(moistureData.reduce((a, b) => a + b, 0) / moistureData.length);
+                document.getElementById('currentAverage').textContent = avg + '%';
+            });
+
+            // Health Index Data & Chart
+            const healthLabels = ['Field A', 'Field B', 'Field C'];
+            const healthData = [92, 78, 85];
+            const healthCtx = document.getElementById('healthChart').getContext('2d');
+            const healthChart = new Chart(healthCtx, {
+                type: 'bar',
+                data: {
+                    labels: healthLabels,
+                    datasets: [{
+                        label: 'Health Index',
+                        data: healthData,
+                        backgroundColor: ['#4CAF50', '#FFC107', '#2196F3']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    onClick: (evt, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const fieldName = healthLabels[index];
+                            // For demo purposes, generate extra details dynamically
+                            const details = {
+                                'Field A': { score: 92, details: 'Excellent soil quality and optimal moisture levels.' },
+                                'Field B': { score: 78, details: 'Slightly lower scores due to nutrient variability.' },
+                                'Field C': { score: 85, details: 'Good performance overall with balanced conditions.' }
+                            };
+                            showHealthModal(fieldName, details[fieldName]);
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Modal functionality for Health Index details
+            const healthModal = document.getElementById('healthModal');
+            const healthModalTitle = document.getElementById('healthModalTitle');
+            const healthModalContent = document.getElementById('healthModalContent');
+            const closeHealthModal = document.getElementById('closeHealthModal');
+
+            function showHealthModal(fieldName, data) {
+                healthModalTitle.textContent = fieldName + ' Details';
+                healthModalContent.innerHTML = `
+          <p><strong>Health Score:</strong> ${data.score}</p>
+          <p>${data.details}</p>
+        `;
+                healthModal.style.display = 'flex';
+            }
+
+            closeHealthModal.addEventListener('click', () => {
+                healthModal.style.display = 'none';
+            });
+
+            healthModal.addEventListener('click', (e) => {
+                if (e.target === healthModal) {
+                    healthModal.style.display = 'none';
+                }
+            });
+
+            // Yield Prediction Chart & Toggle Negative Predictions
+            const yieldLabels = ['Field A', 'Field B', 'Field C'];
+            let yieldData = [12, 5, -3];
+            const yieldCtx = document.getElementById('yieldPredictionChart').getContext('2d');
+            let yieldChart = new Chart(yieldCtx, {
+                type: 'bar',
+                data: {
+                    labels: yieldLabels,
+                    datasets: [{
+                        label: 'Predicted Yield Change (%)',
+                        data: yieldData,
+                        backgroundColor: ['#4CAF50', '#FFC107', '#F44336']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Toggle negative predictions
+            const toggleNegatives = document.getElementById('toggleNegatives');
+            toggleNegatives.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    // Show negatives by setting their opacity to full (or changing color)
+                    yieldChart.data.datasets[0].backgroundColor = ['#4CAF50', '#FFC107', '#F44336'];
+                } else {
+                    // Hide negatives by graying out negative values
+                    yieldChart.data.datasets[0].backgroundColor = yieldData.map(val => val < 0 ? '#ccc' : (val > 0 ? '#4CAF50' : '#FFC107'));
+                }
+                yieldChart.update();
+            });
+        });
+    </script>
+
+</body>
+
+</html>
